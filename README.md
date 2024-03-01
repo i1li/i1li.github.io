@@ -21,4 +21,4 @@ Dynamically transition based on scroll position.
 Custom Youtube embedder, a bare amount of code responsively fits or stretches videos that only load once user clicks "show/hide" button.
 
 ### [Netlify Content Gate](https://github.com/i1li/netlify-content-gate)
-Custom solution for a simple free content gating.
+Custom solution for a simple free content gating. Kept on a separate site for simplicity in this case, but easily integrated.
