@@ -9,36 +9,32 @@ Individual post view at unique URLs removes the welcome intro from display, and 
 
 ### Light/Dark Mode Toggle
 
--   Overview: Allows users to switch between light and dark themes, enhancing accessibility and user preference.
--   Implementation: Utilizes `localStorage` to persist the user's theme choice across sessions and `window.matchMedia` to detect and respect the system's preferred color scheme.
+-   Allows users to switch between light and dark themes, enhancing accessibility and user preference.
+-   Utilizes `localStorage` to persist the user's theme choice across sessions and `window.matchMedia` to detect and respect the system's preferred color scheme.
 
 ### Zoom In/Out Functionality
 
--   Overview: Provides users with the ability to adjust the text size for better readability.
--   Implementation: Dynamically adjusts the font size of key elements on the page based on user interaction, with the zoom level persisted in `localStorage`.
+-   Provides users with the ability to adjust the text size for better readability.
+-   Dynamically adjusts the font size of key elements on the page based on user interaction, with the zoom level persisted in `localStorage`.
 
 ### SPA Navigation and Content Loading
 
--   Overview: Enables seamless navigation within the application without full page reloads, improving the user experience.
--   Implementation:
+-   Enables seamless navigation within the application without full page reloads, improving the user experience.
     
-    -   Uses the `IntersectionObserver` API for lazy loading content as it becomes visible, reducing initial load time.
-    -   Manages browser history and navigation state using the History API (`history.pushState` and `window.onpopstate`), allowing for bookmarkable URLs and functional forward/backward navigation.
-    -   Implements custom logic to show/hide content based on the current navigation state, simulating the behavior of a multi-page application within a single HTML document.
+-   Uses the `IntersectionObserver` API for lazy loading content as it becomes visible, reducing initial load time.
+-   Manages browser history and navigation state using the History API (`history.pushState` and `window.onpopstate`), allowing for bookmarkable URLs and functional forward/backward navigation.
+-   Implements custom logic to show/hide content based on the current navigation state, simulating the behavior of a multi-page application within a single HTML document.
     
-
 ### External Links Handling
 
--   Overview: Correctly identifies and handles external links to ensure they open in a new tab, preserving SPA integrity.
--   Implementation: Checks the URL of clicked links and sets them to open in a new tab if they lead outside the current domain, using `target="_blank"` and `rel="noreferrer"` for security.
+-   Correctly identifies and handles external links to ensure they open in a new tab, preserving SPA integrity.
+-   Checks the URL of clicked links and sets them to open in a new tab if they lead outside the current domain, using `target="_blank"` and `rel="noreferrer"` for security.
 
 ### Sticky Header and Scroll-to-Top Button
 
--   Overview: Improves navigation and accessibility by providing a sticky header and a convenient way to return to the top of the page.
--   Implementation:
-    
-    -   The sticky header adjusts its style based on the scroll position, becoming more compact as the user scrolls down.
-    -   A "scroll to top" button appears after a certain scroll threshold, allowing users to quickly return to the top of the page with a single click.
+-   Improves navigation and accessibility by providing a sticky header and a convenient way to return to the top of the page.    
+-   The sticky header adjusts its style based on the scroll position, becoming more compact as the user scrolls down.
+-   A "scroll to top" button appears after a certain scroll threshold, allowing users to quickly return to the top of the page with a single click.
     
 ### Efficiency and Minimalism
 
