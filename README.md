@@ -1,5 +1,5 @@
-# Minimal, Responsive, Pure Javascript, Single Page App
-No frameworks, just pure Javascript (a.k.a. vanilla Javascript), CSS, and HTML. Responsive containers, images, video, and text automatically adjust to fit accordingly across small and large screens.
+# Minimal, Responsive, Pure JavaScript, Single Page App
+No frameworks, just pure JavaScript (a.k.a. vanilla JavaScript), CSS, and HTML. Responsive containers, images, video, and text automatically adjust to fit accordingly across small and large screens.
 
 [Demo site](https://y0.netlify.app/) contains my personal writing, feel free to fork this repo and use it as a template.
 
