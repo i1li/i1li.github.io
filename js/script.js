@@ -53,7 +53,7 @@ document.getElementById("zoom-out").addEventListener("click", function() {
 });
 
 // Single Page Application
-  const welcomeNav = document.getElementById('welcome-nav');
+  const welcome = document.getElementById('welcome');
   const postContainers = document.querySelectorAll('.post-container');
   const observer = new IntersectionObserver(function(entries, observer) {
     entries.forEach(function(entry) {
@@ -82,7 +82,7 @@ document.getElementById("zoom-out").addEventListener("click", function() {
             container.appendChild(postNavBottom);
           }
         }
-        welcomeNav.style.display = 'none';
+        welcome.style.display = 'none';
       } else {
         container.style.display = 'none';
       }
@@ -91,7 +91,7 @@ document.getElementById("zoom-out").addEventListener("click", function() {
       requestAnimationFrame(function() {
         requestAnimationFrame(function() {
           setTimeout(function() {
-            const offsetTop = targetContainer.getBoundingClientRect().top + window.pageYOffset - 20;
+            const offsetTop = targetContainer.getBoundingClientRect().top + window.pageYOffset - 35;
             window.scrollTo({
               top: offsetTop,
               behavior: 'instant'
@@ -113,7 +113,7 @@ document.getElementById("zoom-out").addEventListener("click", function() {
         postNavBottom.remove();
       }
     });
-    welcomeNav.style.display = 'block';
+    welcome.style.display = 'block';
   }
   function handleNavigation(postId) {
     if (postId) {
