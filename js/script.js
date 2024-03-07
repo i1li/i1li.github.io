@@ -32,7 +32,7 @@ modeToggle.addEventListener('click', toggleDarkMode);
 // Zoom In / Out
 function adjustZoom(isZoomIn) {
   const zoomFactor = isZoomIn ? 1.05 : 0.95;
-  const elements = document.querySelectorAll("html, button, td, .img-container");
+  const elements = document.querySelectorAll("html");
   elements.forEach(function(element) {
     let currentFontSize = parseFloat(window.getComputedStyle(element).fontSize);
     currentFontSize = currentFontSize * zoomFactor;
