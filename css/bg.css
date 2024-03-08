@@ -1,0 +1,44 @@
+#bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: .22;
+}
+.color-box {
+    width: 100%;
+    height: 100%;
+}
+.color-box,
+#overlay,
+#overlay2 {
+    position: fixed;
+}
+#overlay {
+    background-size: 99.99% 0.01%;
+    mix-blend-mode: difference;
+    animation: scroll-stripes 80s linear infinite;
+}
+#overlay2 {
+    background-size: .01% 99.99%;
+    mix-blend-mode: difference;
+    animation: scroll-stripes2 40s linear infinite;
+}
+.hidden {
+    opacity: 0;
+}
+@keyframes scroll-stripes {
+    0% {
+        background-position: 0% 100%;
+    }
+    100% {
+        background-position: 100% 0%;
+    }
+}
+@keyframes scroll-stripes2 {
+    0% {
+        background-position: 100% 0%;
+    }
+    100% {
+        background-position: 0% 100%;
+    }
+}

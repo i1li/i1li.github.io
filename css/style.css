@@ -2,6 +2,24 @@
     top:0;
     width: 100%;
     height: 100vh;
+    margin-top:-100vh;
+    background-color: white;
+    background-image: 
+    url("/img/bg.png");
+    background-attachment: fixed;}
+.bg-wrapper.dark-mode {position: sticky;
+    top:0;
+    width: 100%;
+    height: 100vh;
+    margin-top:-100vh;
+    background-color: black;
+    background-image: 
+    url("/img/bginvert.png");
+    background-attachment: fixed;}
+.bg-wrapper2 {position: relative;
+    top:0;
+    width: 100%;
+    height: 100vh;
     margin-top: -100vh;
     background: linear-gradient(to right, 
     rgba(22, 22, 222, 0.33) 0%, 
@@ -11,10 +29,12 @@
     rgba(200, 200, 200, 0.22) 65%, 
     rgba(22, 22, 111, 0.22) 85%, 
     rgba(22, 22, 222, 0.33) 100%);}
-.bg-wrapper2 {position: relative;
+.bg-wrapper3 {position: relative;
     top:0;
     width: 100%;
     height: 100vh;
+    backdrop-filter: contrast(125%) saturate(50%);
+    -webkit-backdrop-filter: contrast(125%) saturate(50%);
     margin-top:-100vh;
     background: linear-gradient(to bottom, 
     rgba(0, 0, 0, .2) 0%,
@@ -67,7 +87,8 @@ header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 2
 .scrolled-down #site-title-text {opacity: .33;}
 #site-title {display: flex; align-items: center; position:absolute; left: 5%;} .scrolled-down #site-title {left: 1%; margin-top: -.25em;}
 #site-title-text:hover {opacity:.9;}
-#site-intro p {-webkit-backdrop-filter:contrast(115%)blur(.04em); backdrop-filter:contrast(115%)blur(.04em);}
+#site-intro p {-webkit-backdrop-filter:brightness(90%)contrast(111%)saturate(555%)blur(.04em); 
+    backdrop-filter:brightness(90%)contrast(111%)saturate(555%)blur(.04em);}
 #site-intro p, #site-info p{text-align: center;
     margin-right: 1vw;
     margin-left: 1vw;
@@ -76,8 +97,8 @@ header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 2
 #site-info {-webkit-backdrop-filter:blur(.07em); backdrop-filter:blur(.07em);}
 #welcome {background: linear-gradient(to top, rgba(22,22,222, .1), rgba(22, 222, 222, .1));
     line-height: 1.3; padding-bottom: .07em;
-    backdrop-filter: contrast(200%) grayscale(50%);
-    -webkit-backdrop-filter: contrast(200%) grayscale(50%);}
+    backdrop-filter: contrast(333%) grayscale(50%);
+    -webkit-backdrop-filter: contrast(333%) grayscale(50%);}
 #nav-links {background: linear-gradient(to bottom, rgba(222, 22, 22, .35), rgba(128, 0, 128, 0.3));
     font-size: 1.1em;
     line-height: 1.2;
@@ -101,23 +122,18 @@ p {line-height: 1.2;
     text-indent: 1em;
     padding: .7em;
     text-align: justify;}  
-@media only screen and (max-width: 767px) and (orientation: portrait) {html {font-size: 92%;}
-p {text-align: initial;} .to-top {max-width:2.5em; margin-bottom:.2em; margin-right:-.5em; padding-left:.6em; padding-top:.5em;}}
+@media only screen and (max-width: 767px) and (orientation: portrait) {html body, table{font-size: 92%;} p {text-align: initial;} .to-top {max-width:2.5em; margin-bottom:.2em; margin-right:-.5em; padding-left:.6em; padding-top:.5em;}}
 .no-indent {text-indent: 0;} .no-indent p {text-indent: 0;}
 .center {text-align: center;} .justify-content-center {justify-content:center;}
 body, header {scroll-behavior: smooth; scroll-snap-type: none;}
 body {transition: all .369s ease-in-out;
     font-size: 1.04em;
     line-height: 1.5;
-    background-color: rgb(200, 200, 200);
-    background-image: 
-    url("/img/bg.png");
-    background-attachment: fixed;
+
     max-width: 100vw;
     overflow-x: hidden;
     text-shadow: 1px 1px 1px rgba(222,222,222,.3), 0 0 .3em rgba(255,255,255,.5), 0 0 1em rgba(255,255,0,.1);}
-body.dark-mode {backdrop-filter: invert(100%);
-    -webkit-backdrop-filter: invert(100%);
+body.dark-mode {
     color: white;
     text-shadow: 1px 1px 1px rgba(0,0,0,.3), 0 0 .3em rgba(22,22,22,.5), 0 0 1em rgba(255,0,0,.4);}
 a:link.dark-mode, a:visited.dark-mode {color: #00eeff;
@@ -155,9 +171,7 @@ a:hover, a:hover.dark-mode {text-decoration: dotted underline;
     transition: all .7s ease-in-out;
     margin-right: -.7em;
     margin-left: -.7em;
-    padding-top: .2em;
-    border-left: inset .7em rgba(255,255,100,.1);
-    border-right: inset .7em rgba(255,100,100,.1);
+    border: inset .7em rgba(255,255,100,.1);
     border-top: solid 1px rgba(255,0,0,.2);
     border-bottom: solid 1px rgba(255,0,0,.2);}
 .post-header:hover {background: linear-gradient(to top, rgba(222, 69, 69, .3), rgba(128, 0, 128, 0.4));
@@ -210,7 +224,7 @@ a:hover, a:hover.dark-mode {text-decoration: dotted underline;
     -webkit-backdrop-filter: brightness(80%) contrast(170%) grayscale(50%) blur(.1em);}
 .post-content:hover.dark-mode {background: radial-gradient(rgba(0, 0, 0, .2), rgba(128, 128, 128, 0.2));}
 #toTop {display: none;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     right: 2.5%;
     padding: 5px;

@@ -35,13 +35,14 @@ Individual post view at unique URLs removes the welcome intro from display, and 
 -   Improves navigation and accessibility by providing a sticky header and a convenient way to return to the top of the page.    
 -   The sticky header adjusts its style based on the scroll position, becoming more compact as the user scrolls down.
 -   A "scroll to top" button appears after a certain scroll threshold, allowing users to quickly return to the top of the page with a single click.
+
     
 ### Efficiency and Minimalism
 
 -   The code demonstrates efficient use of native JavaScript APIs to achieve functionality often reliant on external libraries, showcasing a minimalist approach that reduces load times and dependency overhead.
 -   By combining CSS class toggles, native browser APIs, and simple event handling, it achieves a responsive, user-friendly SPA experience with minimal code.
 
-This SPA implementation is a testament to the power of modern JavaScript and browser capabilities, allowing developers to create rich, interactive web applications without heavy reliance on frameworks or libraries.
+This SPA implementation is a testament to the power of modern JavaScript and browser capabilities, allowing easy creation of rich, interactive web applications without any reliance on frameworks or libraries.
 
 Custom components included:
 ### [Lightest Youtube Embed](https://github.com/i1li/lightest-youtube-embed)
@@ -49,3 +50,8 @@ Easy to use YouTube embed that saves space, bandwidth, and privacy. With a bare 
 
 ### [Netlify Content Gate](https://github.com/i1li/netlify-content-gate)
 Custom solution for a simple free content gating. Kept on a separate site for simplicity in this case, but easily integrated.
+
+### Background Gradient Shift, and other CSS Effects
+-   `bg.js` & `bg.css` create a constant shifting gradient by creating and replacing blended layers.
+-   Several layers of semi-transparent gradients for background and page elements.
+-   Dynamic cursor hover and filter effects.
