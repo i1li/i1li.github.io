@@ -1,44 +1,67 @@
-#bg {
-    position: absolute;
+.bg-wrapper {position: sticky;
+    top:0;
+    width: 100%;
+    height: 100vh;
+    margin-top:-100vh;
+    background-color: white;
+    background-image: 
+    url("/img/bg.png");
+    background-attachment: fixed;
+    border-radius:0;}
+.bg-wrapper.dark-mode {position: sticky;
+    top:0;
+    width: 100%;
+    height: 100vh;
+    margin-top:-100vh;
+    background-color: black;
+    background-image: 
+    url("/img/bginvert.png");
+    background-attachment: fixed;
+    border-radius:0;}
+.bg-wrapper2 {position: relative;
+    top:0;
+    width: 100%;
+    height: 100vh;
+    margin-top: -100vh;
+    background: linear-gradient(to right, 
+    rgba(22, 22, 222, 0.33) 0%, 
+    rgba(22, 22, 111, 0.22) 15%, 
+    rgba(200, 200, 200, 0.22) 45%, 
+    rgba(222, 222, 222, 0.15) 50%, 
+    rgba(200, 200, 200, 0.22) 65%, 
+    rgba(22, 22, 111, 0.22) 85%, 
+    rgba(22, 22, 222, 0.33) 100%);}
+.bg-wrapper3 {position: relative;
+    top:0;
+    width: 100%;
+    height: 100vh;
+    backdrop-filter: contrast(125%) saturate(50%);
+    -webkit-backdrop-filter: contrast(125%) saturate(50%);
+    margin-top:-100vh;
+    background: linear-gradient(to bottom, 
+    rgba(0, 0, 0, .2) 0%,
+    rgba(64, 64, 64, .1) 10%,
+    rgba(128, 128, 128, .05) 20%,
+    rgba(0, 255, 255, 0.07) 30%,
+    rgba(255, 0, 170, 0.07) 40%,
+    rgba(155, 0, 0, .1) 50%,
+    rgba(155, 0, 155, 0.07) 60%,
+    rgba(0, 255, 0, .07) 70%,
+    rgba(128, 128, 128, .05) 80%,
+    rgba(64, 64, 64, .1) 90%,
+    rgba(0, 0, 0, .3) 100%);}
+#bg {position: absolute;
     top: 0;
     left: 0;
-    opacity: .22;
-}
-.color-box {
-    width: 100%;
-    height: 100%;
-}
-.color-box,
-#overlay,
-#overlay2 {
-    position: fixed;
-}
-#overlay {
-    background-size: 99.99% 0.01%;
+    opacity: .22;}
+.color-box {width: 100%; height: 100%;}
+.color-box, #overlay, #overlay2 {position: fixed;}
+#overlay {background-size: 99.99% 0.01%;
     mix-blend-mode: difference;
-    animation: scroll-stripes 80s linear infinite;
-}
-#overlay2 {
-    background-size: .01% 99.99%;
+    animation: scroll-stripes 80s linear infinite;}
+#overlay2 {background-size: .01% 99.99%;
     mix-blend-mode: difference;
-    animation: scroll-stripes2 40s linear infinite;
-}
-.hidden {
-    opacity: 0;
-}
-@keyframes scroll-stripes {
-    0% {
-        background-position: 0% 100%;
-    }
-    100% {
-        background-position: 100% 0%;
-    }
-}
-@keyframes scroll-stripes2 {
-    0% {
-        background-position: 100% 0%;
-    }
-    100% {
-        background-position: 0% 100%;
-    }
-}
+    animation: scroll-stripes2 40s linear infinite;}
+.hidden {opacity: 0;}
+@keyframes scroll-stripes {0% {background-position: 0% 100%;}100% {background-position: 100% 0%;}}
+@keyframes scroll-stripes2 {0% {background-position: 100% 0%;} 100% {background-position: 0% 100%;}}
