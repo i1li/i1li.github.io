@@ -13,7 +13,8 @@ class YTEmbed extends HTMLElement {
     this.appendChild(this.link);
     if (!this.classList.contains('no-embed')) {
       this.button = document.createElement('button');
-      this.button.textContent = 'Show/Hide';
+      this.button.textContent = '▶️ Play';
+      this.button.title = 'Play Video';
       this.button.className = 'showHideButton';
       this.button.onclick = () => this.toggleVideo();
       this.appendChild(this.button);
@@ -38,9 +39,13 @@ class YTEmbed extends HTMLElement {
       iframe.className = 'yt';
       this.wrapper.appendChild(iframe);
       this.wrapper.style.display = 'block';
+      this.button.textContent = '⏹️ Stop';
+      this.button.title = 'Stop Video';
     } else {
       this.wrapper.removeChild(iframeExists);
       this.wrapper.style.display = 'none';
+      this.button.textContent = '▶️ Play';
+      this.button.title = 'Play Video';
     }
   }
 }
