@@ -70,7 +70,7 @@ h1 {margin:0;
     text-align: left;
     width: 50%;}
 h2, h3, h4, h5, h6 {margin-bottom: 0.7em; padding-bottom: 0;}
-.post-title {text-align:center; line-height: 1.4;}
+.post-title {text-align:center; line-height: 1.4; margin: .5em;}
 body, p {margin: 0;
     font-weight: 500;
     text-align: left;
