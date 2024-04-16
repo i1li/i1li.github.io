@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
 // Light / Dark
 function applyDarkMode(isDarkMode) {
   document.body.classList.toggle("dark-mode", isDarkMode);
-  document.querySelectorAll('a, .post-content, .post-content-wrapper, .bg-wrapper, #random-vids').forEach((element) => {
+  document.querySelectorAll('a, .post-content, .post-content-wrapper, .bg-wrapper, #shuffle').forEach((element) => {
     element.classList.toggle('dark-mode', isDarkMode);
   });
 }
