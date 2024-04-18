@@ -84,9 +84,8 @@ p {line-height: 1.2;
     text-align: justify;}  
 @media only screen and (max-width: 767px) and (orientation: portrait) {html body, table{font-size: 92%;} p {text-align: initial;} .to-top {max-width:2.5em; margin-bottom:.2em; margin-right:-.5em; padding-left:.6em; padding-top:.5em;} .row-cols-auto>*{flex: 0 0 100%;min-width: 100%;}}
 .no-indent {text-indent: 0;} .no-indent p {text-indent: 0;} .width95 {width: 95%; margin:auto;} .width95 p {width: 95%; margin:auto;}
-.center {text-align: center;} .justify-content-center {justify-content:center;}
-* {scrollbar-color: rgba(22,222,222,.7) rgba(0,0,72,.7); overscroll-behavior: none; border-radius:.3em;}
-body, header {scroll-behavior: smooth; scroll-snap-type: none;}
+.center {text-align: center;} .justify-content-center {justify-content:center;} .center p {text-align: center;} .justify-content-center p {justify-content: center;}
+* {border-radius:.3em; scrollbar-color: rgba(22,222,222,.7) rgba(0,0,72,.7); overscroll-behavior: none; scroll-behavior: smooth; scroll-snap-type: none;}
 body {transition: all .369s ease-in-out;
     font-size: 1.04em;
     line-height: 1.5;

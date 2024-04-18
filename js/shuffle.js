@@ -21,7 +21,8 @@ const stack = [
   '<y-t v="_szH-LW0Vvs" class="no-link-embed" t="Entheogenic - Kykeon"></y-t>',
   '<y-t v="1sCoTSHn7WE" t="State Azure: Navigating a Latent Space"></y-t>',
   '<y-t v="GS9ImrohkW4" t="State Azure: Church of the Last Epoch"></y-t>',
-  '<y-t v="q4xKvHANqjk?start=38" t="Khruangbin @ Villain | Pitchfork Live"></y-t>'
+  '<y-t v="q4xKvHANqjk?start=38" t="Khruangbin @ Villain | Pitchfork Live"></y-t>',
+  '<y-t v="-tOSh9bDh00" t="Hugo Kant - Far From Home"></y-t><br/>'
   ];
 function shuffle() {
   for (let i = stack.length - 1; i > 0; i--) {
