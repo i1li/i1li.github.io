@@ -19,10 +19,10 @@ const stack = [
   '<y-t v="ZmrCL9i8Efk" class="no-link-embed" t="shwex/mumukshu mix with visuals by 3na"></y-t>',
   '<y-t v="LlZkLJvj8ks" class="no-link-embed" t="Suduaya - Starseeds"></y-t>',
   '<y-t v="_szH-LW0Vvs" class="no-link-embed" t="Entheogenic - Kykeon"></y-t>',
-  '<y-t v="1sCoTSHn7WE" t="State Azure: Navigating a Latent Space"></y-t>',
-  '<y-t v="GS9ImrohkW4" t="State Azure: Church of the Last Epoch"></y-t>',
   '<y-t v="q4xKvHANqjk?start=38" t="Khruangbin @ Villain | Pitchfork Live"></y-t>',
-  '<y-t v="-tOSh9bDh00" t="Hugo Kant - Far From Home"></y-t><br/>'
+  '<y-t v="-tOSh9bDh00" t="Hugo Kant - Far From Home"></y-t>',
+  '<y-t v="GS9ImrohkW4,1sCoTSHn7WE" t="State Azure"></y-t>',
+  '<y-t v="PLiz2G6tBYC82nX1lRH9ShOoBm3j2p2ROm" class="no-link-embed" t="Alan Watts Chillstep"></y-t>'
   ];
 function shuffle() {
   for (let i = stack.length - 1; i > 0; i--) {

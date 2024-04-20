@@ -76,7 +76,8 @@ body, p {margin: 0;
     text-align: left;
     margin-bottom: 0;
     padding-bottom: 0;
-    font-family: verdana, "times new roman", georgia, arial, "courier new";}
+    font-family: verdana, "times new roman", georgia, arial, "courier new";
+    overflow-anchor: none;}
 p {line-height: 1.2;
     text-indent: 1em;
     padding: .7em;
