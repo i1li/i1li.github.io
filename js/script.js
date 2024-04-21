@@ -71,6 +71,31 @@ document.getElementById("zoom-out").addEventListener("click", function() {
   adjustZoom(false);
 });
 
+// Full Screen Image Overlay
+function openOverlay(imageSource) {
+  var overlay = document.getElementById("fullScreenOverlay");
+  var overlayImage = document.getElementById("overlayImage");
+  overlay.style.display = "block";
+  overlayImage.src = imageSource;
+  document.body.style.overflow = 'hidden';
+  document.addEventListener('keydown', handleKeyPress);
+}
+function closeOverlay() {
+  var overlay = document.getElementById("fullScreenOverlay");
+  overlay.style.display = "none";
+  document.body.style.overflow = 'auto';
+  document.removeEventListener('keydown', handleKeyPress);
+}
+var images = document.querySelectorAll('img:not(.img-footer,.img-header,.to-top,.no-overlay)');
+images.forEach(function(img) {
+  img.addEventListener('click', function() {
+    openOverlay(this.src);
+  });
+});
+function handleKeyPress(event) {
+  closeOverlay();
+}
+
 // Single Page Application
   const welcome = document.getElementById('welcome');
   const postContainers = document.querySelectorAll('.post-container');

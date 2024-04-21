@@ -1,4 +1,4 @@
-let btn = document.querySelector("#next-btn");
+let next = document.querySelector("#next");
 let pick = document.querySelector("#shuffle");
 let currentIndex = 0;
 const stack = [
@@ -24,7 +24,7 @@ const stack = [
   '<y-t v="GS9ImrohkW4,1sCoTSHn7WE,3ckXH4qUKZw" t="State Azure"></y-t>',
   '<y-t v="PLiz2G6tBYC82nX1lRH9ShOoBm3j2p2ROm" class="no-link-embed" t="Alan Watts Chillstep"></y-t>',
   '<y-t v="ZFIrf78pF98,D-orNLH2PXU" t="Dreamstate Logic"></y-t>'
-  ];
+];
 function shuffle() {
   for (let i = stack.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -33,7 +33,7 @@ function shuffle() {
 }
 shuffle();
 pick.innerHTML = stack[currentIndex];
-btn.addEventListener('click', function () {
+next.addEventListener('click', function () {
   currentIndex = (currentIndex + 1) % stack.length;
   pick.innerHTML = stack[currentIndex];
 });
