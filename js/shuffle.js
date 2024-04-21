@@ -21,8 +21,9 @@ const stack = [
   '<y-t v="_szH-LW0Vvs" class="no-link-embed" t="Entheogenic - Kykeon"></y-t>',
   '<y-t v="q4xKvHANqjk?start=38" t="Khruangbin @ Villain | Pitchfork Live"></y-t>',
   '<y-t v="-tOSh9bDh00" t="Hugo Kant - Far From Home"></y-t>',
-  '<y-t v="GS9ImrohkW4,1sCoTSHn7WE" t="State Azure"></y-t>',
-  '<y-t v="PLiz2G6tBYC82nX1lRH9ShOoBm3j2p2ROm" class="no-link-embed" t="Alan Watts Chillstep"></y-t>'
+  '<y-t v="GS9ImrohkW4,1sCoTSHn7WE,3ckXH4qUKZw" t="State Azure"></y-t>',
+  '<y-t v="PLiz2G6tBYC82nX1lRH9ShOoBm3j2p2ROm" class="no-link-embed" t="Alan Watts Chillstep"></y-t>',
+  '<y-t v="ZFIrf78pF98,D-orNLH2PXU" t="Dreamstate Logic"></y-t>'
   ];
 function shuffle() {
   for (let i = stack.length - 1; i > 0; i--) {

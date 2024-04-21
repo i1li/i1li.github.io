@@ -1,4 +1,23 @@
-document.addEventListener("DOMContentLoaded", function() {
+// Sticky Header & Go to top
+const scrollTransition = 50;
+const header = document.getElementById('siteHeader');
+const toTop = document.getElementById("toTop");
+function handleScroll() {
+  if (window.scrollY > scrollTransition) {
+    header.classList.add('scrolled-down');
+  } else {
+    header.classList.remove('scrolled-down');
+  }
+  if (document.body.scrollTop > scrollTransition * 7 || document.documentElement.scrollTop > scrollTransition * 7) {
+    toTop.style.display = "block";
+  } else {
+    toTop.style.display = "none";
+  }
+}
+window.addEventListener('scroll', handleScroll);
+function topFunction() {
+  window.scrollTo(0, 0);
+}
 
 // Light / Dark
 function applyDarkMode(isDarkMode) {
@@ -23,7 +42,7 @@ if (savedMode !== null) {
 } else if (userPrefersLight) {
   darkMode = false;
 } else {
-  darkMode = false;
+  darkMode = true;
 }
 applyDarkMode(darkMode);
 const modeToggle = document.getElementById('mode-toggle');
@@ -67,7 +86,7 @@ document.getElementById("zoom-out").addEventListener("click", function() {
     observer.observe(container);
     container.querySelector('.post-content').style.display = 'none';
   });
-  function showPostContainer(postId) {
+  function showSinglePost(postId) {
     let targetContainer = null;
     postContainers.forEach(function(container) {
       if (container.id === postId) {
@@ -88,20 +107,14 @@ document.getElementById("zoom-out").addEventListener("click", function() {
       }
     });
     if (targetContainer) {
-      requestAnimationFrame(function() {
-        requestAnimationFrame(function() {
-          setTimeout(function() {
-            const offsetTop = targetContainer.getBoundingClientRect().top + window.pageYOffset - 35;
-            window.scrollTo({
-              top: offsetTop,
-              behavior: 'instant'
-            });
-          }, 1); 
-        });
+      const offsetTop = targetContainer.getBoundingClientRect().top + window.scrollY - 35;
+      window.scrollTo({
+        top: offsetTop,
+        behavior: 'instant'
       });
     }
   }
-  function displayAllPosts() {
+  function showAllPosts() {
     postContainers.forEach(function(container, index) {
       container.style.display = 'block';
       if (index !== 0) {
@@ -115,21 +128,21 @@ document.getElementById("zoom-out").addEventListener("click", function() {
     });
     welcome.style.display = 'block';
   }
-  function handleNavigation(postId) {
+  function navigate(postId) {
     if (postId) {
-      showPostContainer(postId);
+      showSinglePost(postId);
       history.pushState({ postId: postId }, '', '/' + postId);
     } else {
-      displayAllPosts();
+      showAllPosts();
       history.pushState({}, '', window.location.origin);
       window.scrollTo(0, 0);
     }
   }
   window.onpopstate = function(event) {
     if (event.state && event.state.postId) {
-      showPostContainer(event.state.postId);
+      showSinglePost(event.state.postId);
     } else {
-      displayAllPosts();
+      showAllPosts();
     }
   };
   document.addEventListener('click', function(event) {
@@ -143,47 +156,16 @@ document.getElementById("zoom-out").addEventListener("click", function() {
     }
       event.preventDefault();
       if (href === '/') {
-        handleNavigation('');
+        navigate('');
       } else {
         const postId = href.startsWith('/') ? href.substring(1) : href;
-        handleNavigation(postId);
+        navigate(postId);
       }
     }
   });  
   const path = window.location.pathname.substring(1);
   if (path) {
-    showPostContainer(path);
+    showSinglePost(path);
   } else {
-    displayAllPosts();
+    showAllPosts();
   }
-
-// Sticky Header
-function debounce(func, wait) {
-  let timeout;
-  return function() {
-      clearTimeout(timeout);
-      timeout = setTimeout(func, wait);
-  };
-}
-const scrollTransition = 50;
-const header = document.getElementById('siteHeader');
-const toTop = document.getElementById("toTop");
-const handleScroll = debounce(function() {
-if (window.scrollY > scrollTransition) {
-    header.classList.add('scrolled-down');
-} else {
-    header.classList.remove('scrolled-down');
-}
-
-// Go To Top
-if (document.body.scrollTop > scrollTransition * 7 || document.documentElement.scrollTop > scrollTransition * 7) {
-    toTop.style.display = "block";
-} else {
-    toTop.style.display = "none";
-}
-}, 20);
-window.addEventListener('scroll', handleScroll);
-});
-function topFunction() {
-  window.scrollTo(0, 0);
-}
