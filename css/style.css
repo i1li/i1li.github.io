@@ -14,6 +14,13 @@ header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 2
     backdrop-filter: brightness(90%) contrast(120%) saturate(250%);
     -webkit-backdrop-filter: brightness(90%) contrast(120%) saturate(250%);}
 .scrolled-down:hover {background: linear-gradient(to top, rgba(0, 0, 0, .6), rgba(128, 128, 128, 0.6)); opacity: 1;}
+.scrolled-down h1 {font-size: 1.5em; position: absolute; left:0;}
+.scrolled-down .img-header {height: 3rem;}
+.scrolled-down #site-title-text {opacity: .33;}
+.scrolled-down #light-dark-zoom {position: absolute;
+    top: .2em;
+    right: .4em;
+    font-size: 1.1em;}
 .scrolled-down {height: 3em;
     margin-top: 2em;
     opacity: .8;
@@ -24,7 +31,6 @@ header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 2
     min-width: 95vw;
     overflow-x: hidden;
     border:none;}
-.scrolled-down h1 {font-size: 1.5em; position: absolute; left:0;}
 #light-dark-zoom {position: absolute;
     text-align: right;
     top: .7em;
@@ -32,16 +38,10 @@ header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 2
     font-size: 1.2em;
     transition: all .2s ease-in-out;
     z-index: 2;}
-.scrolled-down #light-dark-zoom {position: absolute;
-    top: .2em;
-    right: .4em;
-    font-size: 1.1em;}
 .img-header {height: 4rem; transition: all .2s ease;}
 .img-header:hover {-webkit-filter: invert(100%) !important;
     filter: invert(100%) !important;
     transition: all .3s ease-in-out;}
-.scrolled-down .img-header {height: 3rem;}
-.scrolled-down #site-title-text {opacity: .33;}
 #site-title {display: flex; align-items: center; position:absolute; left: 5%;} .scrolled-down #site-title {left: 1%; margin-top: -.25em;}
 #site-title-text:hover {opacity:.9;}
 #site-intro p {-webkit-backdrop-filter:brightness(90%)contrast(111%)saturate(555%)blur(.04em); 
@@ -291,6 +291,7 @@ button:hover {opacity: .9;
 li {list-style-type: none; display: inline-block;}
 input, textarea {font-size: large; background: radial-gradient( circle farthest-corner at 22.4% 21.7%, rgba(4,189,228,1) 0%, rgba(2,83,185,1) 100% );}
 ::placeholder {color: red;}
+img {opacity: 1; transition: all .7s ease-in-out; border-radius:0;} img:hover {opacity: .91;}
 .img-opaq {opacity: 0.66;} .img-opaq:hover {opacity: .86;}
 .img-opaq2 {opacity: 0.72;} .img-opaq2:hover {opacity: .88;}
 .img-opaq3 {opacity: 0.8;} .img-opaq3:hover {opacity: .9;}
@@ -299,7 +300,6 @@ input, textarea {font-size: large; background: radial-gradient( circle farthest-
 .img-sat:hover {filter: saturate(40); -webkit-filter: saturate(40); transition: all 3s ease-in-out;}
 .img-sat2:hover {filter: saturate(20); -webkit-filter: saturate(20); transition: all 3s ease-in-out;}
 .img-sat3:hover {filter: saturate(10); -webkit-filter: saturate(10); transition: all 3s ease-in-out;}
-img {opacity: 1; transition: all .7s ease-in-out; border-radius:0;} img:hover {opacity: .91;}
 .img-container {text-align: center; font-style: italic; font-size: 80%;}
 .img-container a {text-decoration: none; background: none!important; border: none;}
 .img-cred {opacity:.7} .img-cred:hover {opacity:1;}

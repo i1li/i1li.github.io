@@ -9,6 +9,17 @@ class YTEmbed extends HTMLElement {
     this.videoIds = videoIds;
     let linkUrl , embedUrl;
     switch (true) {
+      default:
+        if (this.classList.contains('no-link-embed')) {
+          linkUrl = `https://www.youtube.com/watch?v=${this.id}${this.params ? '&' + this.params + '&': '&'}autoplay=1`;
+          embedUrl = `https://www.youtube-nocookie.com/embed/${this.id}${this.params ? '?' + this.params + '&' : '?'}autoplay=1`;
+        } else if (this.classList.contains('no-embed')) {
+          linkUrl = `https://www.youtube.com/watch?v=${this.id}${this.params ? '&' + this.params + '&' : '&'}autoplay=1`;
+        } else {
+          linkUrl = `https://www.youtube-nocookie.com/embed/${this.id}${this.params ? '?' + this.params + '&' : '?'}autoplay=1`;
+          embedUrl = linkUrl;
+        }
+        break;
       case this.videoIds.length > 1:
         if (this.classList.contains('no-link-embed')) {
           linkUrl = `https://www.youtube.com/watch_videos?video_ids=${this.videoIds.join(',')}&autoplay=1`;
@@ -20,7 +31,7 @@ class YTEmbed extends HTMLElement {
           embedUrl = linkUrl;
         }
         break;
-      case this.id.startsWith('PL') || this.id.startsWith('TL'):
+      case this.id.startsWith('PL') || this.id.startsWith('TL') || this.id.startsWith('OL') || this.id.startsWith('FL') || this.id.length > 11:
         if (this.classList.contains('no-link-embed')) {
           linkUrl = `https://www.youtube.com/playlist?list=${this.id}&autoplay=1`;
           embedUrl = `https://www.youtube-nocookie.com/embed/videoseries?list=${this.id}&autoplay=1`;
@@ -28,17 +39,6 @@ class YTEmbed extends HTMLElement {
           linkUrl = `https://www.youtube.com/playlist?list=${this.id}&autoplay=1`;
         } else {
           linkUrl = `https://www.youtube-nocookie.com/embed/videoseries?list=${this.id}&autoplay=1`;
-          embedUrl = linkUrl;
-        }
-        break;
-      default:
-        if (this.classList.contains('no-link-embed')) {
-          linkUrl = `https://www.youtube.com/watch?v=${this.id}${this.params ? '&' + this.params + '&': '&'}autoplay=1`;
-          embedUrl = `https://www.youtube-nocookie.com/embed/${this.id}${this.params ? '?' + this.params + '&' : '?'}autoplay=1`;
-        } else if (this.classList.contains('no-embed')) {
-          linkUrl = `https://www.youtube.com/watch?v=${this.id}${this.params ? '&' + this.params + '&' : '&'}autoplay=1`;
-        } else {
-          linkUrl = `https://www.youtube-nocookie.com/embed/${this.id}${this.params ? '?' + this.params + '&' : '?'}autoplay=1`;
           embedUrl = linkUrl;
         }
         break;
