@@ -175,6 +175,7 @@ a:hover {text-decoration: dotted underline;
     margin-left: -.7em;
     border-left: inset .7em rgba(100,50,255,.3);
     border-right: inset .7em rgba(11,100,100,.3);}
+.subpost {all: unset !important; cursor: pointer !important;}
 .post-nav:hover {opacity: 1;} .post-nav {display: flex; 
     justify-content: space-between; 
     font-size: 0.85em; 
@@ -304,7 +305,7 @@ img {opacity: 1; transition: all .7s ease-in-out; border-radius:0;} img:hover {o
 .img-container a {text-decoration: none; background: none!important; border: none;}
 .img-cred {opacity:.7} .img-cred:hover {opacity:1;}
 .img-fluid {object-fit:contain;min-width:400px;min-width:70%;margin:auto;max-width:99.5%;max-height:90vh;margin-top:0.5em;margin-bottom:0.5em;}
-.full-screen-overlay {display: none;
+#fullScreenOverlay {display: none;
     position: fixed;
     z-index: 999;
     left: 0;
@@ -316,13 +317,13 @@ img {opacity: 1; transition: all .7s ease-in-out; border-radius:0;} img:hover {o
     text-align: center;
     box-sizing: border-box;
     border-radius: 0;}
-.full-screen-overlay img {vertical-align:middle;object-fit:contain;min-width:95%;margin:auto;max-width:99.5%;max-height:95vh;}
-.full-screen-overlay:before {content: '';
+#fullScreenOverlay img {vertical-align:middle;object-fit:contain;min-width:95%;margin:auto;max-width:97.5%;max-height:95vh;}
+#fullScreenOverlay:before {content: '';
     display: inline-block;
     height: 100vh;
     vertical-align: middle;}
-.close-button:hover {filter: invert(100%); -webkit-filter: invert(100%); cursor: pointer;}
-.close-button {position: absolute;
+#close-button:hover {filter: invert(100%); -webkit-filter: invert(100%); cursor: pointer;}
+#close-button {position: absolute;
     top: .5em;
     right: 1em;
     color: rgba(129, 129, 129, 0.5);

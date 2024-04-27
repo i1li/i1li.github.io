@@ -28,7 +28,7 @@ window.addEventListener("DOMContentLoaded", function () {
         overlay2.style.backgroundImage = gradient;
     }
     function updateColors() {
-        hueIndex = (hueIndex + 1) % 360;
+        hueIndex = (hueIndex + .05) % 360;
         setGradient(hiddenBox, hueIndex);
         setOverlayGradient(hueIndex);
         setOverlay2Gradient(hueIndex);
@@ -43,5 +43,5 @@ window.addEventListener("DOMContentLoaded", function () {
     box2.classList.add("hidden");
     setOverlayGradient(0);
     setOverlay2Gradient(0);
-    setInterval(updateColors, 123);
+    setInterval(updateColors, 15);
 });
