@@ -94,117 +94,126 @@ images.forEach(function(img) {
 });
 
 // Single Page Application
-  const welcome = document.getElementById('welcome');
-  const postContainers = document.querySelectorAll('.post-container');
-  const observer = new IntersectionObserver(function(entries, observer) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        entry.target.querySelector('.post-content').style.display = 'block';
-        observer.unobserve(entry.target);
-      }
+let isInitialLoad = true;
+function scrollToElement(element, isSubpost = false) {
+  if (isSubpost && isInitialLoad) {
+    const postContainer = element.closest('.post-container');
+    postContainer.scrollIntoView({
+      block: 'center'
     });
-  });
-  postContainers.forEach(function(container) {
-    observer.observe(container);
-    container.querySelector('.post-content').style.display = 'none';
-  });
-  let isInitialLoad = true;
-  function showPostContent(container) {
-    container.style.display = 'block';
-    const postContent = container.querySelector('.post-content');
-    if (postContent) {
-      postContent.style.display = 'block';
-    }
-    const postNav = container.querySelector('.post-nav');
-    if (postNav) {
-      let postNavBottom = container.querySelector('.post-nav-bottom');
-      if (!postNavBottom) {
-        postNavBottom = postNav.cloneNode(true);
-        postNavBottom.classList.add('post-nav-bottom');
-        container.appendChild(postNavBottom);
-      }
-    }
-  }
-  function scrollToElement(element, isSubpost = false) {
+    setTimeout(() => {
+      let offsetTop = element.getBoundingClientRect().top + window.scrollY;
+      setTimeout(() => {
+        const subpostCenterOffset = (element.getBoundingClientRect().top + element.getBoundingClientRect().bottom) / 2 + window.scrollY;
+        offsetTop = subpostCenterOffset - window.innerHeight * 0.1;         
+        window.scrollBy({
+          top: offsetTop - window.scrollY,
+        });
+        isInitialLoad = false;
+      }, 200);
+    }, 200);
+  } else {
     let offsetTop = element.getBoundingClientRect().top + window.scrollY - 45;
-      if (isSubpost && isInitialLoad) {
-      offsetTop = Math.round(element.getBoundingClientRect().top + ((window.scrollY / window.innerHeight) * window.scrollY));
-    }
-      window.scrollTo({
-        top: offsetTop,
-      });
-    isInitialLoad = false;
+    window.scrollTo({
+      top: offsetTop,
+    });
   }
-  function showSinglePost(postId, subpostId) {
-    let targetContainer = null;
-    postContainers.forEach(function(container) {
-      if (container.id === postId) {
-        showPostContent(container);
-        targetContainer = container;
-        welcome.style.display = 'none';
-        if (subpostId) {
-          const subpost = container.querySelector(`.subpost#${subpostId}`);
-          if (subpost) {
-            scrollToElement(subpost, true);
-          }
-        } else {
-          scrollToElement(container, false);
+}
+const observer = new IntersectionObserver(function(entries, observer) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.querySelector('.post-content').style.display = 'block';
+      observer.unobserve(entry.target);
+    }
+  });
+});
+const postContainers = document.querySelectorAll('.post-container');
+postContainers.forEach(function(container) {
+  observer.observe(container);
+  container.querySelector('.post-content').style.display = 'none';
+});
+const welcome = document.getElementById('welcome');
+function showSinglePost(postId, subpostId) {
+  postContainers.forEach(function(container) {
+    if (container.id === postId) {
+      welcome.style.display = 'none';
+      container.style.display = 'block';
+      const postContent = container.querySelector('.post-content');
+      if (postContent) {
+        postContent.style.display = 'block';
+      }
+      const postNav = container.querySelector('.post-nav');
+      if (postNav) {
+        let postNavBottom = container.querySelector('.post-nav-bottom');
+        if (!postNavBottom) {
+          postNavBottom = postNav.cloneNode(true);
+          postNavBottom.classList.add('post-nav-bottom');
+          container.appendChild(postNavBottom);
+        }
+      }
+      if (subpostId) {
+        const subpost = container.querySelector(`.subpost#${subpostId}`);
+        if (subpost) {
+          scrollToElement(subpost, true);
         }
       } else {
-        container.style.display = 'none';
+        scrollToElement(container, false);
       }
-    });
-  }
-  function showAllPosts() {
-    postContainers.forEach(function(container, index) {
-      container.style.display = 'block';
-      if (index !== 0) {
-        container.querySelector('.post-content').style.display = 'none';
-      }
-      observer.observe(container);
-      const postNavBottom = container.querySelector('.post-nav-bottom');
-      if (postNavBottom) {
-        postNavBottom.remove();
-      }
-    });
-    welcome.style.display = 'block';
-    header.classList.remove('scrolled-down');
-    topFunction()
-    }
-  function navigate(path) {
-    const [postId, subpostId] = path.split('/');
-    if (postId) {
-      showSinglePost(postId, subpostId);
-      history.pushState({ postId: postId, subpostId: subpostId }, '', `/${path}`);
     } else {
-      showAllPosts();
-      history.pushState({}, '', window.location.origin);
-    }
-  }
-  window.onpopstate = function(event) {
-    if (event.state && event.state.postId) {
-      showSinglePost(event.state.postId, event.state.subpostId);
-    } else {
-      showAllPosts();
-    }
-  };
-  document.addEventListener('click', function(event) {
-    const anchor = event.target.closest('a');
-    if (anchor) {
-      const href = anchor.getAttribute('href');
-      if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) {
-        anchor.setAttribute('target', '_blank');
-        anchor.setAttribute('rel', 'noreferrer');
-        return;
-      }
-      event.preventDefault();
-      navigate(href.substring(1));
+      container.style.display = 'none';
     }
   });
-  const path = window.location.pathname.substring(1);
-  if (path) {
-    const [postId, subpostId] = path.split('/');
+}
+function showAllPosts() {
+  postContainers.forEach(function(container, index) {
+    container.style.display = 'block';
+    if (index !== 0) {
+      container.querySelector('.post-content').style.display = 'none';
+    }
+    observer.observe(container);
+    const postNavBottom = container.querySelector('.post-nav-bottom');
+    if (postNavBottom) {
+      postNavBottom.remove();
+    }
+  });
+  welcome.style.display = 'block';
+  header.classList.remove('scrolled-down');
+  topFunction()
+  }
+function navigate(path) {
+  const [postId, subpostId] = path.split('/');
+  if (postId) {
     showSinglePost(postId, subpostId);
+    history.pushState({ postId: postId, subpostId: subpostId }, '', `/${path}`);
+  } else {
+    showAllPosts();
+    history.pushState({}, '', window.location.origin);
+  }
+}
+window.onpopstate = function(event) {
+  if (event.state && event.state.postId) {
+    showSinglePost(event.state.postId, event.state.subpostId);
   } else {
     showAllPosts();
   }
+};
+document.addEventListener('click', function(event) {
+  const anchor = event.target.closest('a');
+  if (anchor) {
+    const href = anchor.getAttribute('href');
+    if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) {
+      anchor.setAttribute('target', '_blank');
+      anchor.setAttribute('rel', 'noreferrer');
+      return;
+    }
+    event.preventDefault();
+    navigate(href.substring(1));
+  }
+});
+const path = window.location.pathname.substring(1);
+if (path) {
+  const [postId, subpostId] = path.split('/');
+  showSinglePost(postId, subpostId);
+} else {
+  showAllPosts();
+}
