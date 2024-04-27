@@ -1,5 +1,5 @@
 # Minimal, Responsive, Pure JavaScript, Single Page App
-No frameworks, just pure JavaScript (a.k.a. vanilla JavaScript), CSS, and HTML. Responsive containers, images, video, and text automatically adjust to fit accordingly across small and large screens.
+No frameworks, just pure JavaScript (a.k.a. vanilla JavaScript), CSS, and HTML. Responsive containers, images, video, and text automatically adjust to fit accordingly across small and large screens. Minimal, Single Page App, light/dark, zoom in/out, full screen image overlay, go to top, lazy loading, embeded content display toggle, target links as subpages (page/target instead of page#target)
 
 [Demo site](https://y0.netlify.app/) contains my personal writing, feel free to fork this repo and use it as a template.
 
@@ -17,6 +17,10 @@ Individual post view at unique URLs removes the welcome intro from display, and 
 -   Provides users with the ability to adjust the text size for better readability.
 -   Dynamically adjusts the font size of key elements on the page based on user interaction, with the zoom level persisted in `localStorage`.
 
+### Full Screen Image Overlay
+
+-   Responsive full screen overlay when user clicks to expand image, exits by clicking anywhere, pressing any key, or clicking "x"
+
 ### SPA Navigation and Content Loading
 
 -   Enables seamless navigation within the application without full page reloads, improving the user experience.
@@ -24,7 +28,11 @@ Individual post view at unique URLs removes the welcome intro from display, and 
 -   Uses the `IntersectionObserver` API for lazy loading content as it becomes visible, reducing initial load time.
 -   Manages browser history and navigation state using the History API (`history.pushState` and `window.onpopstate`), allowing for bookmarkable URLs and functional forward/backward navigation.
 -   Implements custom logic to show/hide content based on the current navigation state, simulating the behavior of a multi-page application within a single HTML document.
-    
+
+### Target Links As Subpages
+
+-   Allows proper permalinks for specific areas of posts (target links, a.k.a. subpages), so they get a url of post/target instead of post#target
+
 ### External Links Handling
 
 -   Correctly identifies and handles external links to ensure they open in a new tab, preserving SPA integrity.
@@ -36,7 +44,6 @@ Individual post view at unique URLs removes the welcome intro from display, and 
 -   The sticky header adjusts its style based on the scroll position, becoming more compact as the user scrolls down.
 -   A "scroll to top" button appears after a certain scroll threshold, allowing users to quickly return to the top of the page with a single click.
 
-    
 ### Efficiency and Minimalism
 
 -   The code demonstrates efficient use of native JavaScript APIs to achieve functionality often reliant on external libraries, showcasing a minimalist approach that reduces load times and dependency overhead.
@@ -46,7 +53,10 @@ This SPA implementation is a testament to the power of modern JavaScript and bro
 
 Custom components included:
 ### [Lightest Youtube Embed](https://github.com/i1li/lightest-youtube-embed)
-Easy to use YouTube embed that saves space, bandwidth, and privacy. With a bare amount of code, it responsively fits videos that only load once user clicks "show/hide" button.
+Easy to use YouTube embed that saves space, bandwidth, and privacy. With a bare amount of code, it responsively fits videos and playlists that only load once user clicks "show/hide" button.
+
+### Simple Toggle (toggle.js)
+Stipped version of Lightest Youtube Embed to toggle display of any iframe or other content.
 
 ### [Netlify Content Gate](https://github.com/i1li/netlify-content-gate)
 Custom solution for a simple free content gating. Kept on a separate site for simplicity in this case, but easily integrated.
