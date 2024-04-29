@@ -8,21 +8,17 @@ Default "display all posts" view at root directory, with posts auto-expanding up
 Individual post view at unique URLs removes the welcome intro from display, and autoscrolls post header to top. Also clones a copy of the post navigation links shown in the post header, to the bottom of post.
 
 ### Light/Dark Mode Toggle
-
 -   Allows users to switch between light and dark themes, enhancing accessibility and user preference.
 -   Utilizes `localStorage` to persist the user's theme choice across sessions and `window.matchMedia` to detect and respect the system's preferred color scheme.
 
 ### Zoom In/Out Functionality
-
 -   Provides users with the ability to adjust the text size for better readability.
 -   Dynamically adjusts the font size of key elements on the page based on user interaction, with the zoom level persisted in `localStorage`.
 
 ### Full Screen Image Overlay
-
 -   Responsive full screen overlay when user clicks to expand image, exits by clicking anywhere, pressing any key, or clicking "x"
 
 ### SPA Navigation and Content Loading
-
 -   Enables seamless navigation within the application without full page reloads, improving the user experience.
     
 -   Uses the `IntersectionObserver` API for lazy loading content as it becomes visible, reducing initial load time.
@@ -30,38 +26,48 @@ Individual post view at unique URLs removes the welcome intro from display, and 
 -   Implements custom logic to show/hide content based on the current navigation state, simulating the behavior of a multi-page application within a single HTML document.
 
 ### Target Links As Subpages
-
 -   Allows proper permalinks for specific areas of posts (target links, a.k.a. subpages), so they get a url of post/target instead of post#target
+-   [Demo at /edu/psychology](https://y0.netlify.app/edu/psychology)
 
-### External Links Handling
-
--   Correctly identifies and handles external links to ensure they open in a new tab, preserving SPA integrity.
--   Checks the URL of clicked links and sets them to open in a new tab if they lead outside the current domain, using `target="_blank"` and `rel="noreferrer"` for security.
-
-### Sticky Header and Scroll-to-Top Button
-
--   Improves navigation and accessibility by providing a sticky header and a convenient way to return to the top of the page.    
--   The sticky header adjusts its style based on the scroll position, becoming more compact as the user scrolls down.
--   A "scroll to top" button appears after a certain scroll threshold, allowing users to quickly return to the top of the page with a single click.
-
-### Efficiency and Minimalism
-
--   The code demonstrates efficient use of native JavaScript APIs to achieve functionality often reliant on external libraries, showcasing a minimalist approach that reduces load times and dependency overhead.
--   By combining CSS class toggles, native browser APIs, and simple event handling, it achieves a responsive, user-friendly SPA experience with minimal code.
-
-This SPA implementation is a testament to the power of modern JavaScript and browser capabilities, allowing easy creation of rich, interactive web applications without any reliance on frameworks or libraries.
-
-Custom components included:
-### [Lightest Youtube Embed](https://github.com/i1li/lightest-youtube-embed)
-Easy to use YouTube embed that saves space, bandwidth, and privacy. With a bare amount of code, it responsively fits videos and playlists that only load once user clicks "show/hide" button.
+### [Lightest Youtube Embed](https://github.com/i1li/lightest-youtube-embed) (yt.js)
+Easy to use YouTube embed that saves space, bandwidth, and privacy. With a bare amount of code, it responsively fits videos and playlists that only load once user clicks "show/hide" button. [Demo at /edu](https://y0.netlify.app/edu/)
 
 ### Simple Toggle (toggle.js)
-Stipped version of Lightest Youtube Embed to toggle display of any iframe or other content.
+Stipped version of Lightest Youtube Embed to toggle display of any iframe or other content. [Demo at /jesus-and-his-religion](https://y0.netlify.app/jesus-and-his-religion/)
 
-### [Netlify Content Gate](https://github.com/i1li/netlify-content-gate)
-Custom solution for a simple free content gating. Kept on a separate site for simplicity in this case, but easily integrated.
+### yt-titles.js
+Updates all `<y-t>` elements on the page,  `<y-t v="Your Video ID">` becomes `<y-t v="Your Video ID" t="The Video's Title">`
+
+### yt-ids.js
+- Extracts all ids found within the v attribution of `<y-t>` tags. 
+- For playlists, it gets all the available video ids for each, then moves the playlistid from the v attribute to p, listing all video ids in the v attribute. 
+- Combines all video ids from specified `<div>` sections into one `<y-t>` element.
+- Mirrors some `<y-t>` elements into the 'stack' array of shuffle.js
+
+### shuffle.js
+- Shuffles an array of `<y-t>` elements, with it's own next button. [Demo at top of main page](https://y0.netlify.app/)
+- The order of the `<y-t>` elements is shuffled at each page load, as well as the video ids within.
+- Also shuffles all the video ids in the specified `<div>` sections, including the combined list, and videos from the section below it. (This way playlist order is preserved in other sections of the site)
 
 ### Background Gradient Shift, and other CSS Effects
 -   `bg.js` & `bg.css` create a constant shifting gradient by creating and replacing blended layers.
 -   Several layers of semi-transparent gradients for background and page elements.
 -   Dynamic cursor hover and filter effects.
+
+### [Netlify Content Gate](https://github.com/i1li/netlify-content-gate)
+Custom solution for a simple free content gating. Kept on a separate site for simplicity in this case, but easily integrated.
+
+### Sticky Header and Scroll-to-Top Button
+-   Improves navigation and accessibility by providing a sticky header and a convenient way to return to the top of the page.    
+-   The sticky header adjusts its style based on the scroll position, becoming more compact as the user scrolls down.
+-   A "scroll to top" button appears after a certain scroll threshold, allowing users to quickly return to the top of the page with a single click.
+
+### External Links Handling
+-   Correctly identifies and handles external links to ensure they open in a new tab, preserving SPA integrity.
+-   Checks the URL of clicked links and sets them to open in a new tab if they lead outside the current domain, using `target="_blank"` and `rel="noreferrer"` for security.
+
+### Efficiency and Minimalism
+-   The code demonstrates efficient use of native JavaScript APIs to achieve functionality often reliant on external libraries, showcasing a minimalist approach that reduces load times and dependency overhead.
+-   By combining CSS class toggles, native browser APIs, and simple event handling, it achieves a responsive, user-friendly SPA experience with minimal code.
+
+This SPA implementation is a testament to the power of modern JavaScript and browser capabilities, allowing easy creation of rich, interactive web applications without any reliance on frameworks or libraries.
