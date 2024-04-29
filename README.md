@@ -39,15 +39,15 @@ Stipped version of Lightest Youtube Embed to toggle display of any iframe or oth
 Updates all `<y-t>` elements on the page,  `<y-t v="Your Video ID">` becomes `<y-t v="Your Video ID" t="The Video's Title">`
 
 ### yt-ids.js
-- Extracts all ids found within the v attribution of `<y-t>` tags. 
-- For playlists, it gets all the available video ids for each, then moves the playlistid from the v attribute to p, listing all video ids in the v attribute. 
-- Combines all video ids from specified `<div>` sections into one `<y-t>` element.
-- Mirrors some `<y-t>` elements into the 'stack' array of shuffle.js
+- Extracts all IDs found within the v attribute of `<y-t>` tags. 
+- For playlists, it gets all the available video IDs for each, then moves the playlist ID from the v attribute to p, listing all video IDs in the v attribute. 
+- Combines all video IDs from specified `<div>` sections into one `<y-t>` element.
 
 ### shuffle.js
-- Shuffles an array of `<y-t>` elements, with it's own next button. [Demo at top of main page](https://y0.netlify.app/)
-- The order of the `<y-t>` elements is shuffled at each page load, as well as the video ids within.
-- Also shuffles all the video ids in the specified `<div>` sections, including the combined list, and videos from the section below it. (This way playlist order is preserved in other sections of the site)
+- Shuffles an array of `<y-t>` elements extracted from the 'musix' `<div>`, with its own next button. [Demo at top of main page](https://y0.netlify.app/)
+- The order of the `<y-t>` elements is shuffled at each page load, as well as the video IDs within each element.
+- Also shuffles all the video IDs in other specified `<div>` sections, including the combined list, and videos from sections below it. (Limited to these divs so playlist order is preserved in other sections of the site)
+- Since shuffled playlists are constructed with each video ID in the URL, there is a limit of 150 per playlist, although each shuffle picks from the entire list of video IDs
 
 ### Background Gradient Shift, and other CSS Effects
 -   `bg.js` & `bg.css` create a constant shifting gradient by creating and replacing blended layers.

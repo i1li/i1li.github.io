@@ -115,7 +115,7 @@ a:hover.dark-mode {text-decoration: dotted underline;
     text-decoration-thickness: 2px;
     border: .1em rgba(22,22,22,.1) ridge;
     background: linear-gradient(to top, rgba(22,22,222, .5), rgba(222, 222, 222, .1));}
-#shuffle.dark-mode a {color: #00eeff;
+#stack.dark-mode a {color: #00eeff;
     text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
     filter: drop-shadow(0 0 .1em rgba(255, 100, 0, 1));
     -webkit-filter: drop-shadow(0 0 .1em rgba(255, 100, 100, .3));
@@ -129,7 +129,7 @@ a:hover.dark-mode {text-decoration: dotted underline;
     border: .1em rgba(22,22,22,.15) groove;
     background: linear-gradient(to top, rgba(22,222,222, .1), rgba(222, 222, 222, 0.1));
     border-radius: 1em;}
-#shuffle.dark-mode a:hover {text-decoration: dotted underline;
+#stack.dark-mode a:hover {text-decoration: dotted underline;
     text-decoration-thickness: 2px;
     border: .1em rgba(22,22,22,.1) ridge;
     background: linear-gradient(to top, rgba(22,22,222, .5), rgba(222, 222, 222, .1));}

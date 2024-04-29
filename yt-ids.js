@@ -3,9 +3,7 @@ const path = require('path');
 const axios = require("axios");
 const KEY = ""; // https://developers.google.com/youtube/v3/getting-started#before-you-start
 const indexHtmlPath = path.join(__dirname, 'index.html');
-const shuffleJsPath = path.join(__dirname, 'js/shuffle.js');
 const indexHtml = fs.readFileSync(indexHtmlPath, 'utf8');
-const shuffleJs = fs.readFileSync(shuffleJsPath, 'utf8');
 const musicDivRegex = /id="musix">([\s\S]*?)<\/div>/;
 const extraDivRegex = /id="extra">([\s\S]*?)<\/div>/;
 const videoIdRegex = /v="([^"?]*?)"/g;
@@ -36,16 +34,6 @@ while ((match = playlistIdRegex.exec(musicDiv)) !== null) {
     playlistIds.push(match[1]);
   }
 }
-const newShuffleJs = shuffleJs.replace(
-  /stack = \[([\s\S]*?)\];/,
-  `stack = [
-${musicDiv.split('<br/>')
-  .filter(line => line.trim() !== '')
-  .map(line => `'${line.trim()}'`)
-  .join(',\n')}
-];`
-);
-fs.writeFileSync(shuffleJsPath, newShuffleJs);
 const getPlaylistItems = async (playlistIDs) => {
   let availableVideoIds = {};
   for (const playlistID of playlistIDs) {
