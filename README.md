@@ -30,7 +30,7 @@ Individual post view at unique URLs removes the welcome intro from display, and 
 -   [Demo at /edu/psychology](https://y0.netlify.app/edu/psychology)
 
 ### [Lightest Youtube Embed](https://github.com/i1li/lightest-youtube-embed) (yt.js)
-Easy to use YouTube embed that saves space, bandwidth, and privacy. With a bare amount of code, it responsively fits videos and playlists that only load once user clicks "show/hide" button. [Demo at /edu](https://y0.netlify.app/edu/)
+Easy to use YouTube embed that saves space, bandwidth, and privacy. With a bare amount of code (`<y-t v="videoid"></y-t>`), it responsively fits videos and playlists that only load once user clicks "show/hide" button. [Demo at /edu](https://y0.netlify.app/edu/)
 
 ### Simple Toggle (toggle.js)
 Stipped version of Lightest Youtube Embed to toggle display of any iframe or other content. [Demo at /jesus-and-his-religion](https://y0.netlify.app/jesus-and-his-religion/)
@@ -41,12 +41,12 @@ Updates all `<y-t>` elements on the page,  `<y-t v="Your Video ID">` becomes `<y
 ### yt-ids.js
 - Extracts all IDs found within the v attribute of `<y-t>` tags. 
 - For playlists, it gets all the available video IDs for each, then moves the playlist ID from the v attribute to p, listing all video IDs in the v attribute. 
-- Combines all video IDs from specified `<div>` sections into one `<y-t>` element.
+- Combines all video IDs from specified `<div>` sections into one `<y-t>` element at the top of [/edu/music](https://y0.netlify.app/edu/music).
 
 ### shuffle.js
 - Shuffles an array of `<y-t>` elements extracted from the 'musix' `<div>`, with its own next button. [Demo at top of main page](https://y0.netlify.app/)
 - The order of the `<y-t>` elements is shuffled at each page load, as well as the video IDs within each element.
-- Also shuffles all the video IDs in other specified `<div>` sections, including the combined list, and videos from sections below it. (Limited to these divs so playlist order is preserved in other sections of the site)
+- Also shuffles all the video IDs in other specified `<div>` sections at [/edu/music](https://y0.netlify.app/edu/music), including the combined list, and videos from sections below it. (Limited to these divs so playlist order is preserved in other sections of the site)
 - Since shuffled playlists are constructed with each video ID in the URL, there is a limit of 150 per playlist, although each shuffle picks from the entire list of video IDs
 
 ### Background Gradient Shift, and other CSS Effects

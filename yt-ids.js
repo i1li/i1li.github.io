@@ -79,11 +79,14 @@ const getVideoDetails = async (videoIDs) => {
   let availableVideoIds = [];
   for (const videoID of videoIDs) {
     try {
+      let pageToken = null;
+      do {
         const params = {
           part: 'id,snippet,status',
           maxResults: 50,
           id: videoID.trim(),
-          key: KEY
+          key: KEY,
+          pageToken: pageToken,
         }
         const url = new URL('https://www.googleapis.com/youtube/v3/videos');
         url.search = new URLSearchParams(params).toString();
@@ -93,6 +96,8 @@ const getVideoDetails = async (videoIDs) => {
         });
       const availableVideos = result.data.items.filter(item => item.status.privacyStatus === 'public');
       availableVideoIds = [...availableVideoIds, ...availableVideos.map(item => item.id)];
+      pageToken = result.data.nextPageToken;
+       } while (pageToken);
     } catch (error) {
       if (error.response && error.response.status === 404) {
         console.warn(`Skipping invalid video ID: ${videoID}`);
