@@ -58,7 +58,7 @@ const getPlaylistItems = async (playlistIDs) => {
       const result = await axios.get(url.toString(), {
         params,
       });
-      const availableVideos = result.data.items.filter((item) => item.status.privacyStatus === 'public');
+      const availableVideos = result.data.items.filter((item) => item.status.privacyStatus === 'public' && !noEmbedIds.includes(item.snippet.resourceId.videoId));
       videoIds = [...videoIds, ...availableVideos.map((item) => item.snippet.resourceId.videoId)];
       totalItems += result.data.items.length;
       console.log(`Fetched ${totalItems} items for playlist ID: ${playlistID}`);
@@ -94,7 +94,7 @@ const getVideoDetails = async (videoIDs) => {
         const result = await axios.get(url.toString(), {
           params,
         });
-      const availableVideos = result.data.items.filter(item => item.status.privacyStatus === 'public');
+      const availableVideos = result.data.items.filter((item) => item.status.privacyStatus === 'public' && !noEmbedIds.includes(item.id));
       availableVideoIds = [...availableVideoIds, ...availableVideos.map(item => item.id)];
       pageToken = result.data.nextPageToken;
        } while (pageToken);
