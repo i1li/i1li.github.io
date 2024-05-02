@@ -1,46 +1,53 @@
-function shuffle(array) {
+function shuffle(array, limit = Infinity) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
-  return array;
+  return array.slice(0, Math.min(limit, array.length - 1));
 }
-function shuffleAndLimit(videoIds, limit = 150) {
-  shuffle(videoIds);
-  return videoIds.slice(0, limit);
-}
-function processYTElement(ytElement) {
-  const videoIds = ytElement.getAttribute('v').split(',');
-  if (videoIds.length > 1) {
-    const limitedIds = shuffleAndLimit(videoIds);
-    ytElement.setAttribute('v', limitedIds.join(','));
+function processElement(element) {
+  const array = element.getAttribute('v').split(',');
+  if (array.length > 1) {
+    const limitedArray = shuffle(array,150);
+    element.setAttribute('v', limitedArray.join(','));
   }
 }
 function processDiv(containerId) {
   const container = document.getElementById(containerId);
-  const ytElements = container.querySelectorAll('y-t');
-  ytElements.forEach(processYTElement);
+  const elements = container.querySelectorAll('y-t');
+  elements.forEach(processElement);
 }
-function processStack() {
-  const musicDiv = document.getElementById('musix');
-  const ytElements = Array.from(musicDiv.querySelectorAll('y-t'));
-  shuffle(ytElements);
+const musicDiv = document.getElementById('musix');
+const extraDiv = document.getElementById('extra');
+const elements = Array.from(musicDiv.querySelectorAll('y-t')).concat(Array.from(extraDiv.querySelectorAll('y-t')));
+function shuffleAndDraw() {
+  shuffle(elements);
   let currentIndex = 0;
-  let pick = document.getElementById('stack');
-  pick.innerHTML = '';
-  const clonedYTElement = ytElements[currentIndex].cloneNode(false);
-  processYTElement(clonedYTElement);
-  pick.appendChild(clonedYTElement);
+  let draw = document.getElementById('draw');
+  draw.innerHTML = '';
+  const clonedElement = elements[currentIndex].cloneNode(false);
+  processElement(clonedElement);
+  draw.appendChild(clonedElement);
   let next = document.querySelector("#next");
   next.addEventListener('click', function() {
-    currentIndex = (currentIndex + 1) % ytElements.length;
-    pick.innerHTML = '';
-    const clonedYTElement = ytElements[currentIndex].cloneNode(false);
-    processYTElement(clonedYTElement);
-    pick.appendChild(clonedYTElement);
+    currentIndex = (currentIndex + 1) % elements.length;
+    draw.innerHTML = '';
+    const clonedElement = elements[currentIndex].cloneNode(false);
+    processElement(clonedElement);
+    draw.appendChild(clonedElement);
   });
 }
-processDiv('combined-list');
+function limitAndCombine() {
+  const combinedElements = elements.reduce((acc, element) => {
+    const elements = element.getAttribute('v').split(',');
+    return [...acc, ...shuffle(elements,4)];
+  }, []);
+  const combo = document.getElementById('combined-list');
+  const comboElement = combo.querySelector('y-t');
+  comboElement.setAttribute('v', [...new Set(combinedElements)].join(','));
+}
 processDiv('musix');
 processDiv('extra');
-processStack();
+shuffleAndDraw();
+limitAndCombine();
+processDiv('combined-list');

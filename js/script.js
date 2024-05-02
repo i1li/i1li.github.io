@@ -22,7 +22,7 @@ function topFunction() {
 // Light / Dark
 function applyDarkMode(isDarkMode) {
   document.body.classList.toggle("dark-mode", isDarkMode);
-  document.querySelectorAll('a, .post-content, .post-content-wrapper, .bg-wrapper, #stack').forEach((element) => {
+  document.querySelectorAll('a, .post-content, .post-content-wrapper, .bg-wrapper, #draw').forEach((element) => {
     element.classList.toggle('dark-mode', isDarkMode);
   });
 }
@@ -213,7 +213,11 @@ document.addEventListener('click', function(event) {
 const path = window.location.pathname.substring(1);
 if (path) {
   const [postId, subpostId] = path.split('/');
-  showSinglePost(postId, subpostId);
+  if (postId && document.getElementById(postId)) {
+    showSinglePost(postId, subpostId);
+  } else {
+    showAllPosts();
+  }
 } else {
   showAllPosts();
 }

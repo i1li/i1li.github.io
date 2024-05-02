@@ -31,7 +31,7 @@ class YTEmbed extends HTMLElement {
           embedUrl = linkUrl;
         }
         break;
-      case this.id.startsWith('PL') || this.id.startsWith('TL') || this.id.startsWith('OL') || this.id.startsWith('FL') || this.id.length > 11:
+      case this.id.length > 11 && (this.id.startsWith('PL') || this.id.startsWith('TL') || this.id.startsWith('OL') || this.id.startsWith('FL') || this.id.startsWith('UU')):
         if (this.classList.contains('no-link-embed')) {
           linkUrl = `https://www.youtube.com/playlist?list=${this.id}&autoplay=1`;
           embedUrl = `https://www.youtube-nocookie.com/embed/videoseries?list=${this.id}&autoplay=1`;

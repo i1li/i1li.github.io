@@ -6,8 +6,8 @@ const indexHtmlPath = path.join(__dirname, 'index.html');
 const indexHtml = fs.readFileSync(indexHtmlPath, 'utf8');
 const musicDivRegex = /id="musix">([\s\S]*?)<\/div>/;
 const extraDivRegex = /id="extra">([\s\S]*?)<\/div>/;
-const videoIdRegex = /v="([^"?]*?)"/g;
-const playlistIdRegex = /(?:p="(PL[^"]*?|FL[^"]*?|OL[^"]*?|TL[^"]*?)"|v="(PL[^"]*?|FL[^"]*?|OL[^"]*?|TL[^"]*?)")/g;
+const videoIdRegex = /v="([^"?]{11}[^"?]*?)"/g;
+const playlistIdRegex = /(?:p="(PL[^"]{12,}|FL[^"]{12,}|OL[^"]{12,}|TL[^"]{12,}|UU[^"]{12,})"|v="(PL[^"]{12,}|FL[^"]{12,}|OL[^"]{12,}|TL[^"]{12,}|UU[^"]{12,})")/g;
 const noEmbedRegex = /"no-embeds"[^>]*>([^<]*)<\/div>/;
 const musicDiv = indexHtml.match(musicDivRegex)?.[1] || '';
 const extraDiv = indexHtml.match(extraDivRegex)?.[1] || '';
@@ -109,11 +109,10 @@ const getVideoDetails = async (videoIDs) => {
   return availableVideoIds;
 };
 const writeOutput = async () => {
-  const [playlistVideoIds, availableVideoIds] = await Promise.all([
+  const [playlistVideoIds] = await Promise.all([
     getPlaylistItems(playlistIds),
     getVideoDetails(videoIds)
   ]);
-  const combinedVideoIds = [...new Set([...availableVideoIds, ...Object.values(playlistVideoIds).flat()])].filter(id => !noEmbedIds.includes(id));
   let modifiedHtml = indexHtml;
   for (const playlistId of playlistIds) {
     const videoIdsInPlaylist = playlistVideoIds[playlistId] || [];
@@ -126,11 +125,6 @@ const writeOutput = async () => {
       }
     });
   }
-  const combinedListRegex = /"combined-list"[^>]*>[\s\S]*?<\/y-t>/;
-  const finalIndexHtml = modifiedHtml.replace(
-    combinedListRegex,
-    `"combined-list"><y-t class="no-link-embed" v="${combinedVideoIds}" t="Combined Shuffled Playlist"></y-t>`
-  );
-  fs.writeFileSync(path.join(__dirname, 'index.html'), finalIndexHtml);
+  fs.writeFileSync(path.join(__dirname, 'index.html'), modifiedHtml);
 };
 writeOutput().catch(console.error);
