@@ -60,7 +60,6 @@ function shuffleAndDraw() {
   shuffle(elements);
   let currentIndex = 0;
   let draw = document.getElementById('draw');
-  draw.innerHTML = '';
   const clonedElement = elements[currentIndex].cloneNode(false);
   processAndCombine(clonedElement, currentIndex);
   draw.appendChild(clonedElement);
