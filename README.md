@@ -1,5 +1,5 @@
 # Minimal, Responsive, Pure JavaScript, Single Page App
-No frameworks, just pure JavaScript (a.k.a. vanilla JavaScript), CSS, and HTML. Responsive containers, images, video, and text automatically adjust to fit accordingly across small and large screens. Minimal, Single Page App, light/dark, zoom in/out, full screen image overlay, go to top, lazy loading, embeded content display toggle, target links as subpages (page/target instead of page#target)
+No frameworks, just pure JavaScript (a.k.a. vanilla JavaScript), CSS, and HTML. Responsive containers, images, video, and text automatically adjust to fit accordingly across small and large screens. Minimal, Single Page App, light/dark, zoom in/out, full screen image overlay, go to top, lazy loading, embedded content display toggle, target links as subpages (page/target instead of page#target)
 
 [Demo site](https://y0.netlify.app/) contains my personal writing, feel free to fork this repo and use it as a template.
 
@@ -29,20 +29,23 @@ Individual post view at unique URLs removes the welcome intro from display, and 
 -   Allows proper permalinks for specific areas of posts (target links, a.k.a. subpages), so they get a url of post/target instead of post#target
 -   [Demo at /edu/psychology](https://y0.netlify.app/edu/psychology)
 
-### [Lightest Youtube Embed](https://github.com/i1li/lightest-youtube-embed) (yt.js)
+### [Lightest Youtube Embed](https://github.com/i1li/lightest-youtube-embed) - ([yt.js](https://github.com/i1li/i/blob/main/js/yt.js))
 Easy to use YouTube embed that saves space, bandwidth, and privacy. With a bare amount of code (`<y-t v="videoid"></y-t>`), it responsively fits videos and playlists that only load once user clicks "show/hide" button. [Demo at /edu](https://y0.netlify.app/edu/)
 
-### Simple Toggle (toggle.js)
+### [Simple Toggle (toggle.js)](https://github.com/i1li/i/blob/main/js/toggle.js)
 Stipped version of Lightest Youtube Embed to toggle display of any iframe or other content. [Demo at /jesus-and-his-religion](https://y0.netlify.app/jesus-and-his-religion/)
 
-### yt-titles.js
+### [yt-titles.js](https://github.com/i1li/i/blob/main/yt-titles.js)
 Updates all `<y-t>` elements on the page,  `<y-t v="Your Video ID">` becomes `<y-t v="Your Video ID" t="The Video's Title">`
 
-### yt-ids.js
+### [yt-ids.js](https://github.com/i1li/i/blob/main/yt-id.js)
 - Extracts all IDs found within the v attribute of `<y-t>` tags. 
 - For playlists, it gets all the available video IDs for each, then moves the playlist ID from the v attribute to p, listing all video IDs in the v attribute. 
 
-### shuffle.js
+### [shuffle.js](https://github.com/i1li/i/blob/main/js/shuffle.js)
+- The function shuffleAndDraw shuffles an array of playlists and videos extracted from the music section, with its own 'next' button. [Demo at top of main page](https://y0.netlify.app/)
+- The order of the elements is shuffled at each page load, as well as the video IDs within each element.
+- proccessAndCombine combines all video IDs, (limiting how many come from each playlist), from the music section into one `<y-t>` element, at the top of [/edu/music](https://y0.netlify.app/edu/music).
 - The shuffle() function is a hybrid algorithm that combines two different shuffle techniques to optimize performance for a wide range of input array sizes.
 The first shuffle technique used is the "Knuth Shuffle" or "Durstenfeld Shuffle". This is a variation of the Fisher-Yates shuffle algorithm that is optimized for small arrays. It has a time complexity of O(n * log n), where n is the size of the input array.
 
@@ -51,11 +54,8 @@ The decision to use which shuffle method, is based on the size of the input arra
 
 If the array length is less than limit * 2, the Knuth Shuffle is used. If the array length is greater than or equal to limit * 2, the Fisher-Yates Shuffle is used.
 
-- The function shuffleAndDraw shuffles an array of playlists and videos extracted from the 'musix' `<div>`, with its own next button. [Demo at top of main page](https://y0.netlify.app/)
-- The order of the elements is shuffled at each page load, as well as the video IDs within each element.
-- Combines all video IDs, (limiting how many come from each playlist), from specified `<div>` sections into one `<y-t>` element, at the top of [/edu/music](https://y0.netlify.app/edu/music).
-- Limited to specific divs so playlist order is preserved in other sections of the site
-- Since shuffled playlists are constructed with each video ID in the URL, there is a limit of 150 per playlist, although each shuffle picks from the entire list of video IDs
+- Limited to specific divs so playlist order is preserved in other sections of the site.
+- Since shuffled playlists are constructed with each video ID in the URL, there is a limit of 150 per playlist, although each shuffle picks from the entire list of video IDs (in this case several thousand for the combined playlist)
 
 ### Background Gradient Shift, and other CSS Effects
 -   `bg.js` & `bg.css` create a constant shifting gradient by creating and replacing blended layers.
