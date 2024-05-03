@@ -33,7 +33,7 @@ Individual post view at unique URLs removes the welcome intro from display, and 
 Easy to use YouTube embed that saves space, bandwidth, and privacy. With a bare amount of code (`<y-t v="videoid"></y-t>`), it responsively fits videos and playlists that only load once user clicks "show/hide" button. [Demo at /edu](https://y0.netlify.app/edu/)
 
 ### [Simple Toggle (toggle.js)](https://github.com/i1li/i/blob/main/js/toggle.js)
-Stipped version of Lightest Youtube Embed to toggle display of any iframe or other content. [Demo at /jesus-and-his-religion](https://y0.netlify.app/jesus-and-his-religion/)
+Stripped version of Lightest Youtube Embed to toggle display of any iframe or other content. [Demo at /jesus-and-his-religion](https://y0.netlify.app/jesus-and-his-religion/)
 
 ### [yt-titles.js](https://github.com/i1li/i/blob/main/yt-titles.js)
 Updates all `<y-t>` elements on the page,  `<y-t v="Your Video ID">` becomes `<y-t v="Your Video ID" t="The Video's Title">`
@@ -43,19 +43,13 @@ Updates all `<y-t>` elements on the page,  `<y-t v="Your Video ID">` becomes `<y
 - For playlists, it gets all the available video IDs for each, then moves the playlist ID from the v attribute to p, listing all video IDs in the v attribute. 
 
 ### [shuffle.js](https://github.com/i1li/i/blob/main/js/shuffle.js)
-- The function shuffleAndDraw shuffles an array of playlists and videos extracted from the music section, with its own 'next' button. [Demo at top of main page](https://y0.netlify.app/)
-- The order of the elements is shuffled at each page load, as well as the video IDs within each element.
 - proccessAndCombine combines all video IDs, (limiting how many come from each playlist), from the music section into one `<y-t>` element, at the top of [/edu/music](https://y0.netlify.app/edu/music).
-- The shuffle() function is a hybrid algorithm that combines two different shuffle techniques to optimize performance for a wide range of input array sizes.
-The first shuffle technique used is the "Knuth Shuffle" or "Durstenfeld Shuffle". This is a variation of the Fisher-Yates shuffle algorithm that is optimized for small arrays. It has a time complexity of O(n * log n), where n is the size of the input array.
-
-For larger arrays, the function uses the standard Fisher-Yates shuffle algorithm, which has a time complexity of O(n), where n is the size of the input array.
-The decision to use which shuffle method, is based on the size of the input array in relation to the limit parameter (limit is how many items are used from the array after shuffling):
-
-If the array length is less than limit * 2, the Knuth Shuffle is used. If the array length is greater than or equal to limit * 2, the Fisher-Yates Shuffle is used.
-
+- shuffleAndDraw shuffles an array of playlists and videos extracted from the music section, with its own 'next' button. It then "draws" from the shuffled array, cloning the `<y-t>` element into the 'draw' `<div>`. [Demo at top of main page](https://y0.netlify.app/)
+- The order of the elements is shuffled at each page load, as well as the video IDs within each element.
 - Limited to specific divs so playlist order is preserved in other sections of the site.
 - Since shuffled playlists are constructed with each video ID in the URL, there is a limit of 150 per playlist, although each shuffle picks from the entire list of video IDs (in this case several thousand for the combined playlist)
+
+The shuffle function combines two different shuffle techniques to optimize performance for a wide range of input array sizes. The first shuffle technique used is the "Knuth Shuffle" or "Durstenfeld Shuffle". This is a variation of the Fisher-Yates shuffle algorithm that is optimized for small arrays. For larger arrays, the function uses the standard Fisher-Yates shuffle algorithm. The decision to use which shuffle method, is based on the size of the input array in relation to the limit parameter (limit is how many items are used from the array after shuffling): If the array length is less than limit * 2, the Knuth Shuffle is used. If the array length is greater than or equal to limit * 2, the Fisher-Yates Shuffle is used.
 
 ### Background Gradient Shift, and other CSS Effects
 -   `bg.js` & `bg.css` create a constant shifting gradient by creating and replacing blended layers.
