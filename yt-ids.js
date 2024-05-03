@@ -6,7 +6,6 @@ const indexHtmlPath = path.join(__dirname, 'index.html');
 const indexHtml = fs.readFileSync(indexHtmlPath, 'utf8');
 const musicDivRegex = /id="musix">([\s\S]*?)<\/div>/;
 const extraDivRegex = /id="extra">([\s\S]*?)<\/div>/;
-const videoIdRegex = /v="([^"?]{11}[^"?]*?)"/g;
 const playlistIdRegex = /(?:p="(PL[^"]{12,}|FL[^"]{12,}|OL[^"]{12,}|TL[^"]{12,}|UU[^"]{12,})"|v="(PL[^"]{12,}|FL[^"]{12,}|OL[^"]{12,}|TL[^"]{12,}|UU[^"]{12,})")/g;
 const noEmbedRegex = /"no-embeds"[^>]*>([^<]*)<\/div>/;
 const musicDiv = indexHtml.match(musicDivRegex)?.[1] || '';
@@ -25,7 +24,6 @@ const extractIds = (regex, source) => {
   }
   return ids;
 };
-const videoIds = extractIds(videoIdRegex, searchDivs);
 const playlistIds = extractIds(playlistIdRegex, searchDivs);
 let match;
 while ((match = playlistIdRegex.exec(musicDiv)) !== null) {
@@ -54,7 +52,6 @@ const getPlaylistItems = async (playlistIDs) => {
       const url = new URL('https://www.googleapis.com/youtube/v3/playlistItems');
       url.search = new URLSearchParams(params).toString();
       url.href = url.href.replace(/&pageToken=null/, '');
-      console.log(`Sending request to: ${url}`);
       const result = await axios.get(url.toString(), {
         params,
       });
@@ -75,43 +72,9 @@ const getPlaylistItems = async (playlistIDs) => {
 }
 return availableVideoIds;
 };
-const getVideoDetails = async (videoIDs) => {
-  let availableVideoIds = [];
-  for (const videoID of videoIDs) {
-    try {
-      let pageToken = null;
-      do {
-        const params = {
-          part: 'id,snippet,status',
-          maxResults: 50,
-          id: videoID.trim(),
-          key: KEY,
-          pageToken: pageToken,
-        }
-        const url = new URL('https://www.googleapis.com/youtube/v3/videos');
-        url.search = new URLSearchParams(params).toString();
-        url.href = url.href.replace(/&pageToken=null/, '');
-        const result = await axios.get(url.toString(), {
-          params,
-        });
-      const availableVideos = result.data.items.filter((item) => item.status.privacyStatus === 'public' && !noEmbedIds.includes(item.id));
-      availableVideoIds = [...availableVideoIds, ...availableVideos.map(item => item.id)];
-      pageToken = result.data.nextPageToken;
-       } while (pageToken);
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        console.warn(`Skipping invalid video ID: ${videoID}`);
-      } else {
-        console.error(`Error fetching video details for video ID ${videoID}: ${error.message}`);
-      }
-    }
-  }
-  return availableVideoIds;
-};
 const writeOutput = async () => {
   const [playlistVideoIds] = await Promise.all([
     getPlaylistItems(playlistIds),
-    getVideoDetails(videoIds)
   ]);
   let modifiedHtml = indexHtml;
   for (const playlistId of playlistIds) {
