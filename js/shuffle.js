@@ -2,7 +2,7 @@ function shuffle(array, limit = Infinity) {
   if (array.length === 1) {
     return array;
   } else
-  if (array.length <= 20) {
+  if (array.length < Math.min(limit * 2, array.length)) {
     const result = [];
     const indices = new Set();
     while (indices.size < Math.min(limit, array.length)) {
