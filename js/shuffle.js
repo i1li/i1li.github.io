@@ -23,7 +23,7 @@ function shuffle(array, limit = Infinity) {
 }
 const musicDiv = document.getElementById('musix');
 const extraDiv = document.getElementById('extra');
-const elements = Array.from(musicDiv.querySelectorAll('y-t')).concat(Array.from(extraDiv.querySelectorAll('y-t')));
+const elements = [...musicDiv.querySelectorAll('y-t'), ...extraDiv.querySelectorAll('y-t')];
 let combinedElements = [];
 let elementIdsMap = new Map();
 function processAndCombine(element, index) {
@@ -38,7 +38,7 @@ function processAndCombine(element, index) {
     elementIds = elementIdsString.split(',');
     elementIdsMap.set(index, elementIds);
   }
-  const limitedIds = shuffle(elementIds, 2);
+  const limitedIds = shuffle(elementIds, 3);
   limitedIds.forEach(id => combinedElements.push(id.split('?')[0]));
   const shuffledArray = shuffle(elementIds, 150);
   element.setAttribute('v', shuffledArray.join(','));

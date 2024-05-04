@@ -1,6 +1,6 @@
 // Sticky Header & Go to top
 const scrollTransition = 50;
-const header = document.getElementById('siteHeader');
+const header = document.querySelector('header');
 const toTop = document.getElementById("toTop");
 function handleScroll() {
   if (window.scrollY > scrollTransition) {
@@ -221,3 +221,9 @@ if (path) {
 } else {
   showAllPosts();
 }
+window.onload = function() {
+  var currentPath = window.location.pathname;
+  if (currentPath !== '/') {
+    window.location.replace('/');
+  }
+};
