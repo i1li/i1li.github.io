@@ -3,7 +3,7 @@ No frameworks, just pure JavaScript (a.k.a. vanilla JavaScript), CSS, and HTML. 
 
 [Demo site](https://y0.netlify.app/) contains my personal writing, feel free to fork this repo and use it as a template.
 
-Quickstart: Open a terminal in the project directory, and enter
+Quickstart: Open a terminal in the project directory, and enter:
 ```bash
 npm i express
 node serv.js
@@ -42,7 +42,7 @@ Easy to use YouTube embed that saves space, bandwidth, and privacy. With a bare 
 Stripped version of Lightest Youtube Embed to toggle display of any iframe or other content. [Demo at /jesus-and-his-religion](https://y0.netlify.app/jesus-and-his-religion/)
 
 ### [yt-titles.js](https://github.com/i1li/i/blob/main/yt-titles.js)
-Updates all `<y-t>` elements on the page,  `<y-t v="Your Video ID">` becomes `<y-t v="Your Video ID" t="The Video's Title">` To use:
+Updates all `<y-t>` elements on the page,  `<y-t v="Your Video ID">` becomes `<y-t v="Your Video ID" t="The Video's Title">` To use, open a terminal in the project directory, and enter:
 ```bash
 npm i axios
 node yt-titles.js
@@ -50,7 +50,7 @@ node yt-titles.js
 
 ### [yt-ids.js](https://github.com/i1li/i/blob/main/yt-id.js)
 - Extracts all IDs found within the v attribute of `<y-t>` tags. 
-- For playlists, it gets all the available video IDs for each, then moves the playlist ID from the v attribute to p, listing all video IDs in the v attribute. To use:
+- For playlists, it gets all the available video IDs for each, then moves the playlist ID from the v attribute to p, listing all video IDs in the v attribute. To use, put your [API Key](https://developers.google.com/youtube/v3/getting-started#before-you-start) in the empty quotes at `const KEY = ""`, and then open a terminal in the project directory, and enter:
 ```bash
 npm i axios
 node yt-ids.js
