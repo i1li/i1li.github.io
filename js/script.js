@@ -221,9 +221,3 @@ if (path) {
 } else {
   showAllPosts();
 }
-window.onload = function() {
-  var currentPath = window.location.pathname;
-  if (currentPath !== '/') {
-    window.location.replace('/');
-  }
-};
