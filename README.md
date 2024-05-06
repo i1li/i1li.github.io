@@ -17,7 +17,7 @@ netlify dev
 ```
 
 ### SPA Navigation & Content Loading
--   Uses `netlify.toml` for hosting on Netlify, or `404.html` & `gh.js` for hosting on [GitHub Pages](https://i1li.github.io/). The latter uses a redirect workaround for SPA support, thus is [not ideal for SEO](https://github.com/rafgraph/spa-github-pages#seo).
+-   Uses [netlify.toml](/netlify.toml) for hosting on Netlify, or [404.html](/404.html) & [gh.js](/js/gh.js) for hosting on [GitHub Pages](https://i1li.github.io/).
 -   Enables seamless navigation within the application without full page reloads, improving user experience without complication of a framework.
 -   Uses the `IntersectionObserver` API for lazy loading content as it becomes visible, reducing initial load time.
 -   Manages browser history & navigation state using the History API (`history.pushState` & `window.onpopstate`), allowing for bookmarkable URLs & functional forward/backward navigation.

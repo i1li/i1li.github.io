@@ -44,10 +44,12 @@ header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 2
 .img-header:hover {-webkit-filter: invert(100%) !important;
     filter: invert(100%) !important;
     transition: all .3s ease-in-out;}
-#site-intro p {-webkit-backdrop-filter:brightness(90%)contrast(111%)saturate(555%)blur(.04em); 
+.no-bg {background: none !important;border: none !important;}
+#site-intro {padding-bottom: .2em;
+    -webkit-backdrop-filter:brightness(90%)contrast(111%)saturate(555%)blur(.04em); 
     backdrop-filter:brightness(90%)contrast(111%)saturate(555%)blur(.04em);
     border-radius:.5em;}
-#site-intro p, #site-info p{text-align: center;
+#site-intro, #site-info p{text-align: center;
     margin-right: 1vw;
     margin-left: 1vw;
     margin-bottom: .1em;
@@ -60,7 +62,7 @@ header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 2
     border-radius: .3em .3em .5em .5em;}
 #nav-links {background: linear-gradient(to bottom, rgba(222, 22, 22, .35), rgba(128, 0, 128, 0.3));
     font-size: 1.1em;
-    line-height: 1.2;
+    line-height: 1.3;
     padding: .2em 0 .7em;
     backdrop-filter: brightness(100%) contrast(220%);
     -webkit-backdrop-filter: brightness(100%) contrast(220%);}
@@ -96,6 +98,7 @@ body {transition: all .369s ease-in-out;
 body.dark-mode {
     color: white;
     text-shadow: 1px 1px 1px rgba(0,0,0,.3), 0 0 .3em rgba(22,22,22,.5), 0 0 1em rgba(255,0,0,.4);}
+.unstyled-link {all: unset !important; cursor: pointer !important;}
 a:link.dark-mode, a:visited.dark-mode {color: #00eeff;
     text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
     filter: drop-shadow(0 0 .1em rgba(255, 100, 0, 1));
@@ -296,6 +299,7 @@ img {opacity: 1; transition: all .7s ease-in-out; border-radius:0;} img:hover {o
 .img-opaq2 {opacity: 0.72;} .img-opaq2:hover {opacity: .88;}
 .img-opaq3 {opacity: 0.8;} .img-opaq3:hover {opacity: .9;}
 .img-opaq4 {opacity: 0.85;} .img-opaq4:hover {opacity: .92;}
+.opaq80 {opacity: 0.8 !important;}
 .img-gray:hover {filter: grayscale(85%); -webkit-filter: grayscale(85%); transition: all 1s ease-in-out;}
 .img-sat:hover {filter: saturate(40); -webkit-filter: saturate(40); transition: all 3s ease-in-out;}
 .img-sat2:hover {filter: saturate(20); -webkit-filter: saturate(20); transition: all 3s ease-in-out;}

@@ -71,7 +71,6 @@ class YTEmbed extends HTMLElement {
     if (!iframeExists) {
       const iframe = document.createElement('iframe');
       iframe.src = this.embedUrl;
-      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
       iframe.allowFullscreen = true;
       iframe.className = 'yt';
       this.wrapper.appendChild(iframe);

@@ -1,4 +1,4 @@
-.bg-wrapper {position: sticky;
+#bg-wrapper {position: sticky;
     top:0;
     width: 100%;
     height: 100vh;
@@ -8,7 +8,7 @@
     url("/img/bg.png");
     background-attachment: fixed;
     border-radius:0;}
-.bg-wrapper.dark-mode {position: sticky;
+#bg-wrapper.dark-mode {position: sticky;
     top:0;
     width: 100%;
     height: 100vh;
@@ -18,7 +18,7 @@
     url("/img/bginvert.png");
     background-attachment: fixed;
     border-radius:0;}
-.bg-wrapper2 {position: relative;
+#bg-wrapper2 {position: relative;
     top:0;
     width: 100%;
     height: 100vh;
@@ -32,7 +32,7 @@
     rgba(22, 22, 111, 0.22) 85%, 
     rgba(22, 22, 222, 0.33) 100%);
     border-radius:0;}
-.bg-wrapper3 {position: relative;
+#bg-wrapper3 {position: relative;
     top:0;
     width: 100%;
     height: 100vh;
