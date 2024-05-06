@@ -3,8 +3,8 @@ No frameworks, just pure JavaScript (a.k.a. vanilla JavaScript), CSS, & HTML. Re
 
 [Demo site](https://y0.netlify.app/) contains my personal writing, feel free to fork this repo & use it as a template.
 
-
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?repo=https://github.com/i1li/i1li.github.io)[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/i1li/i1li.github.io)[![Open in VSCode](https://img.shields.io/badge/Open%20in%20VSCode-5C2D91.svg?style=flat-square&logo=visual-studio-code&logoColor=white)](https://vscode.dev/redirect?url=github%3A//https://github.com/i1li/i1li.github.io)
+
 Quickstart: Open a terminal in the project directory, & enter either:
 ```bash
 npm i express
@@ -15,10 +15,6 @@ or:
 npm i netlify-cli
 netlify dev
 ```
-
-Default "display all posts" view at root directory, with posts auto-expanding upon scroll, shows a welcome intro message, plus navigation links.
-
-Individual post view at unique URLs removes the welcome intro from display, & autoscrolls post header to top. Also clones a copy of the post navigation links shown in the post header, to the bottom of post.
 
 ### Light/Dark Mode Toggle
 -   Allows users to switch between light & dark themes, enhancing accessibility & user preference.
@@ -37,9 +33,11 @@ Individual post view at unique URLs removes the welcome intro from display, & au
 -   Uses the `IntersectionObserver` API for lazy loading content as it becomes visible, reducing initial load time.
 -   Manages browser history & navigation state using the History API (`history.pushState` & `window.onpopstate`), allowing for bookmarkable URLs & functional forward/backward navigation.
 -   Implements custom logic to show/hide content based on the current navigation state, simulating the behavior of a multi-page application within a single HTML document.
+-   Default "display all posts" view at root directory, with posts auto-expanding upon scroll, shows a welcome intro message, plus navigation links.
+-   Individual post view at unique URLs removes the welcome intro from display, & autoscrolls post header to top. Also clones a copy of the post navigation links shown in the post header, to the bottom of post.
 
 ### Target Links As Subpages
--   Allows proper permalinks for specific areas of posts (target links, a.k.a. subpages), so they get a url of post/target instead of post#target
+-   Allows proper permalinks for specific areas of posts (target links, a.k.a. hashlinks or subpages), so they get a url of post/target instead of post#target
 -   [Demo at /edu/psychology](https://y0.netlify.app/edu/psychology)
 
 ### [Lightest Youtube Embed](https://github.com/i1li/lightest-youtube-embed) - ([yt.js](https://github.com/i1li/i/blob/main/js/yt.js))
