@@ -1,10 +1,10 @@
-
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?repo=https://github.com/i1li/i1li.github.io)[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/i1li/i1li.github.io)[![Open in VSCode](https://img.shields.io/badge/Open%20in%20VSCode-5C2D91.svg?style=flat-square&logo=visual-studio-code&logoColor=white)](https://vscode.dev/redirect?url=github%3A//https://github.com/i1li/i1li.github.io)
 # Minimal, Responsive, Pure JavaScript, Single Page App
 No frameworks, just pure JavaScript (a.k.a. vanilla JavaScript), CSS, & HTML. Responsive containers, images, video, & text automatically adjust to fit accordingly across small & large screens. Minimal, Single Page App, light/dark, zoom in/out, full screen image overlay, go to top, lazy loading, embedded content display toggle, target links as subpages (page/target instead of page#target)
 
 [Demo site](https://y0.netlify.app/) contains my personal writing, feel free to fork this repo & use it as a template.
 
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?repo=https://github.com/i1li/i1li.github.io)[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/i1li/i1li.github.io)[![Open in VSCode](https://img.shields.io/badge/Open%20in%20VSCode-5C2D91.svg?style=flat-square&logo=visual-studio-code&logoColor=white)](https://vscode.dev/redirect?url=github%3A//https://github.com/i1li/i1li.github.io)
 Quickstart: Open a terminal in the project directory, & enter either:
 ```bash
 npm i express
