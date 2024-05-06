@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Loading...</title>
 <script type="text/javascript">
+// Custom SPA 404 solution combining https://github.com/i1li/i frameworkless SPA with 
+// "Single Page Apps for GitHub Pages", (found below and in gh.js), and
+// https://stackoverflow.com/a/65533465 - which performs an XHR on index.html and
+// makes the content the document. Using this, plus putting the stylesheets and scripts from
+// index.html in 404.html(minus gh.js), gives a smoother initial loading experience.
 var doc = document.getElementById('htmlbody');
 xhttp = new XMLHttpRequest();
 xhttp.onreadystatechange = function() {
