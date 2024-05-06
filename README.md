@@ -47,7 +47,7 @@ Easy to use YouTube embed that saves space, bandwidth, & privacy. With a bare am
 Stripped version of Lightest Youtube Embed to toggle display of any iframe or other content. [Demo at /jesus-and-his-religion](https://y0.netlify.app/jesus-and-his-religion/)
 
 ### [yt-titles.js](https://github.com/i1li/i/blob/main/yt-titles.js)
-Updates all `<y-t>` elements on the page,  `<y-t v="Your Video ID">` becomes `<y-t v="Your Video ID" t="The Video's Title">` To use, open a terminal in the project directory, & enter:
+Updates all `<y-t>` elements on the page,  `<y-t v="YouTube Video ID">` becomes `<y-t v="YouTube ID" t="The Video's Title">` To use, open a terminal in the project directory, & enter:
 ```bash
 npm i axios
 node yt-titles.js
