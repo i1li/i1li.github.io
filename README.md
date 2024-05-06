@@ -3,7 +3,7 @@ No frameworks, just pure JavaScript (a.k.a. vanilla JavaScript), CSS, & HTML. Re
 
 [Demo site](https://y0.netlify.app/) contains my personal writing, feel free to fork this repo & use it as a template.
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?repo=https://github.com/i1li/i1li.github.io)[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/i1li/i1li.github.io)[![Open in VSCode](https://img.shields.io/badge/Open%20in%20VSCode-5C2D91.svg?style=flat-square&logo=visual-studio-code&logoColor=white)](https://vscode.dev/redirect?url=github%3A//https://github.com/i1li/i1li.github.io)
+[![Open in GitHub Codespaces](/img/button-codespaces.svg)](https://github.com/codespaces/new?repo=https://github.com/i1li/i1li.github.io)[![Deploy to Netlify](/img/button-netlify.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/i1li/i1li.github.io)[![Open in VSCode](/img/button-vscode.svg)](https://vscode.dev/github/i1li/i1li.github.io)
 
 Quickstart: Open a terminal in the project directory, & enter either:
 ```bash
@@ -17,8 +17,8 @@ netlify dev
 ```
 
 ### SPA Navigation & Content Loading
--   Uses `netlify.toml` for hosting on Netlify, or `404.html` & `gh.js` for hosting on [GitHub Pages](https://i1li.github.io/). The later is a workaround for SPA support that uses redirects, thus is [not ideal for SEO](https://github.com/rafgraph/spa-github-pages#seo).
--   Enables seamless navigation within the application without full page reloads, improving the user experience.
+-   Uses `netlify.toml` for hosting on Netlify, or `404.html` & `gh.js` for hosting on [GitHub Pages](https://i1li.github.io/). The latter uses a redirect workaround for SPA support, thus is [not ideal for SEO](https://github.com/rafgraph/spa-github-pages#seo).
+-   Enables seamless navigation within the application without full page reloads, improving user experience without complication of a framework.
 -   Uses the `IntersectionObserver` API for lazy loading content as it becomes visible, reducing initial load time.
 -   Manages browser history & navigation state using the History API (`history.pushState` & `window.onpopstate`), allowing for bookmarkable URLs & functional forward/backward navigation.
 -   Implements custom logic to show/hide content based on the current navigation state, simulating the behavior of a multi-page application within a single HTML document.
@@ -29,20 +29,20 @@ netlify dev
 -   Allows proper permalinks for specific areas of posts (target links, a.k.a. hashlinks or subpages), so they get a url of post/target instead of post#target
 -   [Demo at /edu/psychology](https://y0.netlify.app/edu/psychology)
 
-### [Lightest Youtube Embed](https://github.com/i1li/lightest-youtube-embed) - ([yt.js](https://github.com/i1li/i/blob/main/js/yt.js))
+### [Lightest Youtube Embed](https://github.com/i1li/lightest-youtube-embed) - ([yt.js](/js/yt.js))
 Easy to use YouTube embed that saves space, bandwidth, & privacy. With a bare amount of code (`<y-t v="videoid"></y-t>`), it responsively fits videos & playlists that only load once user clicks "show/hide" button. [Demo at /edu](https://y0.netlify.app/edu/)
 
-### [Simple Toggle (toggle.js)](https://github.com/i1li/i/blob/main/js/toggle.js)
+### [Simple Toggle (toggle.js)](/js/toggle.js)
 Stripped version of Lightest Youtube Embed to toggle display of any iframe or other content. [Demo at /jesus-and-his-religion](https://y0.netlify.app/jesus-and-his-religion/)
 
-### [yt-titles.js](https://github.com/i1li/i/blob/main/yt-titles.js)
+### [yt-titles.js](/yt-titles.js)
 Updates all `<y-t>` elements on the page,  `<y-t v="YouTube Video ID">` becomes `<y-t v="YouTube ID" t="The Video's Title">` To use, open a terminal in the project directory, & enter:
 ```bash
 npm i axios
 node yt-titles.js
 ```
 
-### [yt-ids.js](https://github.com/i1li/i/blob/main/yt-id.js)
+### [yt-ids.js](/yt-id.js)
 - Extracts all IDs found within the v attribute of `<y-t>` tags. 
 - For playlists, it gets all the available video IDs for each, then moves the playlist ID from the v attribute to p, listing all video IDs in the v attribute. To use, put your [API Key](https://developers.google.com/youtube/v3/getting-started#before-you-start) in the empty quotes at `const KEY = ""`, & then open a terminal in the project directory, & enter:
 ```bash
@@ -50,7 +50,7 @@ npm i axios
 node yt-ids.js
 ```
 
-### [shuffle.js](https://github.com/i1li/i/blob/main/js/shuffle.js)
+### [shuffle.js](/js/shuffle.js)
 - proccessAndCombine combines all video IDs, (limiting how many come from each playlist), from the music section into one `<y-t>` element, at the top of [/edu/music](https://y0.netlify.app/edu/music).
 - shuffleAndDraw shuffles an array of playlists & videos extracted from the music section, with its own 'next' button. It then "draws" from the shuffled array, cloning the `<y-t>` element into the 'draw' `<div>`. [Demo at top of main page](https://y0.netlify.app/)
 - The order of the elements is shuffled at each page load, as well as the video IDs within each element.
