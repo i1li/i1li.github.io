@@ -16,17 +16,6 @@ npm i netlify-cli
 netlify dev
 ```
 
-### Light/Dark Mode Toggle
--   Allows users to switch between light & dark themes, enhancing accessibility & user preference.
--   Utilizes `localStorage` to persist the user's theme choice across sessions and `window.matchMedia` to detect & respect the system's preferred color scheme.
-
-### Zoom In/Out Functionality
--   Provides users with the ability to adjust the text size for better readability.
--   Dynamically adjusts the font size of key elements on the page based on user interaction, with the zoom level persisted in `localStorage`.
-
-### Full Screen Image Overlay
--   Responsive full screen overlay when user clicks to expand image, exits by clicking anywhere, pressing any key, or clicking "x"
-
 ### SPA Navigation & Content Loading
 -   Uses `netlify.toml` for hosting on Netlify, or `404.html` & `gh.js` for hosting on [GitHub Pages](https://i1li.github.io/). The later is a workaround for SPA support that uses redirects, thus is [not ideal for SEO](https://github.com/rafgraph/spa-github-pages#seo).
 -   Enables seamless navigation within the application without full page reloads, improving the user experience.
@@ -69,6 +58,17 @@ node yt-ids.js
 - Since shuffled playlists are constructed with each video ID in the URL, there is a limit of 150 per playlist, although each shuffle picks from the entire list of video IDs (in this case several thousand for the combined playlist)
 
 The shuffle function combines two different shuffle techniques to optimize performance for a wide range of input array sizes. The first shuffle technique used is the "Knuth Shuffle" or "Durstenfeld Shuffle". This is a variation of the Fisher-Yates shuffle algorithm that is optimized for small arrays. For larger arrays, the function uses the standard Fisher-Yates shuffle algorithm. The decision to use which shuffle method, is based on the size of the input array in relation to the limit parameter (limit is how many items are used from the array after shuffling): If the array length is less than limit * 2, the Knuth Shuffle is used. If the array length is greater than or equal to limit * 2, the Fisher-Yates Shuffle is used.
+
+### Light/Dark Mode Toggle
+-   Allows users to switch between light & dark themes, enhancing accessibility & user preference.
+-   Utilizes `localStorage` to persist the user's theme choice across sessions and `window.matchMedia` to detect & respect the system's preferred color scheme.
+
+### Zoom In/Out Functionality
+-   Provides users with the ability to adjust the text size for better readability.
+-   Dynamically adjusts the font size of key elements on the page based on user interaction, with the zoom level persisted in `localStorage`.
+
+### Full Screen Image Overlay
+-   Responsive full screen overlay when user clicks to expand image, exits by clicking anywhere, pressing any key, or clicking "x"
 
 ### Background Gradient Shift, & other CSS Effects
 -   `bg.js` & `bg.css` create a constant shifting gradient by creating & replacing blended layers.
