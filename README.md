@@ -3,7 +3,11 @@ No frameworks, just pure JavaScript (a.k.a. vanilla JavaScript), CSS, & HTML. Re
 
 [Demo site](https://y0.netlify.app/) contains my personal writing, feel free to fork this repo & use it as a template.
 
-[![Open in GitHub Codespaces](/img/button-codespaces.svg)](https://github.com/codespaces/new?repo=https://github.com/i1li/i1li.github.io)[![Deploy to Netlify](/img/button-netlify.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/i1li/i1li.github.io)[![Open in VSCode](/img/button-vscode.svg)](https://vscode.dev/github/i1li/i1li.github.io)
+<p align="center">
+<a href="https://github.com/codespaces/new?repo=https://github.com/i1li/i1li.github.io"><img src="img/button-codespaces.svg" alt="Open in GitHub Codespaces"></a>
+<a href="https://app.netlify.com/start/deploy?repository=https://github.com/i1li/i1li.github.io"><img src="img/button-netlify.svg" alt="Deploy to Netlify"></a>
+<a href="https://vscode.dev/github/i1li/i1li.github.io"><img src="img/button-vscode.svg" alt="Open in VSCode"></a>
+</p>
 
 Quickstart: Open a terminal in the project directory, & enter either:
 ```bash
@@ -19,14 +23,14 @@ netlify dev
 ### SPA Navigation & Content Loading
 -   Uses [netlify.toml](/netlify.toml) for hosting on Netlify, or [404.html](/404.html) & [gh.js](/js/gh.js) for hosting on [GitHub Pages](https://i1li.github.io/).
 -   Enables seamless navigation within the application without full page reloads, improving user experience without complication of a framework.
+-   Default "display all posts" view at root directory, with posts auto-expanding upon scroll, shows a welcome intro message & navigation links at top of page.
+-   Individual post view at unique URLs removes the welcome intro from display, & autoscrolls post header to top. Also clones a copy of the post navigation links shown in the post header, to the bottom of post.
 -   Uses the `IntersectionObserver` API for lazy loading content as it becomes visible, reducing initial load time.
 -   Manages browser history & navigation state using the History API (`history.pushState` & `window.onpopstate`), allowing for bookmarkable URLs & functional forward/backward navigation.
 -   Implements custom logic to show/hide content based on the current navigation state, simulating the behavior of a multi-page application within a single HTML document.
--   Default "display all posts" view at root directory, with posts auto-expanding upon scroll, shows a welcome intro message, plus navigation links.
--   Individual post view at unique URLs removes the welcome intro from display, & autoscrolls post header to top. Also clones a copy of the post navigation links shown in the post header, to the bottom of post.
 
-### Target Links As Subpages
--   Allows proper permalinks for specific areas of posts (target links, a.k.a. hashlinks or subpages), so they get a url of post/target instead of post#target
+### Target Links / Hash Links As Subpages
+-   Allows proper permalinks for specific areas of posts (target links, a.k.a. hashlinks or subpages), so they get a url of /route/target instead of /route#target
 -   [Demo at /edu/psychology](https://y0.netlify.app/edu/psychology)
 
 ### [Lightest Youtube Embed](https://github.com/i1li/lightest-youtube-embed) - ([yt.js](/js/yt.js))
@@ -43,8 +47,8 @@ node yt-titles.js
 ```
 
 ### [yt-ids.js](/yt-id.js)
-- Extracts all IDs found within the v attribute of `<y-t>` tags. 
-- For playlists, it gets all the available video IDs for each, then moves the playlist ID from the v attribute to p, listing all video IDs in the v attribute. To use, put your [API Key](https://developers.google.com/youtube/v3/getting-started#before-you-start) in the empty quotes at `const KEY = ""`, & then open a terminal in the project directory, & enter:
+- Extracts all IDs found within the 'v' attribute of `<y-t>` tags. 
+- For playlists, it gets all the available video IDs for each, then moves the playlist ID from the 'v' attribute to 'p', listing all video IDs in the 'v' attribute. To use, put your [API Key](https://developers.google.com/youtube/v3/getting-started#before-you-start) in the empty quotes at `const KEY = ""`, & then open a terminal in the project directory, & enter:
 ```bash
 npm i axios
 node yt-ids.js
@@ -52,16 +56,16 @@ node yt-ids.js
 
 ### [shuffle.js](/js/shuffle.js)
 - proccessAndCombine combines all video IDs, (limiting how many come from each playlist), from the music section into one `<y-t>` element, at the top of [/edu/music](https://y0.netlify.app/edu/music).
-- shuffleAndDraw shuffles an array of playlists & videos extracted from the music section, with its own 'next' button. It then "draws" from the shuffled array, cloning the `<y-t>` element into the 'draw' `<div>`. [Demo at top of main page](https://y0.netlify.app/)
+- shuffleAndDraw shuffles an array of playlists & videos extracted from the music section, with its own 'next' button. It then "draws" from the shuffled array, cloning the drawn `<y-t>` element into the 'draw' `<div>`. [Demo at top of main page](https://y0.netlify.app/)
 - The order of the elements is shuffled at each page load, as well as the video IDs within each element.
 - Limited to specific divs so playlist order is preserved in other sections of the site.
 - Since shuffled playlists are constructed with each video ID in the URL, there is a limit of 150 per playlist, although each shuffle picks from the entire list of video IDs (in this case several thousand for the combined playlist)
 
-The shuffle function combines two different shuffle techniques to optimize performance for a wide range of input array sizes. The first shuffle technique used is the "Knuth Shuffle" or "Durstenfeld Shuffle". This is a variation of the Fisher-Yates shuffle algorithm that is optimized for small arrays. For larger arrays, the function uses the standard Fisher-Yates shuffle algorithm. The decision to use which shuffle method, is based on the size of the input array in relation to the limit parameter (limit is how many items are used from the array after shuffling): If the array length is less than limit * 2, the Knuth Shuffle is used. If the array length is greater than or equal to limit * 2, the Fisher-Yates Shuffle is used.
+The shuffle function combines two different shuffle techniques to optimize performance for a wide range of input array sizes. The first shuffle technique used is the "Knuth Shuffle" (a.k.a. "Durstenfeld Shuffle"). This is a variation of the Fisher-Yates shuffle algorithm that is optimized for small arrays. For larger arrays, the function uses the standard Fisher-Yates shuffle algorithm. The decision to use which shuffle method, is based on the size of the input array in relation to the limit parameter (limit is how many items are used from the array after shuffling): If the array length is less than limit * 2, the Knuth Shuffle is used. If the array length is greater than or equal to limit * 2, the Fisher-Yates Shuffle is used.
 
 ### Light/Dark Mode Toggle
 -   Allows users to switch between light & dark themes, enhancing accessibility & user preference.
--   Utilizes `localStorage` to persist the user's theme choice across sessions and `window.matchMedia` to detect & respect the system's preferred color scheme.
+-   Utilizes `window.matchMedia` to detect & respect the system's preferred color scheme, & `localStorage` to persist the user's theme choice across sessions.
 
 ### Zoom In/Out Functionality
 -   Provides users with the ability to adjust the text size for better readability.
@@ -81,11 +85,11 @@ Custom solution for a simple free content gating. Kept on a separate site for si
 ### Sticky Header & Scroll-to-Top Button
 -   Improves navigation & accessibility by providing a sticky header & a convenient way to return to the top of the page.    
 -   The sticky header adjusts its style based on the scroll position, becoming more compact as the user scrolls down.
--   A "scroll to top" button appears after scrolling down, allowing users to quickly return to the top of the page with a single click.
+-   A "scroll to top" button appears after scrolling down, allowing quick return to the top of the page with a single click.
 
 ### Automatic External Links Handling
 -   Identifies & handles external links to ensure they open in a new tab, preserving SPA integrity.
--   Checks the URL of clicked links & sets them to open in a new tab if they lead outside the current domain, using `target="_blank"` and `rel="noreferrer"` for privacy & security.
+-   Checks the URL of clicked links & sets them to open in a new tab if they lead outside the current domain, using `target="_blank"` & `rel="noreferrer"` for privacy & security.
 
 ### Efficiency & Minimalism
 -   The code demonstrates efficient use of native JavaScript APIs to achieve functionality often reliant on external libraries, showcasing a minimalist approach that reduces load times & dependency overhead.

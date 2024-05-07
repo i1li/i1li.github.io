@@ -45,7 +45,7 @@ header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 2
     filter: invert(100%) !important;
     transition: all .3s ease-in-out;}
 .no-bg {background: none !important;border: none !important;}
-#site-intro {padding-bottom: .2em;
+#site-intro {padding-bottom: .4em;
     -webkit-backdrop-filter:brightness(90%)contrast(111%)saturate(555%)blur(.04em); 
     backdrop-filter:brightness(90%)contrast(111%)saturate(555%)blur(.04em);
     border-radius:.5em;}
@@ -60,18 +60,18 @@ header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 2
     backdrop-filter: contrast(333%) grayscale(50%);
     -webkit-backdrop-filter: contrast(333%) grayscale(50%);
     border-radius: .3em .3em .5em .5em;}
-#nav-links {background: linear-gradient(to bottom, rgba(222, 22, 22, .35), rgba(128, 0, 128, 0.3));
+#site-nav {background: linear-gradient(to bottom, rgba(222, 22, 22, .35), rgba(128, 0, 128, 0.3));
     font-size: 1.1em;
     line-height: 1.3;
     padding: .2em 0 .7em;
     backdrop-filter: brightness(100%) contrast(220%);
     -webkit-backdrop-filter: brightness(100%) contrast(220%);}
-#nav-links:hover {background: linear-gradient(to top, rgba(222, 22, 22, .2), rgba(128, 0, 128, 0.2)); opacity: 1;}
+#site-nav:hover {background: linear-gradient(to top, rgba(222, 22, 22, .2), rgba(128, 0, 128, 0.2)); opacity: 1;}
 h1 {margin:0;
     padding:0;
     text-align: left;
     width: 50%;}
-h2, h3, h4, h5, h6 {margin-bottom: 0.7em; padding-bottom: 0;}
+h2, h3, h4, h5, h6 {margin-bottom: 0.7em; padding: 0 0 0 .2em;}
 .post-title {text-align:center; line-height: 1.4; margin: .5em;}
 body, p {margin: 0;
     font-weight: 500;
@@ -85,7 +85,7 @@ p {line-height: 1.2;
     padding: .7em;
     padding-bottom:0;
     text-align: justify;}  
-.no-indent {text-indent: 0;} .no-indent p {text-indent: 0;} .width95 {width: 95%; margin:auto;} .width95 p {width: 95%; margin:auto;}
+.no-indent {text-indent: 0;} .no-indent p {text-indent: 0;} .width95 {width: 95%; margin:auto;} .width95 p {width: 95%; margin:auto;} .width90 {width: 90%; margin:auto;} .width90 p {width: 90%; margin:auto;}
 .center {text-align: center;} .justify-content-center {justify-content:center;} .center p {text-align: center;} .justify-content-center p {justify-content: center;}
 * {border-radius:.3em; scrollbar-color: rgba(22,222,222,.7) rgba(0,0,72,.7); overscroll-behavior: none; scroll-behavior: smooth; scroll-snap-type: none;}
 body {transition: all .369s ease-in-out;
@@ -218,8 +218,8 @@ a:hover {text-decoration: dotted underline;
     background-attachment: fixed;
     background-size: 10000px;
     background-position-x: -200px;
-    padding-bottom: 1em;
-    margin-bottom:-.22em;
+    padding: 0 0 1em .2em;
+    margin:-.22em;
     backdrop-filter: brightness(90%) contrast(250%) grayscale(50%) blur(.1em) saturate(120%);
     -webkit-backdrop-filter: brightness(90%) contrast(250%) grayscale(50%) blur(.1em) saturate(120%);}
 .post-content:hover {background: radial-gradient(rgba(128, 128, 128, 0.1), rgba(0, 0, 0, 0.1));
@@ -231,7 +231,7 @@ a:hover {text-decoration: dotted underline;
     background-attachment: scroll;
     background-size: 22000px;
     background-position-x: -200px;
-    padding-bottom: 1em;
+    padding: 0 0 1em .2em;
     margin-bottom:-.22em;
     backdrop-filter: brightness(70%) contrast(200%) grayscale(50%) blur(.1em) saturate(150%);
     -webkit-backdrop-filter: brightness(70%) contrast(200%) grayscale(50%) blur(.1em) saturate(150%);}
@@ -269,7 +269,7 @@ a:hover {text-decoration: dotted underline;
 blockquote:hover {background: linear-gradient(to right, rgba(0, 0, 0, .15), rgba(128, 128, 128, 0.1));}
 blockquote {background: linear-gradient(to left, rgba(0, 0, 0, .15), rgba(128, 128, 128, 0.1));
     width: 92%;
-    margin:0.1em auto;
+    margin:0.3em auto;
     margin-bottom:0.3em;
     padding-bottom:0.3em;
     border: inset .2em rgba(100,100,100,.2);}
@@ -284,7 +284,7 @@ button {font-size: .8em;
     box-shadow: 0 0 .25em #ae00ff, 0 0 .5em #001eff, 0 0 1em #ae00ff;
     border: 1px solid #000;
     border-radius: .7em;
-    margin: 0 .5em;} 
+    margin: .3em 0 0 0;} 
 button:hover {opacity: .9;
     cursor: pointer;
     box-shadow: 0 0 .5em crimson;
@@ -334,9 +334,9 @@ img {opacity: 1; transition: all .7s ease-in-out; border-radius:0;} img:hover {o
     font-weight: bold;
     z-index: 1;}
 .container{margin-right:auto;margin-left:auto}
-@media (min-width:376px){.container{max-width:376px}}@media (min-width:476px){.container{max-width:476px}}@media (min-width:576px){.container,.container-sm{max-width:540px}}@media (min-width:768px){.container{max-width:720px}}@media (min-width:992px){.container {max-width:960px}}@media (min-width:1200px){.container{max-width:1140px}}@media (min-width:1400px){.container{max-width:1320px}}:root{--bs-breakpoint-xs:350px;--bs-breakpoint-sm:576px;--bs-breakpoint-md:768px;--bs-breakpoint-lg:992px;--bs-breakpoint-xl:1200px;--bs-breakpoint-xxl:1400px}
-.row>*{width:100%;max-width:100%;}.row{--bs-gutter-x:.1rem;--bs-gutter-y:.1rem;display:flex;flex-wrap:wrap;margin-top:calc(-1 * var(--bs-gutter-y));margin-right:calc(-.5 * var(--bs-gutter-x));margin-left:calc(-.5 * var(--bs-gutter-x))}
+@media (min-width:376px){.container{max-width:376px}}@media (min-width:476px){.container{max-width:476px}}@media (min-width:576px){.container,.container-sm{max-width:540px}}@media (min-width:768px){.container{max-width:720px}}@media (min-width:992px){.container {max-width:960px}}@media (min-width:1200px){.container{max-width:1140px}}@media (min-width:1400px){.container{max-width:1320px}}
+@media only screen and (max-width: 767px) and (orientation: portrait) {html body, table{font-size: 92%;} p {text-align: initial;} .to-top {max-width:2.5em; margin-bottom:.2em; margin-right:-.5em; padding-left:.6em; padding-top:.5em;} .row-cols-auto>*{flex: 0 0 100%;min-width: 100%;} .col-md-9{width:80%;} .width95 {width: 97.5%; margin:auto;} .width95 p {width: 97.5%; margin:auto;} .width90 {width: 95%; margin:auto;} .width90 p {width: 95%; margin:auto;} blockquote {width: 96%;}}
+.row>*{width:100%;max-width:100%;}.row{display:flex;flex-wrap:wrap;}
 .col{flex:1 0 auto;margin-left:.7em;margin-right:.7em;margin-bottom:.2em}
 .row-cols-auto>*{flex:0 0 auto;width:auto}
 .col-md-9{flex:0 0 auto;width:75%;position: relative;}
-@media only screen and (max-width: 767px) and (orientation: portrait) {html body, table{font-size: 92%;} p {text-align: initial;} .to-top {max-width:2.5em; margin-bottom:.2em; margin-right:-.5em; padding-left:.6em; padding-top:.5em;} .row-cols-auto>*{flex: 0 0 100%;min-width: 100%;} .col-md-9{width:80%;}}
