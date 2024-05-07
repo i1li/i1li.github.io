@@ -54,7 +54,7 @@ header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 2
     margin-left: 1vw;
     margin-bottom: .1em;
     line-height: 1.1;}
-#site-info {-webkit-backdrop-filter:blur(.07em)saturate(250%); backdrop-filter:blur(.07em)saturate(250%);}
+#site-info {-webkit-backdrop-filter:blur(.07em)saturate(250%); backdrop-filter:blur(.07em)saturate(250%); padding-bottom:.1em;}
 #welcome {background: linear-gradient(to top, rgba(22,22,222, .1), rgba(22, 222, 222, .1));
     line-height: 1.3;
     backdrop-filter: contrast(333%) grayscale(50%);
@@ -211,7 +211,7 @@ a:hover {text-decoration: dotted underline;
     background-position-x: -222px;
     background-attachment: fixed;
     border: inset .15em rgba(100,100,100,.2);
-    border-bottom:solid .2em rgba(255,0,0,.2);
+    border-bottom:solid .1em rgba(255,0,0,.4);
     border-top:0;}
 .post-content {border: solid 1px rgba(255,0,0,.2);
     background-image: url("/img/bginvert.png");
@@ -219,7 +219,7 @@ a:hover {text-decoration: dotted underline;
     background-size: 10000px;
     background-position-x: -200px;
     padding: 0 0 1em .2em;
-    margin:-.22em;
+    margin:0;
     backdrop-filter: brightness(90%) contrast(250%) grayscale(50%) blur(.1em) saturate(120%);
     -webkit-backdrop-filter: brightness(90%) contrast(250%) grayscale(50%) blur(.1em) saturate(120%);}
 .post-content:hover {background: radial-gradient(rgba(128, 128, 128, 0.1), rgba(0, 0, 0, 0.1));
@@ -232,7 +232,7 @@ a:hover {text-decoration: dotted underline;
     background-size: 22000px;
     background-position-x: -200px;
     padding: 0 0 1em .2em;
-    margin-bottom:-.22em;
+    margin:0;
     backdrop-filter: brightness(70%) contrast(200%) grayscale(50%) blur(.1em) saturate(150%);
     -webkit-backdrop-filter: brightness(70%) contrast(200%) grayscale(50%) blur(.1em) saturate(150%);}
 #toTop {display: none;
