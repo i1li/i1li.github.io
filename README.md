@@ -19,9 +19,10 @@ or:
 npm i netlify-cli
 netlify dev
 ```
+That's it. No bundling, frameworks, or dependencies.
 
 ### SPA Navigation & Content Loading
--   Uses [netlify.toml](/netlify.toml) for hosting on Netlify, or [404.html](/404.html) & [gh.js](/js/gh.js) for hosting on [GitHub Pages](https://i1li.github.io/).
+-   Uses [netlify.toml](/netlify.toml) for hosting on Netlify, or [404.html](/404.html) & [gh.js](/js/gh.js) for hosting on [GitHub Pages](https://i1li.github.io/) & elsewhere.
 -   Enables seamless navigation within the application without full page reloads, improving user experience without complication of a framework.
 -   Default "display all posts" view at root directory, with posts auto-expanding upon scroll, shows a welcome intro message & navigation links at top of page.
 -   Individual post view at unique URLs removes the welcome intro from display, & autoscrolls post header to top. Also clones a copy of the post navigation links shown in the post header, to the bottom of post.
@@ -75,12 +76,12 @@ The shuffle function combines two different shuffle techniques to optimize perfo
 -   Responsive full screen overlay when user clicks to expand image, exits by clicking anywhere, pressing any key, or clicking "x"
 
 ### Background Gradient Shift, & other CSS Effects
--   `bg.js` & `bg.css` create a constant shifting gradient by creating & replacing blended layers.
+-   [bg.js](/js/bg.js) & [bg.css](/css/bg.css) create a constant shifting gradient by creating & replacing blended layers.
 -   Several layers of semi-transparent gradients for background & page elements.
 -   Dynamic cursor hover & filter effects.
 
 ### [Netlify Content Gate](https://github.com/i1li/netlify-content-gate)
-Custom solution for a simple free content gating. Kept on a separate site for simplicity in this case, but easily integrated.
+Easy solution for an email-verified contact form, and simple free content gating. Kept on a separate site for simplicity in this case, but easily integrated.
 
 ### Sticky Header & Scroll-to-Top Button
 -   Improves navigation & accessibility by providing a sticky header & a convenient way to return to the top of the page.    
