@@ -5,28 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Loading...</title>
 <style>html {background-color: rgb(128,128,128);}</style>
-<link rel="stylesheet" type="text/css" href="/css/style.css"/>
-<script type="text/javascript" src="/js/script.js"></script>
 <script type="text/javascript">
-// Custom SPA 404 solution combining frameworkless SPA (https://github.com/i1li/i) and 
-// "Single Page Apps for GitHub Pages", (found below and in gh.js), with
-// https://stackoverflow.com/a/65533465 - (performs an XHR on index.html and
-// makes the content the document.) Putting the stylesheets and scripts from
-// index.html in 404.html(minus gh.js), gives a smoother initial loading experience,
-// reducing or eliminating blank screen flash when visiting non-root URLs in new tab.
-var doc = document.getElementById('htmlbody');
-xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
-    if (this.readyState == 4) {
-        if (this.status == 200) {
-            doc.innerHTML = this.responseText;
-            doc.removeAttribute("id");
-        }
-        if (this.status == 404) doc.innerHTML = "Page not found.";
-    }
-}
-xhttp.open("GET", "index.html", true);
-xhttp.send();
+// SPA 404 solution combining frameworkless SPA (https://github.com/i1li/i) and 
+// "Single Page Apps for GitHub Pages", (found below and in gh.js)
+// If you're using the root directory by saving the repo name as
+// username.github.io , then keep pathSegmentsToKeep at 0.
+// (Setting repo name like this automatically makes your repo's GitHub pages
+// url username.github.io instead of username.github.io/repo-name )
+
 // Single Page Apps for GitHub Pages https://github.com/rafgraph/spa-github-pages
 // This script takes the current url and converts the path and query
 // string into just a query string, and then redirects the browser
@@ -42,10 +28,6 @@ xhttp.send();
 // https://username.github.io/repo-name/?/one/two&a=b~and~c=d#qwe
 // Otherwise, leave pathSegmentsToKeep as 0.
 
-// If you're using the root directory by saving the repo name as
-// username.github.io , then keep pathSegmentsToKeep at 0.
-// (Setting repo name like this automatically makes your repo's GitHub pages
-// url username.github.io instead of username.github.io/repo-name )
 var pathSegmentsToKeep = 0;
 var l = window.location;
 l.replace(
@@ -56,13 +38,9 @@ l.replace(
     l.hash
 );
 </script>
-<link rel="stylesheet" type="text/css" href="/css/bg.css"/>
-<link rel="stylesheet" type="text/css" href="/css/yt.css"/>
+
 </head>
 <body>
-<script type="text/javascript" src="/js/bg.js"></script>
-<script type="text/javascript" src="/js/shuffle.js"></script>
-<script type="text/javascript" src="/js/yt.js"></script>
-<script type="text/javascript" src="/js/toggle.js"></script>
+
 </body>
 </html>

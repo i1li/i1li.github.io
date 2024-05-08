@@ -73,15 +73,12 @@ The shuffle function combines two different shuffle techniques to optimize perfo
 -   Dynamically adjusts the font size of key elements on the page based on user interaction, with the zoom level persisted in `localStorage`.
 
 ### Full Screen Image Overlay
--   Responsive full screen overlay when user clicks to expand image, exits by clicking anywhere, pressing any key, or clicking "x"
+-   Responsive full screen overlay when user clicks to expand image. Exits by clicking anywhere, pressing any key, or clicking "x"
 
 ### Background Gradient Shift, & other CSS Effects
 -   [bg.js](/js/bg.js) & [bg.css](/css/bg.css) create a constant shifting gradient by creating & replacing blended layers.
 -   Several layers of semi-transparent gradients for background & page elements.
 -   Dynamic cursor hover & filter effects.
-
-### [Netlify Content Gate](https://github.com/i1li/netlify-content-gate)
-Easy solution for an email-verified contact form, and simple free content gating. Kept on a separate site for simplicity in this case, but easily integrated.
 
 ### Sticky Header & Scroll-to-Top Button
 -   Improves navigation & accessibility by providing a sticky header & a convenient way to return to the top of the page.    
@@ -92,8 +89,11 @@ Easy solution for an email-verified contact form, and simple free content gating
 -   Identifies & handles external links to ensure they open in a new tab, preserving SPA integrity.
 -   Checks the URL of clicked links & sets them to open in a new tab if they lead outside the current domain, using `target="_blank"` & `rel="noreferrer"` for privacy & security.
 
+### [Netlify Content Gate](https://github.com/i1li/netlify-content-gate)
+Easy solution for an email-verified contact form, and simple free content gating. Kept on a separate site for simplicity in this case, but easily integrated.
+
 ### Efficiency & Minimalism
 -   The code demonstrates efficient use of native JavaScript APIs to achieve functionality often reliant on external libraries, showcasing a minimalist approach that reduces load times & dependency overhead.
 -   By combining CSS class toggles, native browser APIs, & simple event handling, it achieves a responsive, user-friendly SPA experience with minimal code.
 
-This SPA implementation is a testament to the power of modern JavaScript & browser capabilities, allowing easy creation of rich, interactive web applications without any reliance on frameworks or libraries.
+This SPA implementation is a testament to the power of modern JavaScript & browser capabilities, allowing full-featured creation of rich, interactive web applications without any reliance on frameworks or libraries.
