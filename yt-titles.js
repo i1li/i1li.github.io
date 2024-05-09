@@ -1,16 +1,27 @@
 const fs = require('fs');
-const axios = require('axios');
+const https = require('https');
 async function fetchTitle(videoId) {
-  const response = await axios.get(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId.split('?')[0]}`);
-  const data = response.data;
-  return data.title;
+  const response = await new Promise((resolve, reject) => {
+    https.get(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId.split('?')[0]}`, (res) => {
+      let data = '';
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
+      res.on('end', () => {
+        resolve(JSON.parse(data));
+      });
+    }).on('error', (err) => {
+      reject(err);
+    });
+  });
+  return response.title;
 }
 async function updateTitles() {
   const htmlFilePath = 'index.html';
   let htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
   const regex = /<y-t\s+v="([^"]+)"(?:(?!t).)*?>/g;
   let matches = [...htmlContent.matchAll(regex)];
-  const replacements = await Promise.all(matches.map(async match => {
+  const replacements = await Promise.all(Array.from(matches).map(async match => {
     const videoId = match[1];
     const title = await fetchTitle(videoId);
     let newTag = `<y-t`;

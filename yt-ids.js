@@ -1,12 +1,12 @@
 const fs = require('fs');
 const path = require('path');
-const axios = require("axios");
+const https = require('https');
 const KEY = ""; // https://developers.google.com/youtube/v3/getting-started#before-you-start
 const indexHtmlPath = path.join(__dirname, 'index.html');
 const indexHtml = fs.readFileSync(indexHtmlPath, 'utf8');
 const musicDivRegex = /id="musix">([\s\S]*?)<\/div>/;
 const extraDivRegex = /id="extra">([\s\S]*?)<\/div>/;
-const playlistIdRegex = /(?:p="(PL[^"]{12,}|FL[^"]{12,}|OL[^"]{12,}|TL[^"]{12,}|UU[^"]{12,})"|v="(PL[^"]{12,}|FL[^"]{12,}|OL[^"]{12,}|TL[^"]{12,}|UU[^"]{12,})")/g;
+const playlistIdRegex = /(?:p="(PL[^"]{12,}|FL[^"]{12,}|OL[^"]{12,}|TL[^"]{12,}|UU[^"]{12,})(?!,)"|v="(PL[^"]{12,}|FL[^"]{12,}|OL[^"]{12,}|TL[^"]{12,}|UU[^"]{12,})(?!,)")/g;
 const noEmbedRegex = /"no-embeds"[^>]*>([^<]*)<\/div>/;
 const musicDiv = indexHtml.match(musicDivRegex)?.[1] || '';
 const extraDiv = indexHtml.match(extraDivRegex)?.[1] || '';
@@ -16,9 +16,9 @@ const extractIds = (regex, source) => {
   const ids = [];
   let match;
   while ((match = regex.exec(source)) !== null) {
-    if (match[1]) {
+    if (match[1] && !match[1].includes(',')) {
       ids.push(match[1]);
-    } else if (match[2]) {
+    } else if (match[2] && !match[2].includes(',')) {
       ids.push(match[2]);
     }
   }
@@ -48,29 +48,39 @@ const getPlaylistItems = async (playlistIDs) => {
           playlistId: playlistID.trim(),
           key: KEY,
           pageToken: pageToken,
-        }
-      const url = new URL('https://www.googleapis.com/youtube/v3/playlistItems');
-      url.search = new URLSearchParams(params).toString();
-      url.href = url.href.replace(/&pageToken=null/, '');
-      const result = await axios.get(url.toString(), {
-        params,
-      });
-      const availableVideos = result.data.items.filter((item) => item.status.privacyStatus === 'public' && !noEmbedIds.includes(item.snippet.resourceId.videoId));
-      videoIds = [...videoIds, ...availableVideos.map((item) => item.snippet.resourceId.videoId)];
-      totalItems += result.data.items.length;
-      console.log(`Fetched ${totalItems} items for playlist ID: ${playlistID}`);
-      pageToken = result.data.nextPageToken;
-    } while (pageToken);
-    availableVideoIds[playlistID] = videoIds;
-  } catch (error) {
-    if (error.response && error.response.status === 404) {
-      console.warn(`Skipping invalid playlist ID: ${playlistID}`);
-    } else {
-      console.error(`Error fetching playlist items for playlist ID ${playlistID}: ${error.message}`);
+        };
+        const url = new URL('https://www.googleapis.com/youtube/v3/playlistItems');
+        url.search = new URLSearchParams(params).toString();
+        url.href = url.href.replace(/&pageToken=null/, '');
+        const result = await new Promise((resolve, reject) => {
+          https.get(url.toString(), (res) => {
+            let data = '';
+            res.on('data', (chunk) => {
+              data += chunk;
+            });
+            res.on('end', () => {
+              resolve(JSON.parse(data));
+            });
+          }).on('error', (err) => {
+            reject(err);
+          });
+        });
+        const availableVideos = result.items.filter((item) => item.status.privacyStatus === 'public' && !noEmbedIds.includes(item.snippet.resourceId.videoId));
+        videoIds = [...videoIds, ...availableVideos.map((item) => item.snippet.resourceId.videoId)];
+        totalItems += result.items.length;
+        console.log(`Fetched ${totalItems} items for playlist ID: ${playlistID}`);
+        pageToken = result.nextPageToken;
+      } while (pageToken);
+      availableVideoIds[playlistID] = videoIds;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        console.warn(`Skipping invalid playlist ID: ${playlistID}`);
+      } else {
+        console.error(`Error fetching playlist items for playlist ID ${playlistID}: ${error.message}`);
+      }
     }
   }
-}
-return availableVideoIds;
+  return availableVideoIds;
 };
 const writeOutput = async () => {
   const [playlistVideoIds] = await Promise.all([
@@ -82,6 +92,9 @@ const writeOutput = async () => {
     const ytRegex = new RegExp(`<y-t[^>]*?(?:p="${playlistId}"|v="${playlistId}")[^>]*?>`, 'g');
     modifiedHtml = modifiedHtml.replace(ytRegex, (match) => {
       if (match.includes(`p="${playlistId}"`)) {
+        if (playlistId.includes(',')) {
+          return match;
+        }
         return match.replace(/p="[^"]*?"/, `p="${playlistId}"`).replace(/v="[^"]*?"/, `v="${videoIdsInPlaylist.join(',')}"`);
       } else {
         return match.replace(/v="[^"]*?"/, `p="${playlistId}" v="${videoIdsInPlaylist.join(',')}"`);
