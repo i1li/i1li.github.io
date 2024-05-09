@@ -1,5 +1,5 @@
 {
     "scripts": {
-      "build": "node serv.js"
+        "build": "npm install express && node serv.js"
     }
 }
