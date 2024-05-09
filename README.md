@@ -6,19 +6,19 @@
 <a href="https://app.netlify.com/start/deploy?repository=https://github.com/i1li/i1li.github.io"><img src="img/button-netlify.svg" alt="Deploy to Netlify"></a>
 <a href="https://vscode.dev/github/i1li/i1li.github.io"><img src="img/button-vscode.svg" alt="Open in VSCode"></a><br/>
 <a href="https://y0.netlify.app/">Demo site</a> contains my personal writing & learning resources.<br/>
-<b>Quickstart:</b> Use a quick deploy button above, or clone this repo locally, open a terminal in the project directory, & enter either:</p>
+<b>Quickstart:</b> Use a quick deploy button above, or clone this repo locally, open a terminal in the project directory,<br/> & enter either:</p>
 
 ```bash
 npm i express
 node serv.js
 ```
-<p align="center">(the simplest option), or:</p>
+<p align="center">(the simplest option), or, if you'd like to use Netlify's <a href="https://www.netlify.com/platform/core/functions/">serverless functions</a>, enter the following. (<a href="#Netlify Content Gate">example of serverless function.</a>)
+</p>
 
 ```bash
 npm i netlify-cli
 netlify dev
 ```
-<p align="center">(A bulkier option, but enables use of Netlify's <a href="https://www.netlify.com/platform/core/functions/">serverless functions</a>.)</p>
 
 <h3 id="SPA Navigation & Content Loading">SPA Navigation & Content Loading</h3>
 
@@ -38,14 +38,14 @@ netlify dev
 
 <h3 id="Lightest Youtube Embed"><a href="https://github.com/i1li/lightest-youtube-embed">Lightest Youtube Embed</a> - (<a href="/js/yt.js">yt.js</a>)</h3>
 
-Easy to use YouTube embed that saves space, bandwidth, & privacy. With a bare amount of code (`<y-t v="videoid"></y-t>`), it responsively fits videos & playlists that only load once user clicks "show/hide" button. [Demo at /edu](https://y0.netlify.app/edu/)
+- Easy to use YouTube embed that saves space, bandwidth, & privacy. With a bare amount of code (`<y-t v="videoid"></y-t>`), it responsively fits videos & playlists that only load once user clicks "show/hide" button. [Demo at /edu](https://y0.netlify.app/edu/)
 
 <h3 id="Simple Toggle (toggle.js)"><a href="/js/toggle.js">Simple Toggle (toggle.js)</a></h3>
 
-Stripped version of Lightest Youtube Embed to toggle display of any iframe or other content. [Demo at /jesus-and-his-religion](https://y0.netlify.app/jesus-and-his-religion/)
+- Stripped version of Lightest Youtube Embed to toggle display of any iframe or other content. [Demo at /jesus-and-his-religion](https://y0.netlify.app/jesus-and-his-religion/)
 
 ### [yt-titles.js](/yt-titles.js)
-Updates all `<y-t>` elements on the page,  `<y-t v="YouTube Video ID">` becomes `<y-t v="YouTube ID" t="The Video's Title">` To use, open a terminal in the project directory, & enter:
+- Updates all `<y-t>` elements on the page,  `<y-t v="YouTube Video ID">` becomes `<y-t v="YouTube ID" t="The Video's Title">` To use, open a terminal in the project directory, & enter:
 ```bash
 node yt-titles.js
 ```
@@ -110,7 +110,7 @@ The hybrid shuffle function combines two different techniques to optimize perfor
 
 <h3 id="Netlify Content Gate"><a href="https://github.com/i1li/netlify-content-gate">Netlify Content Gate</a></h3>
 
-- Easy solution for an email-verified contact form, and simple free content gating. Kept on a separate site for simplicity in this case, but easily integrated.
+- Easy solution for an email-verified contact form, and simple free content gating. Kept on a [separate site](https://connect4more.netlify.app/) for simplicity in this case, but easily integrated.
 
 <h3 id="Efficiency & Minimalism">Efficiency & Minimalism</h3>
 
