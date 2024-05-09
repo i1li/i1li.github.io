@@ -8,11 +8,12 @@ serv.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 serv.get('*', (req, res) => {
-    if (req.path !== '/index.html') {
-        res.status(404).sendFile(path.join(__dirname, '404.html'));
-    } else {
-        res.sendFile(path.join(__dirname, 'index.html'));
-    }
+    new URL(req.url, `http://${req.headers.host}`);
+    res.sendFile(path.join(__dirname, 'index.html'), (err) => {
+        if (err) {
+            res.status(404).send('404 Not Found');
+        }
+    });
 });
 serv.listen(PORT, () => {
     console.log(`Server is running on port ${PORT} - \x1b[34mhttp://localhost:${PORT}/\x1b[0m`);
