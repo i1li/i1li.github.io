@@ -1,5 +1,8 @@
 {
     "scripts": {
         "build": "npm install express && node serv.js"
+    },
+    "dependencies": {
+        "express": "^4.19.2"
     }
 }
