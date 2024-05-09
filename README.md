@@ -9,20 +9,22 @@ No frameworks, just pure JavaScript (a.k.a. vanilla JavaScript), CSS, & HTML. Re
 <a href="https://vscode.dev/github/i1li/i1li.github.io"><img src="img/button-vscode.svg" alt="Open in VSCode"></a>
 </p>
 
-Quickstart: Open a terminal in the project directory, & enter either:
+Quickstart: Use a quick deploy option above, or clone this repo locally, open a terminal in the project directory, & enter either:
 ```bash
 npm i express
 node serv.js
 ```
-or:
+(the simplest option), or:
 ```bash
 npm i netlify-cli
 netlify dev
 ```
-That's it. No bundling, frameworks, or dependencies.
+(A bulkier option, but enables use of Netlify's [serverless functions](https://www.netlify.com/platform/core/functions/).)
 
 ### SPA Navigation & Content Loading
--   Uses [netlify.toml](/netlify.toml) for hosting on Netlify, or [404.html](/404.html) & [gh.js](/js/gh.js) for hosting on [GitHub Pages](https://i1li.github.io/) & elsewhere.
+-   For SPA functionality across different hosting environments, the app uses [netlify.toml](/netlify.toml) for hosting on Netlify, or 
+-   [404.html](/404.html) & [gh.js](/js/gh.js) for hosting on [GitHub Pages](https://i1li.github.io/), or
+-   [serv.js](/serv.js) for hosting elsewhere.
 -   Enables seamless navigation within the application without full page reloads, improving user experience without complication of a framework.
 -   Default "display all posts" view at root directory, with posts auto-expanding upon scroll, shows a welcome intro message & navigation links at top of page.
 -   Individual post view at unique URLs removes the welcome intro from display, & autoscrolls post header to top. Also clones a copy of the post navigation links shown in the post header, to the bottom of post.
