@@ -1,4 +1,4 @@
-<h1>Minimal, Responsive, Pure JavaScript, Single Page App</h1>
+<h1 align="center">Minimal, Responsive, Pure JavaScript, Single Page App</h1>
 <p align="center">
 <a href="#Efficiency & Minimalism">Minimal, no frameworks</a>, just pure JavaScript (a.k.a. vanilla JavaScript), CSS, & HTML, <a href="#SPA Navigation & Content Loading">Single Page App (SPA)</a> <br/><a href="#Responsive Design">Responsive Design</a>: images, video, & text automatically adjust to fit accordingly across small & large screens. <br/><a href="#Light/Dark Mode Toggle">Light/Dark Mode</a>, <a href="#Zoom In/Out Functionality">Page Zoom</a>, <a href="#Full Screen Image Overlay">Full Screen Image Overlay</a>, <a href="#Sticky Header & Scroll-to-Top Button">Go to Top Button</a>, <a href="#Lightest YouTube Embed">Embedded Content Display Toggle</a>, <br/><a href="#Target Links / Hash Links As Subpages">Target Links as Subpages</a>, <a href="#Background Gradient Shift, & other CSS Effects">Custom CSS Color-Shifting Gradients</a>, <a href="#Lazy Loading">Lazy Loading</a>, <a href="Automatic External Links Handling">External Link Handling</a>.
 <br/>
@@ -6,18 +6,19 @@
 <a href="https://app.netlify.com/start/deploy?repository=https://github.com/i1li/i1li.github.io"><img src="img/button-netlify.svg" alt="Deploy to Netlify"></a>
 <a href="https://vscode.dev/github/i1li/i1li.github.io"><img src="img/button-vscode.svg" alt="Open in VSCode"></a><br/>
 <a href="https://y0.netlify.app/">Demo site</a> contains my personal writing & learning resources.<br/>
-<b>Quickstart:</b> Use a quick deploy option above, or clone this repo locally, open a terminal in the project directory, & enter either:</p>
+<b>Quickstart:</b> Use a quick deploy button above, or clone this repo locally, open a terminal in the project directory, & enter either:</p>
 
 ```bash
 npm i express
 node serv.js
 ```
-(the simplest option), or:
+<p align="center">(the simplest option), or:</p>
+
 ```bash
 npm i netlify-cli
 netlify dev
 ```
-(A bulkier option, but enables use of Netlify's [serverless functions](https://www.netlify.com/platform/core/functions/).)
+<p align="center">(A bulkier option, but enables use of Netlify's <a href="https://www.netlify.com/platform/core/functions/">serverless functions</a>.)</p>
 
 <h2 id="SPA Navigation & Content Loading">SPA Navigation & Content Loading</h2>
 
