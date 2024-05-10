@@ -1,20 +1,18 @@
+const KEY = "AIzaSyD7AtuxeeeYFRp_CerYXTS-lHSaayUgQfk"; // https://developers.google.com/youtube/v3/getting-started#before-you-start
 const fs = require('fs');
-const path = require('path');
 const https = require('https');
-const KEY = ""; // https://developers.google.com/youtube/v3/getting-started#before-you-start
-const indexHtmlPath = path.join(__dirname, 'index.html');
-const indexHtml = fs.readFileSync(indexHtmlPath, 'utf8');
+let htmlContent = fs.readFileSync('index.html', 'utf8');
 const musicDivRegex = /id="musix">([\s\S]*?)<\/div>/;
 const extraDivRegex = /id="extra">([\s\S]*?)<\/div>/;
 const playlistIdRegex = /(?:p="(PL[^"]{12,}|FL[^"]{12,}|OL[^"]{12,}|TL[^"]{12,}|UU[^"]{12,})(?!,)"|v="(PL[^"]{12,}|FL[^"]{12,}|OL[^"]{12,}|TL[^"]{12,}|UU[^"]{12,})(?!,)")/g;
 const noEmbedRegex = /"no-embeds"[^>]*>([^<]*)<\/div>/;
-const musicDiv = indexHtml.match(musicDivRegex)?.[1] || '';
-const extraDiv = indexHtml.match(extraDivRegex)?.[1] || '';
+const musicDiv = htmlContent.match(musicDivRegex)?.[1] || '';
+const extraDiv = htmlContent.match(extraDivRegex)?.[1] || '';
 const searchDivs = musicDiv + extraDiv;
-const noEmbedIds = indexHtml.match(noEmbedRegex)?.[1].trim().split(',') || [];
+const noEmbedIds = htmlContent.match(noEmbedRegex)?.[1].trim().split(',') || [];
+let match;
 const extractIds = (regex, source) => {
   const ids = [];
-  let match;
   while ((match = regex.exec(source)) !== null) {
     if (match[1] && !match[1].includes(',')) {
       ids.push(match[1]);
@@ -25,7 +23,6 @@ const extractIds = (regex, source) => {
   return ids;
 };
 const playlistIds = extractIds(playlistIdRegex, searchDivs);
-let match;
 while ((match = playlistIdRegex.exec(musicDiv)) !== null) {
   if (match[1] && match[1].length > 11) {
     playlistIds.push(match[1]);
@@ -86,11 +83,10 @@ const writeOutput = async () => {
   const [playlistVideoIds] = await Promise.all([
     getPlaylistItems(playlistIds),
   ]);
-  let modifiedHtml = indexHtml;
   for (const playlistId of playlistIds) {
     const videoIdsInPlaylist = playlistVideoIds[playlistId] || [];
     const ytRegex = new RegExp(`<y-t[^>]*?(?:p="${playlistId}"|v="${playlistId}")[^>]*?>`, 'g');
-    modifiedHtml = modifiedHtml.replace(ytRegex, (match) => {
+    htmlContent = htmlContent.replace(ytRegex, (match) => {
       if (match.includes(`p="${playlistId}"`)) {
         if (playlistId.includes(',')) {
           return match;
@@ -101,6 +97,6 @@ const writeOutput = async () => {
       }
     });
   }
-  fs.writeFileSync(path.join(__dirname, 'index.html'), modifiedHtml);
+  fs.writeFileSync('index.html', htmlContent, 'utf8');
 };
 writeOutput().catch(console.error);

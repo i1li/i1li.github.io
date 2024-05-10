@@ -1,5 +1,7 @@
 const fs = require('fs');
 const https = require('https');
+let htmlContent = fs.readFileSync('index.html', 'utf8');
+const regex = /<y-t\s+v="([^"]+)"(?:(?!t).)*?>/g;
 async function fetchTitle(videoId) {
   const response = await new Promise((resolve, reject) => {
     https.get(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId.split('?')[0]}`, (res) => {
@@ -17,9 +19,6 @@ async function fetchTitle(videoId) {
   return response.title;
 }
 async function updateTitles() {
-  const htmlFilePath = 'index.html';
-  let htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
-  const regex = /<y-t\s+v="([^"]+)"(?:(?!t).)*?>/g;
   let matches = [...htmlContent.matchAll(regex)];
   const replacements = await Promise.all(Array.from(matches).map(async match => {
     const videoId = match[1];
@@ -48,6 +47,6 @@ async function updateTitles() {
   replacements.forEach(replacement => {
     htmlContent = htmlContent.replace(replacement.old, replacement.new);
   });
-  fs.writeFileSync(htmlFilePath, htmlContent, 'utf8');
+  fs.writeFileSync('index.html', htmlContent, 'utf8');
 }
 updateTitles().then(() => console.log('Titles updated.'));
