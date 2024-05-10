@@ -1,4 +1,4 @@
-const KEY = "AIzaSyD7AtuxeeeYFRp_CerYXTS-lHSaayUgQfk"; // https://developers.google.com/youtube/v3/getting-started#before-you-start
+const KEY = ""; // https://developers.google.com/youtube/v3/getting-started#before-you-start
 const fs = require('fs');
 const https = require('https');
 let htmlContent = fs.readFileSync('index.html', 'utf8');
