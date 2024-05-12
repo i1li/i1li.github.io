@@ -34,7 +34,7 @@ netlify dev
 <h3 id="Target Links / Hash Links As Subpages">Target Links / Hash Links As Subpages</h3>
 
 - Allows proper permalinks for specific areas of posts (target links, a.k.a. hashlinks or subpages), so they get a url of /route/target instead of /route#target
-- [Demo at /edu/psychology](https://y0.netlify.app/edu/psychology)
+- [Demo at /edu/mind](https://y0.netlify.app/edu/mind)
 
 <h3 id="Lightest Youtube Embed"><a href="https://github.com/i1li/lightest-youtube-embed">Lightest Youtube Embed</a> - (<a href="/js/yt.js">yt.js</a>)</h3>
 
@@ -59,7 +59,7 @@ node yt-ids.js
 
 <h3 id="shuffle.js"><a href="/js/shuffle.js">shuffle.js</a></h3>
 
-- proccessAndCombine combines all video IDs, (limiting how many come from each playlist), from the music section into one `<y-t>` element, at the top of [/edu/music](https://y0.netlify.app/edu/music).
+- proccessAndCombine combines all video IDs, (limiting how many come from each playlist), from the music section into one `<y-t>` element, at the top of [/edu/vibes](https://y0.netlify.app/edu/vibes).
 - shuffleAndDraw shuffles an array of playlists & videos extracted from the music section, with its own 'next' button. It then "draws" from the shuffled array, cloning the drawn `<y-t>` element into the 'draw' `<div>`. [Demo at top of main page](https://y0.netlify.app/)
 - The order of the elements is shuffled at each page load, as well as the video IDs within each element.
 - Limited to specific divs so playlist order is preserved in other sections of the site.
