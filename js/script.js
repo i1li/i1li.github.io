@@ -22,7 +22,7 @@ function topFunction() {
 // Light / Dark
 function applyDarkMode(isDarkMode) {
   document.body.classList.toggle("dark-mode", isDarkMode);
-  document.querySelectorAll('a, .post-content, .post-content-wrapper, #bg-wrapper, #draw').forEach((element) => {
+  document.querySelectorAll('a, .article-content, .article-content-wrapper, #bg-wrapper, #draw').forEach((element) => {
     element.classList.toggle('dark-mode', isDarkMode);
   });
 }
@@ -95,8 +95,8 @@ images.forEach(function(img) {
 
 // Single Page Application
 let isInitialLoad = true;
-function scrollToElement(element, isSubpost = false) {
-  if (isSubpost && isInitialLoad) {
+function scrollToElement(element, isSection = false) {
+  if (isSection && isInitialLoad) {
     const article = element.closest('article');
     article.scrollIntoView({
       block: 'center'
@@ -104,8 +104,8 @@ function scrollToElement(element, isSubpost = false) {
     setTimeout(() => {
       let offsetTop = element.getBoundingClientRect().top + window.scrollY;
       setTimeout(() => {
-        const subpostCenterOffset = (element.getBoundingClientRect().top + element.getBoundingClientRect().bottom) / 2 + window.scrollY;
-        offsetTop = subpostCenterOffset - window.innerHeight * 0.1;         
+        const sectionCenterOffset = (element.getBoundingClientRect().top + element.getBoundingClientRect().bottom) / 2 + window.scrollY;
+        offsetTop = sectionCenterOffset - window.innerHeight * 0.1;         
         window.scrollBy({
           top: offsetTop - window.scrollY,
         });
@@ -113,7 +113,7 @@ function scrollToElement(element, isSubpost = false) {
       }, 200);
     }, 200);
   } else {
-    let offsetTop = element.getBoundingClientRect().top + window.scrollY - 45;
+    let offsetTop = element.getBoundingClientRect().top + window.scrollY - 75;
     window.scrollTo({
       top: offsetTop,
     });
@@ -122,7 +122,7 @@ function scrollToElement(element, isSubpost = false) {
 const observer = new IntersectionObserver(function(entries, observer) {
   entries.forEach(function(entry) {
     if (entry.isIntersecting) {
-      entry.target.querySelector('.post-content').style.display = 'block';
+      entry.target.querySelector('.article-content').style.display = 'block';
       observer.unobserve(entry.target);
     }
   });
@@ -130,31 +130,31 @@ const observer = new IntersectionObserver(function(entries, observer) {
 const articles = document.querySelectorAll('article');
 articles.forEach(function(container) {
   observer.observe(container);
-  container.querySelector('.post-content').style.display = 'none';
+  container.querySelector('.article-content').style.display = 'none';
 });
 const welcome = document.getElementById('welcome');
-function showSinglePost(postId, subpostId) {
+function showSingleArticle(articleId, sectionId) {
   articles.forEach(function(container) {
-    if (container.id === postId) {
+    if (container.id === articleId) {
       welcome.style.display = 'none';
       container.style.display = 'block';
-      const postContent = container.querySelector('.post-content');
-      if (postContent) {
-        postContent.style.display = 'block';
+      const articleContent = container.querySelector('.article-content');
+      if (articleContent) {
+        articleContent.style.display = 'block';
       }
-      const postNav = container.querySelector('.post-nav');
-      if (postNav) {
-        let postNavBottom = container.querySelector('.post-nav-bottom');
-        if (!postNavBottom) {
-          postNavBottom = postNav.cloneNode(true);
-          postNavBottom.classList.add('post-nav-bottom');
-          container.appendChild(postNavBottom);
+      const articleNav = container.querySelector('.article-nav');
+      if (articleNav) {
+        let articleNavBottom = container.querySelector('.article-nav-bottom');
+        if (!articleNavBottom) {
+          articleNavBottom = articleNav.cloneNode(true);
+          articleNavBottom.classList.add('article-nav-bottom');
+          container.appendChild(articleNavBottom);
         }
       }
-      if (subpostId) {
-        const subpost = container.querySelector(`.subpost#${subpostId}`);
-        if (subpost) {
-          scrollToElement(subpost, true);
+      if (sectionId) {
+        const section = container.querySelector(`.section-title#${sectionId}`);
+        if (section) {
+          scrollToElement(section, true);
         }
       } else {
         scrollToElement(container, false);
@@ -164,16 +164,16 @@ function showSinglePost(postId, subpostId) {
     }
   });
 }
-function showAllPosts() {
+function showAllArticles() {
   articles.forEach(function(container, index) {
     container.style.display = 'block';
     if (index !== 0) {
-      container.querySelector('.post-content').style.display = 'none';
+      container.querySelector('.article-content').style.display = 'none';
     }
     observer.observe(container);
-    const postNavBottom = container.querySelector('.post-nav-bottom');
-    if (postNavBottom) {
-      postNavBottom.remove();
+    const articleNavBottom = container.querySelector('.article-nav-bottom');
+    if (articleNavBottom) {
+      articleNavBottom.remove();
     }
   });
   welcome.style.display = 'block';
@@ -181,20 +181,20 @@ function showAllPosts() {
   topFunction()
   }
 function navigate(path) {
-  const [postId, subpostId] = path.split('/');
-  if (postId) {
-    showSinglePost(postId, subpostId);
-    history.pushState({ postId: postId, subpostId: subpostId }, '', `/${path}`);
+  const [articleId, sectionId] = path.split('/');
+  if (articleId) {
+    showSingleArticle(articleId, sectionId);
+    history.pushState({ articleId: articleId, sectionId: sectionId }, '', `/${path}`);
   } else {
-    showAllPosts();
+    showAllArticles();
     history.pushState({}, '', window.location.origin);
   }
 }
 window.onpopstate = function(event) {
-  if (event.state && event.state.postId) {
-    showSinglePost(event.state.postId, event.state.subpostId);
+  if (event.state && event.state.articleId) {
+    showSingleArticle(event.state.articleId, event.state.sectionId);
   } else {
-    showAllPosts();
+    showAllArticles();
   }
 };
 document.addEventListener('click', function(event) {
@@ -212,12 +212,12 @@ document.addEventListener('click', function(event) {
 });
 const path = window.location.pathname.substring(1);
 if (path) {
-  const [postId, subpostId] = path.split('/');
-  if (postId && document.getElementById(postId)) {
-    showSinglePost(postId, subpostId);
+  const [articleId, sectionId] = path.split('/');
+  if (articleId && document.getElementById(articleId)) {
+    showSingleArticle(articleId, sectionId);
   } else {
-    showAllPosts();
+    showAllArticles();
   }
 } else {
-  showAllPosts();
+  showAllArticles();
 }
