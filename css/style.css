@@ -60,13 +60,13 @@ header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 2
     backdrop-filter: contrast(333%) grayscale(50%);
     -webkit-backdrop-filter: contrast(333%) grayscale(50%);
     border-radius: .3em .3em .5em .5em;}
-#site-nav {background: linear-gradient(to bottom, rgba(222, 22, 22, .35), rgba(128, 0, 128, 0.3));
+nav {background: linear-gradient(to bottom, rgba(222, 22, 22, .35), rgba(128, 0, 128, 0.3));
     font-size: 1.1em;
     line-height: 1.3;
     padding: .2em 0 .7em;
     backdrop-filter: brightness(100%) contrast(220%);
     -webkit-backdrop-filter: brightness(100%) contrast(220%);}
-#site-nav:hover {background: linear-gradient(to top, rgba(222, 22, 22, .2), rgba(128, 0, 128, 0.2)); opacity: 1;}
+nav:hover {background: linear-gradient(to top, rgba(222, 22, 22, .2), rgba(128, 0, 128, 0.2)); opacity: 1;}
 h1 {margin:0;
     padding:0;
     text-align: left;
@@ -152,7 +152,7 @@ a:hover {text-decoration: dotted underline;
     text-decoration-thickness: 2px;
     border: .1em rgba(22,22,22,.1) ridge;
     background: linear-gradient(to top, rgba(22,22,222, .2), rgba(22, 222, 222, .5));}
-.post-container {min-height:80vh; border: dotted 1px rgba(255,255,0,.1);}
+article {min-height:80vh; border: dotted 1px rgba(255,255,0,.1);}
 .post-header-wrapper {background-image: url("/img/bg.png");
     background-size: 191px;
     background-attachment: scroll;
@@ -249,7 +249,7 @@ a:hover {text-decoration: dotted underline;
     filter: invert(100%) !important;
     transition: all .3s ease-in-out;}
 #toTopFooter {opacity: 0.5;} #toTopFooter:hover {cursor: pointer; opacity: 0.9;}
-#footer {background: linear-gradient(to top, rgba(0, 0, 0, .3), rgba(128, 128, 128, 0.2));
+footer {background: linear-gradient(to top, rgba(0, 0, 0, .3), rgba(128, 128, 128, 0.2));
     transition: all .7s ease-in-out;
     margin-right: -.7em;
     margin-left: -.7em;
@@ -257,7 +257,7 @@ a:hover {text-decoration: dotted underline;
     border-left: inset .7em rgba(222, 114, 22, .1);
     border-right: inset .7em rgba(22, 222, 28, .1);
     height: 5em;}
-#footer:hover {background: linear-gradient(to bottom, rgba(0, 0, 0, .3), rgba(128, 128, 128, 0.2));
+footer:hover {background: linear-gradient(to bottom, rgba(0, 0, 0, .3), rgba(128, 128, 128, 0.2));
     transition: all 1s ease-in-out;
     margin-right: -.7em;
     margin-left: -.7em;

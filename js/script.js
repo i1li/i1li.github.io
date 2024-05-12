@@ -97,8 +97,8 @@ images.forEach(function(img) {
 let isInitialLoad = true;
 function scrollToElement(element, isSubpost = false) {
   if (isSubpost && isInitialLoad) {
-    const postContainer = element.closest('.post-container');
-    postContainer.scrollIntoView({
+    const article = element.closest('article');
+    article.scrollIntoView({
       block: 'center'
     });
     setTimeout(() => {
@@ -127,14 +127,14 @@ const observer = new IntersectionObserver(function(entries, observer) {
     }
   });
 });
-const postContainers = document.querySelectorAll('.post-container');
-postContainers.forEach(function(container) {
+const articles = document.querySelectorAll('article');
+articles.forEach(function(container) {
   observer.observe(container);
   container.querySelector('.post-content').style.display = 'none';
 });
 const welcome = document.getElementById('welcome');
 function showSinglePost(postId, subpostId) {
-  postContainers.forEach(function(container) {
+  articles.forEach(function(container) {
     if (container.id === postId) {
       welcome.style.display = 'none';
       container.style.display = 'block';
@@ -165,7 +165,7 @@ function showSinglePost(postId, subpostId) {
   });
 }
 function showAllPosts() {
-  postContainers.forEach(function(container, index) {
+  articles.forEach(function(container, index) {
     container.style.display = 'block';
     if (index !== 0) {
       container.querySelector('.post-content').style.display = 'none';
