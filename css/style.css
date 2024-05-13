@@ -69,6 +69,7 @@ header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 2
     backdrop-filter: brightness(100%) contrast(220%);
     -webkit-backdrop-filter: brightness(100%) contrast(220%);
     border: 1px solid rgba(4, 223, 231, 0.4);}
+#site-nav .col a {padding:.15em .5em;}
 #site-nav:hover {background: linear-gradient(to top, rgba(222, 22, 22, .2), rgba(128, 0, 128, 0.2)); opacity: 1;}
 h1 {margin:0;
     padding:0;
@@ -183,18 +184,20 @@ article {min-height:80vh; border: dotted 1px rgba(255,255,0,.1);}
     scale:1.03;}
 .section-title {all: unset !important; cursor: pointer !important; text-align: center !important;}
 .section-nav {background: linear-gradient(to right, rgb(22 222 28 / 15%) 0%, rgb(110 0 145 / 15%) 50%, rgb(222 114 22 / 15%) 100%);
-    font-size: 0.9em; 
     padding:0 1em .65em;
     border: solid 1px rgba(255,0,0,.3);
     transition:all 1.3s ease;}
+.section-nav .col a {padding:.33em .9em;}
 .section-nav:hover {background: linear-gradient(to left, rgb(22 222 28 / 22%) 0%, rgb(110 0 145 / 22%) 50%, rgb(222 114 22 / 22%) 100%);
     scale:1.03;}
 .article-nav:hover {opacity: 1;} .article-nav {display: flex; 
     justify-content: space-between; 
-    font-size: 0.85em; 
+    font-size: 0.9em; 
     text-transform: full-width;
-    opacity: .55;
+    opacity: .85;
     padding: 0 1.5%;}
+.article-nav a:link {background: rgba(128, 128, 128, 0.1);}
+.article-nav a:hover {background: rgba(0, 242, 255, 0.2);}
 .article-nav-bottom {background: linear-gradient(to right, rgb(22 222 28 / 22%) 0%, rgb(110 0 145 / 22%) 50%, rgb(222 114 22 / 22%) 100%);
     font-size: 0.9em; 
     opacity: .8;
@@ -205,14 +208,14 @@ article {min-height:80vh; border: dotted 1px rgba(255,255,0,.1);}
     scale:1.03;}
 .previous-article {text-align: left;
     width: 33%;
-    padding:1.2em 0 .9em 2em !important;}
+    padding:1.1em 0 .9em 2em !important;}
 .share-article {text-align: center;
     width: 34%;
     display: none;}
 .next-article {text-align: right;
     margin-right:.5em;
     width: 33%;
-    padding:1.2em 2em .9em 0 !important}
+    padding:1.1em 2em .9em 0 !important}
 .article-content-wrapper {background-image: url("/img/bginvert.png");
     background-size: 20000px;
     background-position-x: -222px;
