@@ -46,26 +46,24 @@ header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 2
     transition: all .5s ease-in-out;
     scale:1.07;}
 .no-bg {background: none !important;border: none !important;}
-#site-intro {padding-bottom: .4em;
+#site-intro {text-align: center;
+    padding: .1em 0 .2em;
     -webkit-backdrop-filter:brightness(90%)contrast(111%)saturate(555%)blur(.04em); 
     backdrop-filter:brightness(90%)contrast(111%)saturate(555%)blur(.04em);
     border-radius:.5em;}
-#site-intro, #site-info p{text-align: center;
+#site-info p{text-align: center;
     margin-right: 1vw;
     margin-left: 1vw;
-    margin-bottom: .1em;
-    line-height: 1.1;}
+    margin-bottom: .1em;}
 #site-info {-webkit-backdrop-filter:blur(.07em)saturate(250%); backdrop-filter:blur(.07em)saturate(250%); padding-bottom:.1em;}
 #welcome {background: linear-gradient(to top, rgba(22,22,222, .1), rgba(22, 222, 222, .1));
-    line-height: 1.3;
     backdrop-filter: contrast(333%) grayscale(50%);
     -webkit-backdrop-filter: contrast(333%) grayscale(50%);
     border-radius: .3em .3em .5em .5em;
     border: 1px solid rgba(0, 171, 63, 0.6);}
 #site-nav {background: linear-gradient(to bottom, rgba(222, 22, 22, .35), rgba(128, 0, 128, 0.3));
-    font-size: 1.1em;
-    line-height: 1.3;
     padding: .2em 0 .7em;
+    font-size: 1.1em;
     backdrop-filter: brightness(100%) contrast(220%);
     -webkit-backdrop-filter: brightness(100%) contrast(220%);
     border: 1px solid rgba(4, 223, 231, 0.4);}
