@@ -93,6 +93,23 @@ images.forEach(function(img) {
   });
 });
 
+// Random Colors on Hover for Links & Buttons
+const buttons = document.querySelectorAll('button, a, a.dark-mode');
+buttons.forEach(button => {
+  button.addEventListener('mouseover', () => {
+    let randomDegree;
+    do {
+      randomDegree = Math.floor(Math.random() * 601) - 300;
+    } while (randomDegree >= -40 && randomDegree <= 40);
+    button.style.filter = `hue-rotate(${randomDegree}deg)`;
+    button.style.webkitFilter = `hue-rotate(${randomDegree}deg)`;
+  });
+  button.addEventListener('mouseout', () => {
+    button.style.filter = 'none';
+    button.style.webkitFilter = 'none';
+  });
+});
+
 // Single Page Application
 let isInitialLoad = true;
 function scrollToElement(element, isSection = false) {
@@ -112,6 +129,12 @@ function scrollToElement(element, isSection = false) {
         isInitialLoad = false;
       }, 200);
     }, 200);
+  } else if (isInitialLoad){
+    let offsetTop = element.getBoundingClientRect().top + window.scrollY + 25;
+    window.scrollTo({
+      top: offsetTop,
+    });
+    isInitialLoad = false;
   } else {
     let offsetTop = element.getBoundingClientRect().top + window.scrollY - 75;
     window.scrollTo({
