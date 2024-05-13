@@ -51,8 +51,8 @@ modeToggle.addEventListener('click', toggleDarkMode);
 // Zoom In / Out
 function adjustZoom(isZoomIn) {
   const zoomFactor = isZoomIn ? 1.05 : 0.95;
-  const elements = document.querySelectorAll("html");
-  elements.forEach(function(element) {
+  const zoom = document.querySelectorAll("html");
+  zoom.forEach(function(element) {
     let currentFontSize = parseFloat(window.getComputedStyle(element).fontSize);
     currentFontSize = currentFontSize * zoomFactor;
     element.style.fontSize = currentFontSize + "px";
@@ -93,20 +93,31 @@ images.forEach(function(img) {
   });
 });
 
-// Random Colors on Hover for Links & Buttons
-const buttons = document.querySelectorAll('button, a, a.dark-mode');
-buttons.forEach(button => {
-  button.addEventListener('mouseover', () => {
-    let randomDegree;
-    do {
-      randomDegree = Math.floor(Math.random() * 601) - 300;
-    } while (randomDegree >= -40 && randomDegree <= 40);
-    button.style.filter = `hue-rotate(${randomDegree}deg)`;
-    button.style.webkitFilter = `hue-rotate(${randomDegree}deg)`;
-  });
-  button.addEventListener('mouseout', () => {
-    button.style.filter = 'none';
-    button.style.webkitFilter = 'none';
+// Random Color On Hover Or Click - Rotate hue between -315 and 315 degrees, excluding -45 to 45. While hover active, shift 5 degrees per .1 second
+const hover = document.querySelectorAll('button, a, a.dark-mode');
+hover.forEach(element => {
+  let intervalId;
+  element.addEventListener('mouseover', handleHover);
+  element.addEventListener('click', handleClick);
+  function handleHover() {
+    const isNegative = Math.random() < 0.5;
+    let randomDegree = isNegative ? Math.floor(Math.random() * -270) - 45 : Math.floor(Math.random() * 270) + 46;
+    element.style.filter = `hue-rotate(${randomDegree}deg)`;
+    element.style.webkitFilter = `hue-rotate(${randomDegree}deg)`;
+    intervalId = setInterval(() => {
+      randomDegree += isNegative ? -5 : 5;
+      element.style.filter = `hue-rotate(${randomDegree}deg)`;
+      element.style.webkitFilter = `hue-rotate(${randomDegree}deg)`;
+    }, 100);
+  }
+  function handleClick() {
+    clearInterval(intervalId);
+    handleHover();
+  }
+  element.addEventListener('mouseout', () => {
+    element.style.filter = 'none';
+    element.style.webkitFilter = 'none';
+    clearInterval(intervalId);
   });
 });
 
