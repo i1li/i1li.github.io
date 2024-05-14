@@ -1,3 +1,4 @@
+* {border-radius:.3em; scrollbar-color: rgba(22,222,222,.7) rgba(0,0,72,.7); overscroll-behavior: none; scroll-behavior: smooth; scroll-snap-type: none;}
 header:hover {background: linear-gradient(to top, rgba(0, 22, 0, .3), rgba(128, 0, 128, 0.4));}
 header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 22, 128, 0.3));
     position: sticky;
@@ -89,7 +90,6 @@ p {line-height: 1.2;
     text-align: justify;}  
 .no-indent {text-indent: 0;} .no-indent p {text-indent: 0;} .width95 {width: 95%; margin:auto;} .width95 p {width: 95%; margin:auto;} .width90 {width: 90%; margin:auto;} .width90 p {width: 90%; margin:auto;}
 .center {text-align: center;} .justify-content-center {justify-content:center;} .center p {text-align: center;} .justify-content-center p {justify-content: center;}
-* {border-radius:.3em; scrollbar-color: rgba(22,222,222,.7) rgba(0,0,72,.7); overscroll-behavior: none; scroll-behavior: smooth; scroll-snap-type: none;}
 body {transition: all .369s ease-in-out;
     font-size: 1.04em;
     line-height: 1.5;
@@ -149,7 +149,8 @@ a:link, a:visited {text-shadow: 1px 2px 1em rgba(141, 0, 12, .5), 0 0 .3em rgba(
     padding-bottom:0;
     font-size: 1em;
     border: .1em rgba(22,22,22,.15) groove;
-    background: linear-gradient(to bottom, rgba(222,222,222, .5), rgba(128, 128, 128, 0.1));}
+    background: linear-gradient(to bottom, rgba(222,222,222, .5), rgba(128, 128, 128, 0.1));
+    border-radius: 1em;}
 a:hover {text-decoration: dotted underline;
     text-decoration-thickness: 2px;
     border: .1em rgba(22,22,22,.1) ridge;
@@ -192,10 +193,10 @@ article {min-height:80vh; border: dotted 1px rgba(255,255,0,.1);}
     justify-content: space-between; 
     font-size: 0.9em; 
     text-transform: full-width;
-    opacity: .85;
+    opacity: .9;
     padding: 0 1.5%;}
-.article-nav a:link {background: rgba(128, 128, 128, 0.1);}
-.article-nav a:hover {background: rgba(0, 242, 255, 0.2);}
+.article-nav a:link {background: linear-gradient(to top, rgba(255, 252, 84, 0.25), rgba(255,0,0,.2), rgba(221, 0, 255, 0.15));}
+.article-nav a:hover {background: linear-gradient(to top, rgba(255, 252, 84, 0.35), rgba(255,0,0,.25), rgba(221, 0, 255, 0.2));}
 .article-nav-bottom {background: linear-gradient(to right, rgb(22 222 28 / 22%) 0%, rgb(110 0 145 / 22%) 50%, rgb(222 114 22 / 22%) 100%);
     font-size: 0.9em; 
     opacity: .8;
@@ -213,7 +214,7 @@ article {min-height:80vh; border: dotted 1px rgba(255,255,0,.1);}
 .next-article {text-align: right;
     margin-right:.5em;
     width: 33%;
-    padding:1.1em 2em .9em 0 !important}
+    padding:1.1em 2em .9em 0 !important;}
 .article-content-wrapper {background-image: url("/img/bginvert.png");
     background-size: 20000px;
     background-position-x: -222px;
