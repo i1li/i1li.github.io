@@ -23,7 +23,7 @@ netlify dev
 <h3 id="SPA Navigation & Content Loading">SPA Navigation & Content Loading</h3>
 
 - For SPA (Single Page App) routing across different hosting environments, the app uses [netlify.toml](/netlify.toml) on Netlify, or 
-- [404.html](/404.html) & [gh.js](/js/gh.js) on [GitHub Pages](https://i1li.github.io/), or
+- [404.html](/404.html) & [github-pages.js](/js/github-pages.js) on [GitHub Pages](https://i1li.github.io/), or
 - [serv.js](/serv.js) elsewhere.
 - Enables seamless navigation within the application without full page reloads, improving user experience without complication of a framework.
 - Default "display all posts" view at root directory, with posts auto-expanding upon scroll, shows a welcome intro message & navigation links at top of page.
@@ -36,11 +36,11 @@ netlify dev
 - Allows proper permalinks for specific areas of posts (target links, a.k.a. hashlinks or subpages), so they get a url of /route/target instead of /route#target
 - [Demo at /edu/mind](https://y0.netlify.app/edu/mind)
 
-<h3 id="Lightest Youtube Embed"><a href="https://github.com/i1li/lightest-youtube-embed">Lightest Youtube Embed</a> - (<a href="/js/yt.js">yt.js</a>)</h3>
+<h3 id="Lightest Youtube Embed"><a href="https://github.com/i1li/lightest-youtube-embed">Lightest Youtube Embed</a> - (<a href="/js/youtube-embed.js">youtube-embed.js</a>)</h3>
 
 - Easy to use YouTube embed that saves space, bandwidth, & privacy. With a bare amount of code (`<y-t v="videoid"></y-t>`), it responsively fits videos & playlists that only load once user clicks "show/hide" button. [Demo at /edu](https://y0.netlify.app/edu/)
 
-<h3 id="Simple Toggle (toggle.js)"><a href="/js/toggle.js">Simple Toggle (toggle.js)</a></h3>
+<h3 id="Simple Toggle (display-toggle.js)"><a href="/js/display-toggle.js">Simple Toggle (display-toggle.js)</a></h3>
 
 - Stripped version of Lightest Youtube Embed to toggle display of any iframe or other content. [Demo at /jesus-and-his-religion](https://y0.netlify.app/jesus-and-his-religion/)
 
@@ -77,15 +77,16 @@ The hybrid shuffle function combines two different techniques to optimize perfor
 - Provides users with the ability to adjust the text size for better readability.
 - Dynamically adjusts the font size of key elements on the page based on user interaction, with the zoom level persisted in `localStorage`.
 
-<h3 id="Full Screen Image Overlay">Full Screen Image Overlay</h3>
+<h3 id="Full Screen Image Overlay"><a href="/js/image-overlay.js">Full Screen Image Overlay (image-overlay.js)</a></h3>
 
 - Responsive full screen overlay when user clicks to expand image. Exits by clicking anywhere, pressing any key, or clicking "x"
 
 <h3 id="Background Gradient Shift, & other CSS Effects">Background Gradient Shift, & other CSS Effects</h3>
 
-- [bg.js](/js/bg.js) & [bg.css](/css/bg.css) create a constant shifting gradient by creating & replacing blended layers.
+- [background.js](/js/background.js) & [background.css](/css/background.css) create a constant shifting gradient by creating & replacing blended layers.
 - Several layers of semi-transparent gradients for background & page elements.
 - Dynamic cursor hover & filter effects.
+- [link-colors.js](/js/link-colors.js) - Random Color on Hover, Click, or Touch of Links and Buttons.
 
 <h3 id="Sticky Header & Scroll-to-Top Button">Sticky Header & Scroll-to-Top Button</h3>
 
