@@ -6,7 +6,7 @@ header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 2
     height: 5em;
     z-index: 1;
     padding-top: 1em;
-    transition: all .369s ease-in-out;
+    transition: all .3s ease-in-out;
     overflow: hidden;
     border-bottom: solid 2px rgba(0,0,255,.25);
     border-left: solid 2px rgba(255,0,0,.15);
@@ -90,7 +90,7 @@ p {line-height: 1.2;
     text-align: justify;}  
 .no-indent {text-indent: 0;} .no-indent p {text-indent: 0;} .width95 {width: 95%; margin:auto;} .width95 p {width: 95%; margin:auto;} .width90 {width: 90%; margin:auto;} .width90 p {width: 90%; margin:auto;}
 .center {text-align: center;} .justify-content-center {justify-content:center;} .center p {text-align: center;} .justify-content-center p {justify-content: center;}
-body {transition: all .369s ease-in-out;
+body {transition: all .3s ease-in-out;
     font-size: 1.04em;
     line-height: 1.5;
     color: black;
@@ -168,14 +168,13 @@ article {min-height:80vh; border: dotted 1px rgba(255,255,0,.1);}
     backdrop-filter: brightness(95%) contrast(220%);
     -webkit-backdrop-filter: brightness(95%) contrast(220%);}
 .article-header-wrapper {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 22, 128, 0.3));
-    transition: all 1.1s ease-in-out;
+    transition: all 1.3s ease-in-out;
     margin-right: -.7em;
     margin-left: -.7em;
     border: inset .7em rgba(255,255,100,.1);
     border-top: solid 1px rgba(255,0,0,.2);
     border-bottom: solid 1px rgba(255,0,0,.2);}
 .article-header-wrapper:hover {background: linear-gradient(to top, rgba(222, 69, 69, .3), rgba(128, 0, 128, 0.4));
-    transition: all .7s ease-in-out;
     margin-right: -.7em;
     margin-left: -.7em;
     border-left: inset .7em rgba(100,50,255,.3);
@@ -185,7 +184,7 @@ article {min-height:80vh; border: dotted 1px rgba(255,255,0,.1);}
 .section-nav {background: linear-gradient(to right, rgb(22 222 28 / 15%) 0%, rgb(110 0 145 / 15%) 50%, rgb(222 114 22 / 15%) 100%);
     padding:0 1em .65em;
     border: solid 1px rgba(255,0,0,.3);
-    transition:all 1.3s ease;}
+    transition:all 1.5s ease;}
 .section-nav .col a {padding:.33em .9em;}
 .section-nav:hover {background: linear-gradient(to left, rgb(22 222 28 / 22%) 0%, rgb(110 0 145 / 22%) 50%, rgb(222 114 22 / 22%) 100%);
     scale:1.03;}
@@ -202,9 +201,9 @@ article {min-height:80vh; border: dotted 1px rgba(255,255,0,.1);}
     opacity: .8;
     padding:.3em 2em;
     border: solid 1px rgba(255,0,0,.3);
-    transition:all 1s ease;}
+    transition:all 1.5s ease;}
 .article-nav-bottom:hover {background: linear-gradient(to left, rgb(22 222 28 / 22%) 0%, rgb(110 0 145 / 22%) 50%, rgb(222 114 22 / 22%) 100%);
-    scale:1.03;}
+    scale:1.02;}
 .previous-article {text-align: left;
     width: 33%;
     padding:1.1em 0 .9em 2em !important;}
@@ -266,21 +265,19 @@ article {min-height:80vh; border: dotted 1px rgba(255,255,0,.1);}
     transition: all .3s ease-in-out;}
 #toTopFooter {opacity: 0.5;} #toTopFooter:hover {cursor: pointer; opacity: 0.9;}
 footer {background: linear-gradient(to top, rgba(0, 0, 0, .3), rgba(128, 128, 128, 0.2));
-    transition: all .7s ease-in-out;
+    transition: all 1.2s ease-in-out;
     margin-right: -.7em;
     margin-left: -.7em;
     margin-bottom: .4em;
     border-left: inset .7em rgba(222, 114, 22, .1);
     border-right: inset .7em rgba(22, 222, 28, .1);
-    height: 5em;
-    transition:all 1s ease;}
+    height: 5em;}
 footer:hover {background: linear-gradient(to bottom, rgba(0, 0, 0, .3), rgba(128, 128, 128, 0.2));
-    transition: all 1s ease-in-out;
     margin-right: -.7em;
     margin-left: -.7em;
     border-right: inset .7em rgba(222, 114, 22, .2);
     border-left: inset .7em rgba(22, 222, 28, .2);
-    scale:1.03 1.01}
+    scale:1.02 1.01}
 .img-footer {width: 3.5rem;} .img-footer:hover {-webkit-filter: invert(100%);
     filter: invert(100%);
     transition: all .5s ease-in-out;
