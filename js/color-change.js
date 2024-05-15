@@ -1,7 +1,7 @@
 // Random Color on Hover, Click, or Touch of Links, Buttons + other elements
 const hover = document.querySelectorAll('button, a, a.dark-mode, .article-header-wrapper, footer, .article-nav-bottom');
 // Shift colors of elements in 'alwaysShiftRandomly' at randomly varying rate, regardless of hover.
-const alwaysShiftRandomly = document.querySelectorAll('header, #site-nav, .section-nav, .article-header, footer, .article-title, #site-title, #light-dark-zoom');
+const alwaysShiftRandomly = document.querySelectorAll('header, #site-nav .col, #site-nav, .section-nav .col, .article-header, footer, .article-title, #site-title, #light-dark-zoom');
 // Rotate hue between -315 and 315 degrees, excluding -45 to 45. (Avoids similar hue ranges.)
 function startColorShiftAlwaysShiftRandomly(element, interval = 100) {
   let randomDegree = Math.random() < 0.5 ? Math.floor(Math.random() * -270) - 45 : Math.floor(Math.random() * 270) + 46;
@@ -28,7 +28,7 @@ alwaysShiftRandomly.forEach(element => {
   const randomInterval = Math.floor(Math.random() * (1111 - 111 + 1)) + 111;
   element.intervalId = startColorShiftAlwaysShiftRandomly(element, randomInterval);
   setInterval(() => {
-    element.shiftIncrement = Math.random() < 0.5 ? Math.floor(Math.random() * 11) + 1 : Math.floor(Math.random() * -11);
+    element.shiftIncrement = Math.random() < 0.5 ? Math.floor(Math.random() * 11) + 1 : Math.floor(Math.random() * -14);
   }, Math.random() * 1000 + 111);
 });
 hover.forEach(element => {
