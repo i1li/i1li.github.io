@@ -86,7 +86,8 @@ The hybrid shuffle function combines two different techniques to optimize perfor
 - [background.js](/js/background.js) & [background.css](/css/background.css) create a constant shifting gradient by creating & replacing blended layers.
 - Several layers of semi-transparent gradients for background & page elements.
 - Dynamic cursor hover & filter effects.
-- [link-colors.js](/js/link-colors.js) - Random Color on Hover, Click, or Touch of Links and Buttons.
+- [color-change.js](/js/color-change.js) - Random color on hover, click, or touch of links and buttons. Also shifts colors of other elements at randomly varying rate, regardless of hover.
+
 
 <h3 id="Sticky Header & Scroll-to-Top Button">Sticky Header & Scroll-to-Top Button</h3>
 
