@@ -28,7 +28,7 @@ alwaysShiftRandomly.forEach(element => {
   const randomInterval = Math.floor(Math.random() * (1111 - 111 + 1)) + 111;
   element.intervalId = startColorShiftAlwaysShiftRandomly(element, randomInterval);
   setInterval(() => {
-    element.shiftIncrement = Math.random() < 0.5 ? Math.floor(Math.random() * 11) + 1 : Math.floor(Math.random() * -14);
+    element.shiftIncrement = Math.random() < 0.5 ? Math.floor(Math.random() * 11) + 1 : Math.floor(Math.random() * -10);
   }, Math.random() * 1000 + 111);
 });
 hover.forEach(element => {
