@@ -3,7 +3,7 @@ const hover = document.querySelectorAll('button, a, a.dark-mode, .article-header
 // Shift colors of elements in 'alwaysShiftRandomly' at randomly varying rate, regardless of hover.
 const alwaysShiftRandomly = document.querySelectorAll('header, #site-nav .col, #site-nav, .section-nav .col, .article-header, footer, .article-title, #site-title, #light-dark-zoom');
 // Rotate hue between -315 and 315 degrees, excluding -45 to 45. (Avoids similar hue ranges.)
-function startColorShiftAlwaysShiftRandomly(element, interval = 100) {
+function startAlwaysShiftRandomly(element, interval) {
   let randomDegree = Math.random() < 0.5 ? Math.floor(Math.random() * -270) - 45 : Math.floor(Math.random() * 270) + 46;
   element.style.filter = `hue-rotate(${randomDegree}deg)`;
   return setInterval(() => {
@@ -11,7 +11,7 @@ function startColorShiftAlwaysShiftRandomly(element, interval = 100) {
     element.style.filter = `hue-rotate(${randomDegree}deg)`;
   }, interval);
 }
-function startColorShiftHover(element, interval = 100) {
+function startHover(element, interval = 100) {
   let randomDegree = Math.random() < 0.5 ? Math.floor(Math.random() * -270) - 45 : Math.floor(Math.random() * 270) + 46;
   element.style.filter = `hue-rotate(${randomDegree}deg) drop-shadow(0 0 1em rgba(255, 255, 255, 0.5))`;
   return setInterval(() => {
@@ -25,25 +25,25 @@ function handleDisengage(element, intervalId) {
 }
 alwaysShiftRandomly.forEach(element => {
   element.shiftIncrement = Math.floor(Math.random() * 111) + 1;
-  const randomInterval = Math.floor(Math.random() * (1111 - 111 + 1)) + 111;
-  element.intervalId = startColorShiftAlwaysShiftRandomly(element, randomInterval);
+  const randomInterval = 111 + Math.floor(Math.random() * 1001);
+  element.intervalId = startAlwaysShiftRandomly(element, randomInterval);
   setInterval(() => {
     element.shiftIncrement = Math.random() < 0.5 ? Math.floor(Math.random() * 11) + 1 : Math.floor(Math.random() * -10);
-  }, Math.random() * 1000 + 111);
+  }, 111 + Math.random() * 1234);
 });
 hover.forEach(element => {
   let intervalId;
   let disengageTimeout;
   element.addEventListener('mouseover', () => {
-    intervalId = startColorShiftHover(element);
+    intervalId = startHover(element);
   });
   element.addEventListener('click', () => {
     clearInterval(intervalId);
-    intervalId = startColorShiftHover(element);
+    intervalId = startHover(element);
   });
   element.addEventListener('touchstart', () => {
     clearInterval(intervalId);
-    intervalId = startColorShiftHover(element);
+    intervalId = startHover(element);
     disengageTimeout = setTimeout(() => handleDisengage(element, intervalId), 888);
   });
   element.addEventListener('mouseout', () => {
