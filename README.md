@@ -1,6 +1,6 @@
 <h1 align="center">Minimal, Responsive, Pure JavaScript, Single Page App</h1>
 <p align="center">
-<a href="#Efficiency & Minimalism">Minimal, no frameworks</a>, just pure JavaScript (a.k.a. vanilla JavaScript), CSS, & HTML, <a href="#SPA Navigation & Content Loading">Single Page App (SPA)</a> <br/><a href="#Responsive Design">Responsive Design</a>: images, video, & text automatically adjust to fit accordingly across small & large screens. <br/><a href="#Light/Dark Mode Toggle">Light/Dark Mode</a>, <a href="#Zoom In/Out Functionality">Page Zoom</a>, <a href="#Full Screen Image Overlay">Full Screen Image Overlay</a>, <a href="#Sticky Header & Scroll-to-Top Button">Go to Top Button</a>, <a href="#Lightest YouTube Embed">Embedded Content Display Toggle</a>, <br/><a href="#Target Links / Hash Links As Subpages">Target Links as Subpages</a>, <a href="#Background Gradient Shift, & other CSS Effects">Custom CSS Color-Shifting Gradients</a>, <a href="#Lazy Loading">Lazy Loading</a>, <a href="Automatic External Links Handling">External Link Handling</a>.
+<a href="#Efficiency & Minimalism">Minimal, no frameworks</a>, just pure JavaScript (a.k.a. vanilla JavaScript), CSS, & HTML, <a href="#SPA Navigation & Content Loading">Single Page App (SPA)</a> <br/><a href="#Responsive Design">Responsive Design</a>: images, video, & text automatically adjust to fit accordingly across small & large screens. <br/><a href="#Light/Dark Mode Toggle">Light/Dark Mode</a>, <a href="#Zoom In/Out Functionality">Page Zoom</a>, <a href="#Full Screen Image Overlay">Full Screen Image Overlay</a>, <a href="#Sticky Header & Scroll-to-Top Button">Go to Top Button</a>, <a href="#Lightest YouTube Embed">Embedded Content Display Toggle</a>, <br/><a href="#Target Links / Hash Links As Subpages">Target Links as Subpages</a>, <a href="#Background Gradient Shift, & other CSS Effects">Custom CSS Color-Shifting Gradients</a>, <a href="#Lazy Loading">Lazy Loading</a>, <a href="#Device Detection">Device Detection</a>, <a href="#Automatic External Links Handling">External Link Handling</a>.
 <br/>
 <a href="https://github.com/codespaces/new?repo=https://github.com/i1li/i1li.github.io"><img src="img/button-codespaces.svg" alt="Open in GitHub Codespaces"></a>
 <a href="https://app.netlify.com/start/deploy?repository=https://github.com/i1li/i1li.github.io"><img src="img/button-netlify.svg" alt="Deploy to Netlify"></a>
@@ -104,6 +104,10 @@ The hybrid shuffle function combines two different techniques to optimize perfor
 
 - Uses the `IntersectionObserver` API for lazy loading content as it becomes visible, reducing initial load time.
 - This gives the main view at the root URL an infinite scroll for all posts.
+
+<h3 id="Device Detection">Device Detection</h3>
+
+- [detect-device.js](/js/detect-device.js) - Detects when the page is loaded from a mobile device, to save processing power from being used for extra color effects like in [background.js](/js/background.js) and [color-change.js](/js/color-change.js)
 
 <h3 id="Automatic External Links Handling">Automatic External Links Handling</h3>
 
