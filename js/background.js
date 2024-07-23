@@ -1,10 +1,5 @@
-function isDesktop() {
-    const isMobile = (navigator.maxTouchPoints && navigator.maxTouchPoints > 2) ||
-                     (window.matchMedia && window.matchMedia("(max-width: 768px)").matches) ||
-                     /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|windows phone|kindle|playbook|silk|mobile|tablet|samsung|lg|htc|nokia|motorola|symbian|fennec|maemo|tizen|blazer|series60|ucbrowser|bada|micromessenger|webview/.test(navigator.userAgent.toLowerCase());
-    return !isMobile;
-  }
-  if (isDesktop()) {
+// Only run this code on non-mobile devices
+if (detectMobile()) {
 const box1 = document.getElementById("box1");
 const box2 = document.getElementById("box2");
 const overlay = document.getElementById("overlay");

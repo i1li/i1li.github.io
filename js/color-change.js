@@ -1,10 +1,5 @@
-function isDesktop() {
-  const isMobile = (navigator.maxTouchPoints && navigator.maxTouchPoints > 2) ||
-                   (window.matchMedia && window.matchMedia("(max-width: 768px)").matches) ||
-                   /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|windows phone|kindle|playbook|silk|mobile|tablet|samsung|lg|htc|nokia|motorola|symbian|fennec|maemo|tizen|blazer|series60|ucbrowser|bada|micromessenger|webview/.test(navigator.userAgent.toLowerCase());
-  return !isMobile;
-}
-if (isDesktop()) {
+// Only run this code on non-mobile devices
+if (detectMobile()) {
 // Random Color on Hover, Click, or Touch of Links, Buttons + other elements
 const hoverShift = document.querySelectorAll('button, a, a.dark-mode, .article-header-wrapper, footer, .article-nav-bottom');
 // Shift colors of elements in 'alwaysShift' at randomly varying rate, regardless of hover.
