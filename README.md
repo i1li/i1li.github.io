@@ -23,7 +23,7 @@ netlify dev
 
 <h3 id="SPA Navigation & Content Loading">SPA Navigation & Content Loading</h3>
 
-- For SPA (Single Page App) routing across different hosting environments, the app uses [netlify.toml](/netlify.toml) on Netlify, or 
+- [spa.js](/js/spa.js) For SPA (Single Page App) routing across different hosting environments, the app uses [netlify.toml](/netlify.toml) on Netlify, or 
 - [404.html](/404.html) & [github-pages.js](/js/github-pages.js) on [GitHub Pages](https://i1li.github.io/), or
 - [serv.js](/serv.js) elsewhere.
 - Enables seamless navigation within the application without full page reloads, improving user experience without complication of a framework.
@@ -70,12 +70,12 @@ The hybrid shuffle function combines two different techniques to optimize perfor
 
 <h3 id="Light/Dark Mode Toggle">Light/Dark Mode Toggle</h3>
 
-- Allows users to switch between light & dark themes, enhancing accessibility & user preference.
+- [light-dark.js](/js/light-dark.js) Allows users to switch between light & dark themes, enhancing accessibility & user preference.
 - Utilizes `window.matchMedia` to detect & respect the system's preferred color scheme, & `localStorage` to persist the user's theme choice across sessions.
 
 <h3 id="Zoom In/Out Functionality">Zoom In/Out Functionality</h3>
   
-- Provides users with the ability to adjust the text size for better readability.
+- [zoom.js](/js/zoom.js) Provides users with the ability to adjust the text size for better readability.
 - Dynamically adjusts the font size of key elements on the page based on user interaction, with the zoom level persisted in `localStorage`.
 
 <h3 id="Full Screen Image Overlay"><a href="/js/image-overlay.js">Full Screen Image Overlay (image-overlay.js)</a></h3>
@@ -92,7 +92,7 @@ The hybrid shuffle function combines two different techniques to optimize perfor
 
 <h3 id="Sticky Header & Scroll-to-Top Button">Sticky Header & Scroll-to-Top Button</h3>
 
-- Improves navigation & accessibility by providing a sticky header & a convenient way to return to the top of the page.  
+- [scroll.js](/js/scroll.js) Improves navigation & accessibility by providing a sticky header & a convenient way to return to the top of the page.  
 - The sticky header adjusts its style based on the scroll position, becoming more compact as the user scrolls down.
 - A "scroll to top" button appears after scrolling down, allowing quick return to the top of the page with a single click.
 
