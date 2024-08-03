@@ -1,3 +1,4 @@
+// Lightest YouTube Embed, also uses youtube-embed.css
 class YTEmbed extends HTMLElement {
   constructor() {
     super();
@@ -69,6 +70,7 @@ class YTEmbed extends HTMLElement {
   toggleVideo() {
     const iframeExists = this.wrapper.querySelector('iframe');
     if (!iframeExists) {
+      this.closeAllOtherVideos();
       const iframe = document.createElement('iframe');
       iframe.src = this.embedUrl;
       iframe.allowFullscreen = true;
@@ -83,6 +85,14 @@ class YTEmbed extends HTMLElement {
       this.button.textContent = '▶️ Play';
       this.button.title = 'Play Video';
     }
+  }
+  closeAllOtherVideos() {
+    const stopButtons = document.querySelectorAll('button.showHideButton');
+    stopButtons.forEach(button => {
+      if (button !== this.button && button.textContent === '⏹️ Stop') {
+        button.click();
+      }
+    });
   }
 }
 customElements.define('y-t', YTEmbed);

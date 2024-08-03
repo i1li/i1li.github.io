@@ -1,5 +1,6 @@
 // Only run this code on non-mobile devices
 if (detectMobile()) {
+// Changing background colors, also uses background.css
 const box1 = document.getElementById("box1");
 const box2 = document.getElementById("box2");
 const overlay = document.getElementById("overlay");
