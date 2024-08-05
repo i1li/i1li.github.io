@@ -29,7 +29,8 @@ netlify dev
 - Enables seamless navigation within the application without full page reloads, improving user experience without complication of a framework.
 - Default "display all posts" view at root directory, with posts auto-expanding upon scroll, shows a welcome intro message & navigation links at top of page.
 - Individual post view at unique URLs removes the welcome intro from display, & autoscrolls post header to top. Also clones a copy of the post navigation links shown in the post header, to the bottom of post.
-- Manages browser history & navigation state using the History API (`history.pushState` & `window.onpopstate`), allowing for bookmarkable URLs & functional forward/backward navigation.
+- Manages browser history & navigation state using the History API (`history.pushState`, `history.replaceState`, & `window.onpopstate`), allowing for bookmarkable URLs & functional forward/backward navigation.
+- Updates browser URL as user scrolls through posts with `updateURLonScroll` function
 - Implements custom logic to show/hide content based on the current navigation state, simulating the behavior of a multi-page application within a single HTML document.
 
 <h3 id="Target Links / Hash Links As Subpages">Target Links / Hash Links As Subpages</h3>
@@ -37,9 +38,11 @@ netlify dev
 - Allows proper permalinks for specific areas of posts (target links, a.k.a. hashlinks or subpages), so they get a url of /route/target instead of /route#target
 - [Demo at /edu/mind](https://y0.netlify.app/edu/mind)
 
-<h3 id="Lightest Youtube Embed"><a href="https://github.com/i1li/lightest-youtube-embed">Lightest Youtube Embed</a> - (<a href="/js/youtube-embed.js">youtube-embed.js</a>)</h3>
+<h3 id="Lightest YouTube Embed"><a href="https://github.com/i1li/lightest-youtube-embed">Lightest Youtube Embed</a> - (<a href="/js/youtube-embed.js">youtube-embed.js</a>)</h3>
 
-- Easy to use YouTube embed that saves space, bandwidth, & privacy. With a bare amount of code (`<y-t v="videoid"></y-t>`), it responsively fits videos & playlists that only load once user clicks "show/hide" button. [Demo at /edu](https://y0.netlify.app/edu/)
+- Easy to use YouTube embed that saves space, bandwidth, & privacy. With a bare amount of code (`<y-t v="videoid"></y-t>`), it responsively fits videos & playlists that only load once user clicks play button. [Demo at /edu](https://y0.netlify.app/edu/)
+- Includes a remote control function at bottom right of page, allowing quick media control while navigating throughout the site.
+- Automatically stops any current playing videos if user clicks play on another video.
 
 <h3 id="Simple Toggle (display-toggle.js)"><a href="/js/display-toggle.js">Simple Toggle (display-toggle.js)</a></h3>
 
