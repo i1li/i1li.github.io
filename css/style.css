@@ -280,12 +280,12 @@ blockquote {background: linear-gradient(to left, rgba(0, 0, 0, .15), rgba(128, 1
     border: inset .2em rgba(100,100,100,.2);}
 a, a.dark-mode, button {font-size: 1.1em;
     font-weight:600;
-    background: radial-gradient( circle farthest-corner at 22.4% 21.7%, rgba(4,189,228,1) 0%, rgba(2,83,185,1) 100% );
     opacity: .8;
     color: black;}
 button {font-size: .8em;
     padding: .2em .4em;
     outline: none;
+    background: radial-gradient( circle farthest-corner at 22.4% 21.7%, rgba(4,189,228,1) 0%, rgba(2,83,185,1) 100% );
     box-shadow: 0 0 .25em #ae00ff, 0 0 .5em #001eff, 0 0 1em #ae00ff;
     border: 1px solid #000;
     border-radius: .7em;

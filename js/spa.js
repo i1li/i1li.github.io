@@ -1,5 +1,6 @@
 // Single Page Application
 let isInitialLoad = true;
+let lastUpdatedPath = '';
 function scrollToElement(element, isSection = false) {
   if (isSection && isInitialLoad) {
     const article = element.closest('article');
@@ -10,14 +11,14 @@ function scrollToElement(element, isSection = false) {
       let offsetTop = element.getBoundingClientRect().top + window.scrollY;
       setTimeout(() => {
         const sectionCenterOffset = (element.getBoundingClientRect().top + element.getBoundingClientRect().bottom) / 2 + window.scrollY;
-        offsetTop = sectionCenterOffset - window.innerHeight * 0.1;         
+        offsetTop = sectionCenterOffset - window.innerHeight * 0.1;
         window.scrollBy({
           top: offsetTop - window.scrollY,
         });
         isInitialLoad = false;
       }, 200);
     }, 200);
-  } else if (isInitialLoad){
+  } else if (isInitialLoad) {
     let offsetTop = element.getBoundingClientRect().top + window.scrollY + 25;
     window.scrollTo({
       top: offsetTop,
@@ -70,6 +71,11 @@ function showSingleArticle(articleId, sectionId) {
       } else {
         scrollToElement(container, false);
       }
+      let path = `/${articleId}`;
+      if (sectionId) {
+        path += `/${sectionId}`;
+      }
+      history.replaceState({ articleId: articleId, sectionId: sectionId }, '', path);
     } else {
       container.style.display = 'none';
     }
@@ -89,16 +95,28 @@ function showAllArticles() {
   });
   welcome.style.display = 'block';
   header.classList.remove('scrolled-down');
-  topFunction()
-  }
+  topFunction();
+}
 function navigate(path) {
-  const [articleId, sectionId] = path.split('/');
-  if (articleId) {
-    showSingleArticle(articleId, sectionId);
-    history.pushState({ articleId: articleId, sectionId: sectionId }, '', `/${path}`);
+  if (path.startsWith('#')) {
+    handleHashNavigation(path.substring(1));
   } else {
+    const [articleId, sectionId] = path.split('/');
+    if (articleId) {
+      showSingleArticle(articleId, sectionId);
+    } else {
+      showAllArticles();
+      history.replaceState({}, '', window.location.origin);
+    }
+  }
+}
+function handleHashNavigation(hash) {
+  if (hash === 'now-playing' || !document.getElementById(hash)) {
     showAllArticles();
-    history.pushState({}, '', window.location.origin);
+    history.replaceState(null, '', window.location.pathname);
+  } else {
+    const [articleId, sectionId] = hash.split('/');
+    showSingleArticle(articleId, sectionId);
   }
 }
 window.onpopstate = function(event) {
@@ -121,7 +139,58 @@ document.addEventListener('click', function(event) {
     navigate(href.substring(1));
   }
 });
+function updateURLOnScroll() {
+  const articles = document.querySelectorAll('article');
+  let currentArticle, currentSection;
+  articles.forEach(article => {
+    const rect = article.getBoundingClientRect();
+    if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+      currentArticle = article;
+      const sections = article.querySelectorAll('.section-title');
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i];
+        const sectionRect = section.getBoundingClientRect();
+        if (sectionRect.top <= window.innerHeight / 2) {
+          currentSection = section;
+          break;
+        }
+      }
+    }
+  });
+  if (currentArticle) {
+    let path = currentArticle.id;
+    if (currentSection) {
+      path += `/${currentSection.id}`;
+    }
+    if (path !== lastUpdatedPath) {
+      history.replaceState(null, '', `/${path}`);
+      lastUpdatedPath = path;
+    }
+  }
+}
+function throttle(func, limit) {
+  let lastFunc;
+  let lastRan;
+  return function() {
+    const context = this;
+    const args = arguments;
+    if (!lastRan) {
+      func.apply(context, args);
+      lastRan = Date.now();
+    } else {
+      clearTimeout(lastFunc);
+      lastFunc = setTimeout(function() {
+        if ((Date.now() - lastRan) >= limit) {
+          func.apply(context, args);
+          lastRan = Date.now();
+        }
+      }, limit - (Date.now() - lastRan));
+    }
+  }
+}
+window.addEventListener('scroll', throttle(updateURLOnScroll, 100));
 const path = window.location.pathname.substring(1);
+const hash = window.location.hash.substring(1);
 if (path) {
   const [articleId, sectionId] = path.split('/');
   if (articleId && document.getElementById(articleId)) {
@@ -129,6 +198,12 @@ if (path) {
   } else {
     showAllArticles();
   }
+} else if (hash) {
+  handleHashNavigation(hash);
 } else {
   showAllArticles();
 }
+window.addEventListener('hashchange', () => {
+  const hash = window.location.hash.substring(1);
+  handleHashNavigation(hash);
+});
