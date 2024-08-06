@@ -21,9 +21,8 @@ function shuffle(array, limit = Infinity) {
     return array.slice(0, Math.min(limit, array.length));
   }
 }
-const musicDiv = document.getElementById('musix');
-const extraDiv = document.getElementById('extra');
-const elements = [...musicDiv.querySelectorAll('y-t'), ...extraDiv.querySelectorAll('y-t')];
+const shuffleDiv = document.getElementById('shuffle');
+const elements = [...shuffleDiv.querySelectorAll('y-t')];
 let combinedElements = [];
 let elementIdsMap = new Map();
 function processAndCombine(element, index) {

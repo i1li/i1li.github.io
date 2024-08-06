@@ -14,37 +14,18 @@
   max-height: 90vh;
   border: 0;
 }
-#remote-control {
-  opacity:.7;
-  position: fixed;
-  bottom: 5rem;
-  right: .2rem;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  display: none;
-}
-#remote-control:hover {
-  opacity:.9;
-}
-#remote-control a {
-  font-size:1rem;
-  margin-right:0;
-  padding-right:0;
-}
 #expand-icon {
   width: 2.5rem;
-  opacity:.2;
+  opacity: .2;
   position: fixed;
   bottom: 5rem;
   right: .2rem;
   z-index: 1001;
-  cursor: pointer;
+  padding: 1em 0 0 1em;
 }
 #now-playing-text {
   font-size: .7rem;
-  opacity:.55;
+  opacity: .55;
   position: fixed;
   bottom: 7rem;
   right: 0;
@@ -52,5 +33,28 @@
   display: none;
 }
 #now-playing-text:hover {
-  opacity:.75;
+  opacity: .75;
+}
+#remote-control {
+  opacity: .7;
+  position: fixed;
+  bottom: 5rem;
+  right: .2rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 1.5rem 0 .5rem 1rem;
+  display: none;
+}
+#remote-control:hover {
+  opacity: .9;
+}
+#remote-control button {
+  margin-right: .2rem;
+}
+#remote-control a {
+  font-size: 1rem;
+  margin-right: 0;
+  padding-right: 0;
 }
