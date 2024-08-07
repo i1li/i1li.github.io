@@ -5,6 +5,7 @@ let htmlContent = fs.readFileSync('index.html', 'utf8');
 const searchDivRegex = /id="shuffle">([\s\S]*?)<\/div>/;
 const playlistIdRegex = /(?:p="([^"]+)"|v="(PL[^"]{12,}|FL[^"]{12,}|OL[^"]{12,}|TL[^"]{12,}|UU[^"]{12,})(?!,)")/g;
 const noEmbedRegex = /"no-embeds"[^>]*>([^<]*)<\/div>/;
+const totalVideosRegex = /"total-videos"[^>]*>([^<]*)<\/span>/;
 const searchDiv = htmlContent.match(searchDivRegex)?.[1] || '';
 const noEmbedIds = htmlContent.match(noEmbedRegex)?.[1].trim().split(',') || [];
 const extractIds = (regex, source) => {
@@ -33,7 +34,7 @@ const getPlaylistItems = async (playlistIDs) => {
           part: 'id,snippet,status',
           maxResults: 50,
           playlistId: playlistID.trim(),
-          key: KEY, 
+          key: KEY,
           pageToken: pageToken,
         };
         const url = new URL('https://www.googleapis.com/youtube/v3/playlistItems');
@@ -70,17 +71,36 @@ const getPlaylistItems = async (playlistIDs) => {
   return availableVideoIds;
 };
 const writeOutput = async () => {
-  const [playlistVideoIds] = await Promise.all([
-    getPlaylistItems(playlistIds),
-  ]);
-  const ytRegex = /<y-t[^>]*?p="([^"]+)"[^>]*?>/g;
-  htmlContent = htmlContent.replace(ytRegex, (match, playlistIdsStr) => {
-    const playlistIdsInTag = playlistIdsStr.split(',').map(id => id.trim());
-    const combinedVideoIds = playlistIdsInTag.flatMap(playlistId => playlistVideoIds[playlistId] || []);
-    return match
-      .replace(/p="[^"]*?"/, `p="${playlistIdsStr}"`)
-      .replace(/v="[^"]*?"/, `v="${combinedVideoIds.join(',')}"`);
+  const [playlistVideoIds] = await Promise.all([getPlaylistItems(playlistIds)]);
+  let totalVideoCount = 0;
+  const ytRegex = /<y-t([^>]*)>/g;
+  const updatedSearchDiv = searchDiv.replace(ytRegex, (match, attributes) => {
+    const pMatch = attributes.match(/p="([^"]+)"/);
+    const vMatch = attributes.match(/v="([^"]+)"/);
+    let playlistIdsInTag = pMatch ? pMatch[1].split(',').map(id => id.trim()) : [];
+    let videoIdsInTag = vMatch ? vMatch[1].split(',').map(id => id.trim()) : [];
+    if (vMatch && vMatch[1].match(/^(PL|FL|OL|TL|UU)/)) {
+      const playlistIdsInV = vMatch[1].split(',').filter(id => id.match(/^(PL|FL|OL|TL|UU)/));
+      playlistIdsInTag = [...new Set([...playlistIdsInTag, ...playlistIdsInV])];
+      videoIdsInTag = videoIdsInTag.filter(id => !id.match(/^(PL|FL|OL|TL|UU)/));
+    }
+    const newVideoIds = playlistIdsInTag.flatMap(playlistId => playlistVideoIds[playlistId] || []);
+    const combinedVideoIds = [...new Set([...videoIdsInTag, ...newVideoIds])];
+    totalVideoCount += combinedVideoIds.length;
+    let newAttributes = attributes;
+    if (playlistIdsInTag.length > 0) {
+      newAttributes = newAttributes.replace(/p="[^"]*"/, `p="${playlistIdsInTag.join(',')}"`)
+      if (!pMatch) {
+        newAttributes = `p="${playlistIdsInTag.join(',')}" ` + newAttributes;
+      }
+    }
+    newAttributes = newAttributes.replace(/v="[^"]*"/, `v="${combinedVideoIds.join(',')}"`)
+      .replace(/\s+/g, ' ')
+      .trim();
+    return `<y-t ${newAttributes}>`;
   });
-  fs.writeFileSync('index.html', htmlContent, 'utf8');
+  const updatedHtmlContent = htmlContent.replace(searchDivRegex, `id="shuffle">${updatedSearchDiv}</div>`);
+  const finalHtmlContent = updatedHtmlContent.replace(totalVideosRegex, `"total-videos">${totalVideoCount}</span>`);
+  fs.writeFileSync('index.html', finalHtmlContent, 'utf8');
 };
 writeOutput().catch(console.error);
