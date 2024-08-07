@@ -59,8 +59,11 @@ node yt-titles.js
 ```
 
 ### [yt-ids.js](/yt-ids.js)
-- Extracts all IDs found within the 'v' attribute of `<y-t>` tags. 
-- For playlists, it gets all the available video IDs for each, then moves the playlist ID from the 'v' attribute to 'p', listing all video IDs in the 'v' attribute. To use, put your [API Key](https://developers.google.com/youtube/v3/getting-started#before-you-start) in the empty quotes at `const KEY = ""`, & then open a terminal in the project directory, & enter:
+- Extracts all IDs found within the 'v' attribute of `<y-t>` tags in the "music" `<div>`. 
+- For playlists, it gets all the available video IDs for each, then moves the playlist ID from the 'v' attribute to 'p', listing all video IDs in the 'v' attribute.
+- Accepts multiple playlist IDs per `<y-t>` element, allowing playlist combination.
+- Updates the total count of video IDs found in the "music" `<div>`, inserting the total in the description of the <a href="https://y0.netlify.app/edu/vibes">"Combined Shuffled Playlist"</a> within `<span id="total-count"></span>`
+- To use, put your [API Key](https://developers.google.com/youtube/v3/getting-started#before-you-start) in the empty quotes at `const KEY = ""`, & then open a terminal in the project directory, & enter:
 ```bash
 node yt-ids.js
 ```
@@ -70,8 +73,8 @@ node yt-ids.js
 - proccessAndCombine combines all video IDs, (limiting how many come from each playlist), from the music section into one `<y-t>` element, at the top of [/edu/vibes](https://y0.netlify.app/edu/vibes).
 - shuffleAndDraw shuffles an array of playlists & videos extracted from the music section, with its own 'next' button. It then "draws" from the shuffled array, cloning the drawn `<y-t>` element into the 'draw' `<div>`. [Demo at top of main page](https://y0.netlify.app/)
 - The order of the elements is shuffled at each page load, as well as the video IDs within each element.
-- Limited to specific divs so playlist order is preserved in other sections of the site.
-- Since shuffled playlists are constructed with each video ID in the URL, there is a limit of 150 per playlist, although each shuffle picks from the entire list of video IDs (in this case several thousand for the combined playlist)
+- Limited to the `<div>` with id "music" so only music is included and playlist order is preserved in other sections of the site.
+- Since shuffled playlists are constructed with each video ID in the URL, there is a limit of 150 per playlist, although each shuffle picks from the entire list of video IDs (in this case about 20,000 for the combined playlist)
 <details><summary>More info on the shuffle function</summary>
 The hybrid shuffle function combines two different techniques to optimize performance for a wide range of input array sizes. The first is the "Knuth Shuffle" (a.k.a. "Durstenfeld Shuffle"), which has a time complexity of O(n * log n), where n is the size of the input array. This is a variation of the Fisher-Yates shuffle algorithm that is optimized for small arrays. For larger arrays, the function uses the standard Fisher-Yates shuffle algorithm, which has a time complexity of O(n), where n is the size of the input array. The decision to use which shuffle method, is based on the size of the input array in relation to the limit parameter (limit is how many items are used from the array after shuffling): If the array length is less than limit * 2, the Knuth Shuffle is used. If the array length is greater than or equal to limit * 2, the Fisher-Yates Shuffle is used.</details>
 
