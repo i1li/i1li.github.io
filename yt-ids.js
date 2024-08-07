@@ -2,34 +2,24 @@ const KEY = ""; // https://developers.google.com/youtube/v3/getting-started#befo
 const fs = require('fs');
 const https = require('https');
 let htmlContent = fs.readFileSync('index.html', 'utf8');
-const musicDivRegex = /id="musix">([\s\S]*?)<\/div>/;
-const extraDivRegex = /id="extra">([\s\S]*?)<\/div>/;
-const playlistIdRegex = /(?:p="(PL[^"]{12,}|FL[^"]{12,}|OL[^"]{12,}|TL[^"]{12,}|UU[^"]{12,})(?!,)"|v="(PL[^"]{12,}|FL[^"]{12,}|OL[^"]{12,}|TL[^"]{12,}|UU[^"]{12,})(?!,)")/g;
+const searchDivRegex = /id="shuffle">([\s\S]*?)<\/div>/;
+const playlistIdRegex = /(?:p="([^"]+)"|v="(PL[^"]{12,}|FL[^"]{12,}|OL[^"]{12,}|TL[^"]{12,}|UU[^"]{12,})(?!,)")/g;
 const noEmbedRegex = /"no-embeds"[^>]*>([^<]*)<\/div>/;
-const musicDiv = htmlContent.match(musicDivRegex)?.[1] || '';
-const extraDiv = htmlContent.match(extraDivRegex)?.[1] || '';
-const searchDivs = musicDiv + extraDiv;
+const searchDiv = htmlContent.match(searchDivRegex)?.[1] || '';
 const noEmbedIds = htmlContent.match(noEmbedRegex)?.[1].trim().split(',') || [];
-let match;
 const extractIds = (regex, source) => {
   const ids = [];
+  let match;
   while ((match = regex.exec(source)) !== null) {
-    if (match[1] && !match[1].includes(',')) {
-      ids.push(match[1]);
-    } else if (match[2] && !match[2].includes(',')) {
+    if (match[1]) {
+      ids.push(...match[1].split(',').map(id => id.trim()));
+    } else if (match[2]) {
       ids.push(match[2]);
     }
   }
   return ids;
 };
-const playlistIds = extractIds(playlistIdRegex, searchDivs);
-while ((match = playlistIdRegex.exec(musicDiv)) !== null) {
-  if (match[1] && match[1].length > 11) {
-    playlistIds.push(match[1]);
-  } else if (match[2] && match[2].length > 11) {
-    playlistIds.push(match[2]);
-  }
-}
+const playlistIds = extractIds(playlistIdRegex, searchDiv);
 const getPlaylistItems = async (playlistIDs) => {
   let availableVideoIds = {};
   for (const playlistID of playlistIDs) {
@@ -43,7 +33,7 @@ const getPlaylistItems = async (playlistIDs) => {
           part: 'id,snippet,status',
           maxResults: 50,
           playlistId: playlistID.trim(),
-          key: KEY,
+          key: KEY, 
           pageToken: pageToken,
         };
         const url = new URL('https://www.googleapis.com/youtube/v3/playlistItems');
@@ -83,20 +73,14 @@ const writeOutput = async () => {
   const [playlistVideoIds] = await Promise.all([
     getPlaylistItems(playlistIds),
   ]);
-  for (const playlistId of playlistIds) {
-    const videoIdsInPlaylist = playlistVideoIds[playlistId] || [];
-    const ytRegex = new RegExp(`<y-t[^>]*?(?:p="${playlistId}"|v="${playlistId}")[^>]*?>`, 'g');
-    htmlContent = htmlContent.replace(ytRegex, (match) => {
-      if (match.includes(`p="${playlistId}"`)) {
-        if (playlistId.includes(',')) {
-          return match;
-        }
-        return match.replace(/p="[^"]*?"/, `p="${playlistId}"`).replace(/v="[^"]*?"/, `v="${videoIdsInPlaylist.join(',')}"`);
-      } else {
-        return match.replace(/v="[^"]*?"/, `p="${playlistId}" v="${videoIdsInPlaylist.join(',')}"`);
-      }
-    });
-  }
+  const ytRegex = /<y-t[^>]*?p="([^"]+)"[^>]*?>/g;
+  htmlContent = htmlContent.replace(ytRegex, (match, playlistIdsStr) => {
+    const playlistIdsInTag = playlistIdsStr.split(',').map(id => id.trim());
+    const combinedVideoIds = playlistIdsInTag.flatMap(playlistId => playlistVideoIds[playlistId] || []);
+    return match
+      .replace(/p="[^"]*?"/, `p="${playlistIdsStr}"`)
+      .replace(/v="[^"]*?"/, `v="${combinedVideoIds.join(',')}"`);
+  });
   fs.writeFileSync('index.html', htmlContent, 'utf8');
 };
 writeOutput().catch(console.error);
