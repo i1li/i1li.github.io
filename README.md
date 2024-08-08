@@ -15,6 +15,7 @@ My favorite features are the <a href="#Lightest YouTube Embed">custom video embe
 
 ```bash
 npm i express
+npm i dotenv
 node serv.js
 ```
 <p align="center">(the simplest option), or, if you'd like to use Netlify's <a href="https://www.netlify.com/platform/core/functions/">serverless functions</a>, enter the following. (<a href="#Netlify Content Gate">example of serverless function.</a>)
@@ -65,6 +66,7 @@ node yt-titles.js
 - Updates the total count of video IDs found in the "music" `<div>`, inserting the total in the description of the <a href="https://y0.netlify.app/edu/vibes">"Combined Shuffled Playlist"</a> within `<span id="total-count"></span>`
 - To use, put your [API Key](https://developers.google.com/youtube/v3/getting-started#before-you-start) at `KEY=` in the `.env` file, & then open a terminal in the project directory, & enter:
 ```bash
+npm i dotenv
 node yt-ids.js
 ```
 
