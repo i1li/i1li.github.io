@@ -63,7 +63,7 @@ node yt-titles.js
 - For playlists, it gets all the available video IDs for each, then moves the playlist ID from the 'v' attribute to 'p', listing all video IDs in the 'v' attribute.
 - Accepts multiple playlist IDs per `<y-t>` element, allowing playlist combination.
 - Updates the total count of video IDs found in the "music" `<div>`, inserting the total in the description of the <a href="https://y0.netlify.app/edu/vibes">"Combined Shuffled Playlist"</a> within `<span id="total-count"></span>`
-- To use, put your [API Key](https://developers.google.com/youtube/v3/getting-started#before-you-start) in the empty quotes at `const KEY = ""`, & then open a terminal in the project directory, & enter:
+- To use, put your [API Key](https://developers.google.com/youtube/v3/getting-started#before-you-start) at `KEY=` in the `.env` file, & then open a terminal in the project directory, & enter:
 ```bash
 node yt-ids.js
 ```
