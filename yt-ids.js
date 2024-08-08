@@ -1,13 +1,13 @@
 const KEY = ""; // https://developers.google.com/youtube/v3/getting-started#before-you-start
 const fs = require('fs');
 const https = require('https');
-let htmlContent = fs.readFileSync('index.html', 'utf8');
+const htmlContent = fs.readFileSync('index.html', 'utf8');
 const searchDivRegex = /id="shuffle">([\s\S]*?)<\/div>/;
+const searchDiv = htmlContent.match(searchDivRegex)?.[1] || '';
 const playlistIdRegex = /(?:p="([^"]+)"|v="(PL[^"]{12,}|FL[^"]{12,}|OL[^"]{12,}|TL[^"]{12,}|UU[^"]{12,})(?!,)")/g;
 const noEmbedRegex = /"no-embeds"[^>]*>([^<]*)<\/div>/;
-const totalVideosRegex = /"total-videos"[^>]*>([^<]*)<\/span>/;
-const searchDiv = htmlContent.match(searchDivRegex)?.[1] || '';
-const noEmbedIds = htmlContent.match(noEmbedRegex)?.[1].trim().split(',') || [];
+const totalVideosRegex = /"total-videos">([^<]*)<\/span>/;
+const noEmbedIds = searchDiv.match(noEmbedRegex)?.[1].trim().split(',') || [];
 const extractIds = (regex, source) => {
   const ids = [];
   let match;
@@ -15,12 +15,12 @@ const extractIds = (regex, source) => {
     if (match[1]) {
       ids.push(...match[1].split(',').map(id => id.trim()));
     } else if (match[2]) {
-      ids.push(match[2]);
+      ids.push(...match[2].split(',').map(id => id.trim()));
     }
   }
   return ids;
 };
-const playlistIds = extractIds(playlistIdRegex, searchDiv);
+const playlistIds = extractIds(playlistIdRegex, searchDiv).filter(id => id.match(/^(PL|FL|OL|TL|UU)/));
 const getPlaylistItems = async (playlistIDs) => {
   let availableVideoIds = {};
   for (const playlistID of playlistIDs) {
@@ -53,7 +53,10 @@ const getPlaylistItems = async (playlistIDs) => {
             reject(err);
           });
         });
-        const availableVideos = result.items.filter((item) => item.status.privacyStatus === 'public' && !noEmbedIds.includes(item.snippet.resourceId.videoId));
+        const availableVideos = result.items.filter((item) => 
+          item.status.privacyStatus === 'public' && 
+          !noEmbedIds.includes(item.snippet.resourceId.videoId)
+        );
         videoIds = [...videoIds, ...availableVideos.map((item) => item.snippet.resourceId.videoId)];
         totalItems += result.items.length;
         console.log(`Fetched ${totalItems} items for playlist ID: ${playlistID}`);
@@ -79,28 +82,32 @@ const writeOutput = async () => {
     const vMatch = attributes.match(/v="([^"]+)"/);
     let playlistIdsInTag = pMatch ? pMatch[1].split(',').map(id => id.trim()) : [];
     let videoIdsInTag = vMatch ? vMatch[1].split(',').map(id => id.trim()) : [];
-    if (vMatch && vMatch[1].match(/^(PL|FL|OL|TL|UU)/)) {
-      const playlistIdsInV = vMatch[1].split(',').filter(id => id.match(/^(PL|FL|OL|TL|UU)/));
-      playlistIdsInTag = [...new Set([...playlistIdsInTag, ...playlistIdsInV])];
-      videoIdsInTag = videoIdsInTag.filter(id => !id.match(/^(PL|FL|OL|TL|UU)/));
-    }
+    const playlistIdsInV = videoIdsInTag.filter(id => id.match(/^(PL|FL|OL|TL|UU)/));
+    playlistIdsInTag = [...new Set([...playlistIdsInTag, ...playlistIdsInV])];
+    videoIdsInTag = videoIdsInTag.filter(id => !id.match(/^(PL|FL|OL|TL|UU)/));
     const newVideoIds = playlistIdsInTag.flatMap(playlistId => playlistVideoIds[playlistId] || []);
-    const combinedVideoIds = [...new Set([...videoIdsInTag, ...newVideoIds])];
+    const combinedVideoIds = [...new Set([...videoIdsInTag, ...newVideoIds])].filter(id => !noEmbedIds.includes(id));
     totalVideoCount += combinedVideoIds.length;
     let newAttributes = attributes;
     if (playlistIdsInTag.length > 0) {
-      newAttributes = newAttributes.replace(/p="[^"]*"/, `p="${playlistIdsInTag.join(',')}"`)
+      newAttributes = newAttributes.replace(/p="[^"]*"/, `p="${playlistIdsInTag.join(',')}"`);
       if (!pMatch) {
         newAttributes = `p="${playlistIdsInTag.join(',')}" ` + newAttributes;
       }
     }
-    newAttributes = newAttributes.replace(/v="[^"]*"/, `v="${combinedVideoIds.join(',')}"`)
-      .replace(/\s+/g, ' ')
-      .trim();
+    if (vMatch) {
+      newAttributes = newAttributes.replace(/v="[^"]*"/, `v="${combinedVideoIds.join(',')}"`);
+    } else {
+      newAttributes += ` v="${combinedVideoIds.join(',')}"`;
+    }
+    newAttributes = newAttributes.replace(/\s+/g, ' ').trim();
     return `<y-t ${newAttributes}>`;
   });
-  const updatedHtmlContent = htmlContent.replace(searchDivRegex, `id="shuffle">${updatedSearchDiv}</div>`);
-  const finalHtmlContent = updatedHtmlContent.replace(totalVideosRegex, `"total-videos">${totalVideoCount}</span>`);
-  fs.writeFileSync('index.html', finalHtmlContent, 'utf8');
+  const formattedTotalVideoCount = totalVideoCount.toLocaleString();
+  const finalSearchDiv = updatedSearchDiv;
+  const updatedHtmlContent = htmlContent
+    .replace(searchDivRegex, `id="shuffle">${finalSearchDiv}</div>`)
+    .replace(totalVideosRegex, `"total-videos">${formattedTotalVideoCount}</span>`);
+  fs.writeFileSync('index.html', updatedHtmlContent, 'utf8');
 };
 writeOutput().catch(console.error);
