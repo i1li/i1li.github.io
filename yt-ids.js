@@ -1,13 +1,17 @@
-const KEY = ""; // https://developers.google.com/youtube/v3/getting-started#before-you-start
+require('dotenv').config();
+const KEY = process.env.KEY
 const fs = require('fs');
 const https = require('https');
 const htmlContent = fs.readFileSync('index.html', 'utf8');
 const searchDivRegex = /id="shuffle">([\s\S]*?)<\/div>/;
 const searchDiv = htmlContent.match(searchDivRegex)?.[1] || '';
-const playlistIdRegex = /(?:p="([^"]+)"|v="(PL[^"]{12,}|FL[^"]{12,}|OL[^"]{12,}|TL[^"]{12,}|UU[^"]{12,})(?!,)")/g;
+const playlistIdRegex = /(?:p="([^"]+)"|v="([^"]+)")/g;
 const noEmbedRegex = /"no-embeds"[^>]*>([^<]*)<\/div>/;
 const totalVideosRegex = /"total-videos">([^<]*)<\/span>/;
 const noEmbedIds = searchDiv.match(noEmbedRegex)?.[1].trim().split(',') || [];
+if (!KEY) {
+  throw new Error('API key is missing or empty. Please provide a valid API key. https://developers.google.com/youtube/v3/getting-started#before-you-start');
+}
 const extractIds = (regex, source) => {
   const ids = [];
   let match;
@@ -20,9 +24,12 @@ const extractIds = (regex, source) => {
   }
   return ids;
 };
-const playlistIds = extractIds(playlistIdRegex, searchDiv).filter(id => id.match(/^(PL|FL|OL|TL|UU)/));
+const allIds = extractIds(playlistIdRegex, searchDiv);
+const playlistIds = allIds.filter(id => id.split('?')[0].length > 11);
+const videoIds = allIds.filter(id => id.split('?')[0].length === 11);
 const getPlaylistItems = async (playlistIDs) => {
   let availableVideoIds = {};
+  let errorCount = 0;
   for (const playlistID of playlistIDs) {
     try {
       console.log(`Fetching playlist items for playlist ID: ${playlistID}`);
@@ -64,6 +71,7 @@ const getPlaylistItems = async (playlistIDs) => {
       } while (pageToken);
       availableVideoIds[playlistID] = videoIds;
     } catch (error) {
+      errorCount++;
       if (error.response && error.response.status === 404) {
         console.warn(`Skipping invalid playlist ID: ${playlistID}`);
       } else {
@@ -71,10 +79,10 @@ const getPlaylistItems = async (playlistIDs) => {
       }
     }
   }
-  return availableVideoIds;
+  return { availableVideoIds, errorCount };
 };
 const writeOutput = async () => {
-  const [playlistVideoIds] = await Promise.all([getPlaylistItems(playlistIds)]);
+  const { availableVideoIds, errorCount } = await getPlaylistItems(playlistIds);
   let totalVideoCount = 0;
   const ytRegex = /<y-t([^>]*)>/g;
   const updatedSearchDiv = searchDiv.replace(ytRegex, (match, attributes) => {
@@ -85,7 +93,7 @@ const writeOutput = async () => {
     const playlistIdsInV = videoIdsInTag.filter(id => id.match(/^(PL|FL|OL|TL|UU)/));
     playlistIdsInTag = [...new Set([...playlistIdsInTag, ...playlistIdsInV])];
     videoIdsInTag = videoIdsInTag.filter(id => !id.match(/^(PL|FL|OL|TL|UU)/));
-    const newVideoIds = playlistIdsInTag.flatMap(playlistId => playlistVideoIds[playlistId] || []);
+    const newVideoIds = playlistIdsInTag.flatMap(playlistId => availableVideoIds[playlistId] || []);
     const combinedVideoIds = [...new Set([...videoIdsInTag, ...newVideoIds])].filter(id => !noEmbedIds.includes(id));
     totalVideoCount += combinedVideoIds.length;
     let newAttributes = attributes;
@@ -109,5 +117,7 @@ const writeOutput = async () => {
     .replace(searchDivRegex, `id="shuffle">${finalSearchDiv}</div>`)
     .replace(totalVideosRegex, `"total-videos">${formattedTotalVideoCount}</span>`);
   fs.writeFileSync('index.html', updatedHtmlContent, 'utf8');
+  console.log(`Total videos: ${formattedTotalVideoCount}`);
+  console.log(`Number of errors: ${errorCount}`);
 };
 writeOutput().catch(console.error);
