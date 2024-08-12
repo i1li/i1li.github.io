@@ -30,7 +30,7 @@ function setOverlay2Gradient(index) {
     overlay2.style.backgroundImage = gradient;
 }
 function updateColors() {
-    hueIndex = (hueIndex + .05) % 360;
+    hueIndex = (hueIndex + .5) % 360;
     setGradient(hiddenBox, hueIndex);
     setOverlayGradient(hueIndex);
     setOverlay2Gradient(hueIndex);
