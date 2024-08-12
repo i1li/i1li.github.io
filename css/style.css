@@ -173,6 +173,7 @@ article {min-height:80vh; border: dotted 1px rgba(255,255,0,.1);}
     border-right: inset .7em rgba(11,100,100,.3);
     scale:1.01;}
 .section-title {all: unset !important; cursor: pointer !important; text-align: center !important;}
+.section-title h3:hover {text-decoration:underline;}
 .section-nav {background: linear-gradient(to right, rgb(22 222 28 / 15%) 0%, rgb(110 0 145 / 35%) 50%, rgb(222 114 22 / 15%) 100%);
     padding:0 0 .65em;
     border: solid 1px rgba(255,0,0,.3);
@@ -338,6 +339,8 @@ img {opacity: 1; transition: all .7s ease-in-out; border-radius:0;} img:hover {o
     font-size: 3em;
     font-weight: bold;
     z-index: 1;}
+details > summary {cursor: pointer;}
+details > summary:hover {cursor: pointer; text-decoration: underline;}
 .container{margin-right:auto;margin-left:auto}
 @media (min-width:376px){.container{max-width:376px}}@media (min-width:476px){.container{max-width:476px}}@media (min-width:576px){.container,.container-sm{max-width:540px}}@media (min-width:768px){.container{max-width:720px}}@media (min-width:992px){.container {max-width:960px}}@media (min-width:1200px){.container{max-width:1140px}}@media (min-width:1400px){.container{max-width:1320px}}
 @media only screen and (max-width: 767px) and (orientation: portrait) {html body, table{font-size: 92%;} p {text-align: initial;} .to-top {max-width:2.5em; margin-bottom:.2em; margin-right:-.5em; padding-left:.6em; padding-top:.5em;} .row-cols-auto>*{flex: 0 0 100%;min-width: 100%;} .col-md-9{width:80%;} .width95 {width: 97.5%; margin:auto;} .width95 p {width: 97.5%; margin:auto;} .width90 {width: 95%; margin:auto;} .width90 p {width: 95%; margin:auto;} blockquote {width: 96%;} h1 {font-size:1.3rem;} h2 {font-size:1.2rem;} h3 {font-size:1rem;}}
