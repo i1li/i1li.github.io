@@ -4,8 +4,8 @@
     height: 100vh;
     margin-top:-100vh;
     background-color: white;
-    background-image: 
-    url("/img/bg.png");
+    background-image: url("/img/bg.png");
+    background-blend-mode: luminosity;
     background-attachment: fixed;
     border-radius:0;}
 #bg-wrapper.dark-mode {position: sticky;
@@ -14,9 +14,36 @@
     height: 100vh;
     margin-top:-100vh;
     background-color: black;
-    background-image: 
-    url("/img/bginvert.png");
+    background-image: url("/img/bginvert.png");
+    background-blend-mode: difference;
     background-attachment: fixed;
+    border-radius:0;}
+#bg-wrapper2 {position: relative;
+    top:0;
+    width: 100%;
+    height: 100vh;
+    background-blend-mode: saturation;
+    backdrop-filter: contrast(150%) saturate(350%);
+    margin-top:-100vh;
+    background: linear-gradient(to bottom, 
+    rgba(128, 128, 128, .5) 0%,
+    rgba(128, 128, 128, 0) 50%,
+    rgba(128, 128, 128, .5) 100%);
+    border-radius:0;}
+#bg-wrapper3 {position: relative;
+    opacity: .1;
+    top:0;
+    width: 100%;
+    height: 100vh;
+    background-blend-mode: saturation;
+    backdrop-filter: contrast(150%) saturate(350%);
+    margin-top:-100vh;
+    background: linear-gradient(to right, 
+    rgba(128, 128, 128, .5) 0%,
+    rgba(128, 128, 128, .3) 10%,
+    rgba(128, 128, 128, 0) 50%,
+    rgba(128, 128, 128, .3) 90%,
+    rgba(128, 128, 128, .5) 100%);
     border-radius:0;}
 #bg {position: absolute;
     top: 0;
@@ -35,8 +62,8 @@
     100% { transform: rotate(-360deg); }
 }
 #overlay {
-    animation: rotate-clockwise 3s ease-in-out infinite alternate;
+    animation: rotate-clockwise 3s ease-in infinite alternate;
 }
 #overlay2 {
-    animation: rotate-counterclockwise 3.3s ease-in-out infinite alternate;
+    animation: rotate-counterclockwise 3.3s ease-out infinite alternate;
 }

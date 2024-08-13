@@ -60,6 +60,8 @@ header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 2
     font-size: 1.1em;
     backdrop-filter: brightness(90%) contrast(120%) saturate(250%);
     border: 1px solid rgba(4, 223, 231, 0.4);}
+#site-nav:hover {background: linear-gradient(to top, rgba(222, 22, 22, .2), rgba(128, 0, 128, 0.2)); opacity: 1;}
+#site-nav .col a {padding:.15em .5em; filter: drop-shadow(0 0 .8em rgba(128, 128, 128, .5));}
 a:link, a:visited {text-shadow: 1px 2px 1em rgba(141, 0, 12, .5), 0 0 .3em rgba(0, 255, 115, 1), 0 0 .5em rgba(255, 0, 191, 1);
     color: rgb(0, 17, 199);
     filter: drop-shadow(0 0 .2em rgba(255,255,0,.5));
@@ -86,8 +88,6 @@ a:link.dark-mode, a:visited.dark-mode {color: #00eeff;
     border: .1em rgba(22,22,22,.15) groove;
     background: linear-gradient(to top, rgba(22,222,222, .1), rgba(222, 222, 222, 0.1));
     border-radius: 1em;}
-#site-nav .col a {padding:.15em .5em; filter: drop-shadow(0 0 .8em rgba(128, 128, 128, .5));}
-#site-nav:hover {background: linear-gradient(to top, rgba(222, 22, 22, .2), rgba(128, 0, 128, 0.2)); opacity: 1;}
 h1 {margin:0;
     padding:0;
     text-align: left;
