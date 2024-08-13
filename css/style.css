@@ -52,13 +52,13 @@ header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 2
     margin-bottom: .1em;}
 #site-info {backdrop-filter:blur(.07em)saturate(250%); padding-bottom:.1em;}
 #welcome {background: linear-gradient(to top, rgba(22,22,222, .1), rgba(22, 222, 222, .1));
-    backdrop-filter: contrast(333%) grayscale(50%);
+    backdrop-filter: contrast(333%) grayscale(70%) brightness(90%) saturate(250%);
     border-radius: .3em .3em .5em .5em;
     border: 1px solid rgba(0, 171, 63, 0.6);}
 #site-nav {background: linear-gradient(to bottom, rgba(222, 22, 22, .35), rgba(128, 0, 128, 0.3));
     padding: .2em 0 .7em;
     font-size: 1.1em;
-    backdrop-filter: brightness(100%) contrast(220%);
+    backdrop-filter: brightness(90%) contrast(120%) saturate(250%);
     border: 1px solid rgba(4, 223, 231, 0.4);}
 a:link, a:visited {text-shadow: 1px 2px 1em rgba(141, 0, 12, .5), 0 0 .3em rgba(0, 255, 115, 1), 0 0 .5em rgba(255, 0, 191, 1);
     color: rgb(0, 17, 199);
