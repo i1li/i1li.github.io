@@ -11,21 +11,19 @@ function scrollToElement(element, isSection = false) {
       let offsetTop = element.getBoundingClientRect().top + window.scrollY;
       setTimeout(() => {
         const sectionCenterOffset = (element.getBoundingClientRect().top + element.getBoundingClientRect().bottom) / 2 + window.scrollY;
-        offsetTop = sectionCenterOffset - window.innerHeight * 0.1;
-        window.scrollBy({
-          top: offsetTop - window.scrollY,
-        });
+        offsetTop = sectionCenterOffset - window.innerHeight * 0.15;
+        window.scrollBy({top: offsetTop - window.scrollY});
         isInitialLoad = false;
       }, 200);
     }, 200);
   } else if (isInitialLoad) {
-    let offsetTop = element.getBoundingClientRect().top + window.scrollY + 25;
+    let offsetTop = element.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.1;
     window.scrollTo({
       top: offsetTop,
     });
     isInitialLoad = false;
   } else {
-    let offsetTop = element.getBoundingClientRect().top + window.scrollY - 75;
+    let offsetTop = element.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.2;
     window.scrollTo({
       top: offsetTop,
     });
@@ -89,9 +87,7 @@ function showAllArticles() {
     }
     observer.observe(container);
     const articleNavBottom = container.querySelector('.article-nav-bottom');
-    if (articleNavBottom) {
-      articleNavBottom.remove();
-    }
+    if (articleNavBottom) {articleNavBottom.remove();}
   });
   welcome.style.display = 'block';
   header.classList.remove('scrolled-down');
