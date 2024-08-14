@@ -15,14 +15,18 @@ if (detectMobile()) {
         const topRight = `hsl(${getAdjustedHue(index, 90)}, 100%, 50%)`;
         const bottomRight = `hsl(${getAdjustedHue(index, 180)}, 100%, 50%)`;
         const bottomLeft = `hsl(${getAdjustedHue(index, 270)}, 100%, 50%)`;
+        const width = box.offsetWidth;
+        const height = box.offsetHeight;
+        const diagonal = Math.sqrt(width * width + height * height);
+        const percentage = (diagonal / (Math.max(width, height) * Math.sqrt(2))) * 100;
         const gradient = `
-            radial-gradient(circle at 0 0, ${topLeft}, transparent 70.71%),
-            radial-gradient(circle at 100% 0, ${topRight}, transparent 70.71%),
-            radial-gradient(circle at 100% 100%, ${bottomRight}, transparent 70.71%),
-            radial-gradient(circle at 0 100%, ${bottomLeft}, transparent 70.71%)
+            radial-gradient(ellipse farthest-corner at 0 0, ${topLeft}, transparent ${percentage}%),
+            radial-gradient(ellipse farthest-corner at 100% 0, ${topRight}, transparent ${percentage}%),
+            radial-gradient(ellipse farthest-corner at 100% 100%, ${bottomRight}, transparent ${percentage}%),
+            radial-gradient(ellipse farthest-corner at 0 100%, ${bottomLeft}, transparent ${percentage}%)
         `;
         box.style.backgroundImage = gradient;
-    }
+    }    
     function setOverlayGradient(index) {
         const adjustedIndex = getAdjustedHue(index);
         const gradient = `conic-gradient(from 0deg, hsl(${adjustedIndex}, 100%, 50%) 0deg, transparent 180deg, transparent 360deg)`;
