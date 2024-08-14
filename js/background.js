@@ -1,57 +1,41 @@
 // Only run this code on non-mobile devices
 if (detectMobile()) {
-    const box1 = document.getElementById("box1");
-    const box2 = document.getElementById("box2");
+    const box = document.getElementById("box");
     const overlay = document.getElementById("overlay");
-    const overlay2 = document.getElementById("overlay2");
     let hueIndex = 0;
-    let visibleBox = box1;
-    let hiddenBox = box2;
-    function getAdjustedHue(index, adjustment) {
-        return (index + adjustment + 360) % 360;
+    let hueIncrement = 1;
+    let intervalCount = 0;
+    let intervalsTillNextChange = Math.floor(Math.random() * 22) + 11; 
+    const HUE_STEP = 360 / 7;
+    function getAdjustedHue(index, step) {
+        return (index + step * HUE_STEP + 360) % 360;
     }
-    function setGradient(box, index) {
-        const topLeft = `hsl(${index}, 100%, 50%)`;
-        const topRight = `hsl(${getAdjustedHue(index, 90)}, 100%, 50%)`;
-        const bottomRight = `hsl(${getAdjustedHue(index, 180)}, 100%, 50%)`;
-        const bottomLeft = `hsl(${getAdjustedHue(index, 270)}, 100%, 50%)`;
-        const width = box.offsetWidth;
-        const height = box.offsetHeight;
+    function setGradient(element, index) {
+        const width = element.offsetWidth;
+        const height = element.offsetHeight;
         const diagonal = Math.sqrt(width * width + height * height);
         const percentage = (diagonal / (Math.max(width, height) * Math.sqrt(2))) * 100;
-        const gradient = `
-            radial-gradient(ellipse farthest-corner at 0 0, ${topLeft}, transparent ${percentage}%),
-            radial-gradient(ellipse farthest-corner at 100% 0, ${topRight}, transparent ${percentage}%),
-            radial-gradient(ellipse farthest-corner at 100% 100%, ${bottomRight}, transparent ${percentage}%),
-            radial-gradient(ellipse farthest-corner at 0 100%, ${bottomLeft}, transparent ${percentage}%)
-        `;
-        box.style.backgroundImage = gradient;
-    }    
-    function setOverlayGradient(index) {
-        const adjustedIndex = getAdjustedHue(index);
-        const gradient = `conic-gradient(from 0deg, hsl(${adjustedIndex}, 100%, 50%) 0deg, transparent 180deg, transparent 360deg)`;
-        overlay.style.backgroundImage = gradient;
-    }
-    function setOverlay2Gradient(index) {
-        const adjustedIndex = getAdjustedHue(index, 180);
-        const gradient = `conic-gradient(from 180deg, hsl(${adjustedIndex}, 100%, 50%) 0deg, transparent 180deg, transparent 360deg)`;
-        overlay2.style.backgroundImage = gradient;
+        let gradients = [];
+        for (let i = 0; i < 7; i++) {
+            const angle = i * (360 / 7);
+            const x = 50 + 50 * Math.cos(angle * Math.PI / 180);
+            const y = 50 + 50 * Math.sin(angle * Math.PI / 180);
+            gradients.push(`radial-gradient(ellipse farthest-corner at ${x}% ${y}%, hsl(${getAdjustedHue(index, i)}, 100%, 50%), transparent ${percentage}%)`);
+        }
+        element.style.backgroundImage = gradients.join(', ');
     }
     function updateColors() {
-        hueIndex = (hueIndex + 1) % 360;
-        setGradient(hiddenBox, hueIndex);
-        setOverlayGradient(hueIndex);
-        setOverlay2Gradient(hueIndex);
-        hiddenBox.classList.remove("hidden");
-        visibleBox.classList.add("hidden");
-        const temp = visibleBox;
-        visibleBox = hiddenBox;
-        hiddenBox = temp;
+        hueIndex = (hueIndex + hueIncrement) % 360;
+        intervalCount++;
+        if (intervalCount >= intervalsTillNextChange) {
+            hueIncrement = 0.5 + Math.random() * 1;
+            intervalCount = 0;
+            intervalsTillNextChange = Math.floor(Math.random() * 9) + 3; 
+        }
+        setGradient(box, hueIndex);
+        setGradient(overlay, 360 - hueIndex); 
     }
-    setGradient(box1, 0);
-    setGradient(box2, 180);
-    box2.classList.add("hidden");
-    setOverlayGradient(0);
-    setOverlay2Gradient(0);
+    setGradient(box, 0);
+    setGradient(overlay, 360);
     setInterval(updateColors, 33);
 }

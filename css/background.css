@@ -31,7 +31,7 @@
     rgba(128, 128, 128, .5) 100%);
     border-radius:0;}
 #bg-wrapper3 {position: relative;
-    opacity: .1;
+    opacity: .5;
     top:0;
     width: 100%;
     height: 100vh;
@@ -40,30 +40,25 @@
     margin-top:-100vh;
     background: linear-gradient(to right, 
     rgba(128, 128, 128, .5) 0%,
-    rgba(128, 128, 128, .3) 10%,
+    rgba(128, 128, 128, .3) 15%,
     rgba(128, 128, 128, 0) 50%,
-    rgba(128, 128, 128, .3) 90%,
+    rgba(128, 128, 128, .3) 85%,
     rgba(128, 128, 128, .5) 100%);
     border-radius:0;}
 #bg {position: absolute;
     top: 0;
     left: 0;
     opacity: .3;
-    border-radius:0;}
-.color-box {width: 100%; height: 100%;}
-.color-box, #overlay, #overlay2 {position: fixed; border-radius:0;}
-.hidden {opacity: 0;}
-@keyframes rotate-clockwise {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    border-radius:0;
+    mix-blend-mode: color;
 }
-@keyframes rotate-counterclockwise {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(-360deg); }
+#box, #overlay {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
 }
 #overlay {
-    animation: rotate-clockwise 3s ease-in infinite alternate;
-}
-#overlay2 {
-    animation: rotate-counterclockwise 3.3s ease-out infinite alternate;
+    mix-blend-mode: overlay;
 }
