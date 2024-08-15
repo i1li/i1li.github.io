@@ -3,9 +3,11 @@ if (detectMobile()) {
 const box = document.getElementById("box");
 const overlay = document.getElementById("overlay");
 let hueIndex = 0;
-let hueIncrement = 1;
 let intervalCount = 0;
-let intervalsTillNextChange = Math.floor(Math.random() * 22) + 11; 
+function getRandomHueIncrement() {return Math.random() < 0.5 ? Math.random() * -1 - .7 : Math.random() * 1 + .7;}
+let hueIncrement = getRandomHueIncrement();
+function getIntervalsTillNextChange() {return Math.floor(Math.random() * 66) + 33;}
+let intervalsTillNextChange = getIntervalsTillNextChange();
 const HUE_STEP = 360 / 7;
 function getAdjustedHue(index, step) {return (index + step * HUE_STEP + 360) % 360;}
 function setGradient(element, index) {
@@ -23,12 +25,12 @@ function setGradient(element, index) {
     element.style.backgroundImage = gradients.join(', ');
 }
 function updateColors() {
-    hueIndex = (hueIndex + hueIncrement) % 360;
+    hueIndex = (hueIndex + hueIncrement + 360) % 360;
     intervalCount++;
     if (intervalCount >= intervalsTillNextChange) {
-        hueIncrement = 0.5 + Math.random() * 1;
+        hueIncrement = getRandomHueIncrement();
         intervalCount = 0;
-        intervalsTillNextChange = Math.floor(Math.random() * 9) + 3; 
+        intervalsTillNextChange = getIntervalsTillNextChange();
     }
     setGradient(box, hueIndex);
     setGradient(overlay, 360 - hueIndex); 

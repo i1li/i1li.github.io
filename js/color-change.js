@@ -5,6 +5,18 @@ const alwaysShift = document.querySelectorAll('header, #site-nav .col, .section-
 function getRandomDegree() {return Math.random() < 0.5 ? Math.floor(Math.random() * -270) - 45 : Math.floor(Math.random() * 270) + 46;}
 function getNewIntervalsTillNextChange() {return Math.floor(Math.random() * 22) + 11;}
 function getRandomInterval() {return 111 + Math.floor(Math.random() * 1000);}
+let isWindowActive = true;
+window.addEventListener('focus', () => isWindowActive = true);
+window.addEventListener('blur', () => isWindowActive = false);
+function isElementInViewport(el) {
+  const rect = el.getBoundingClientRect();
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  );
+}
 function startShift(element, interval, isHover = false) {
   let currentDegree = getRandomDegree();
   let targetDegree = currentDegree;
@@ -27,20 +39,22 @@ function startShift(element, interval, isHover = false) {
   }
   updateFilter();
   return setInterval(() => {
-    intervalCount++;
-    if (intervalCount >= intervalsTillNextChange) {
-      targetDegree += getRandomDegree();
-      targetSaturation = Math.random() * (125 - 90) + 90;
-      targetContrast = Math.random() * (isHover ? 170 - 80 : 120 - 80) + 80;
-      targetBrightness = Math.random() * (isHover ? 135 - 85 : 110 - 90) + (isHover ? 85 : 90);
-      intervalCount = 0;
-      intervalsTillNextChange = getNewIntervalsTillNextChange();
+    if (isWindowActive && isElementInViewport(element)) {
+      intervalCount++;
+      if (intervalCount >= intervalsTillNextChange) {
+        targetDegree += getRandomDegree();
+        targetSaturation = Math.random() * (125 - 90) + 90;
+        targetContrast = Math.random() * (isHover ? 170 - 80 : 120 - 80) + 80;
+        targetBrightness = Math.random() * (isHover ? 135 - 85 : 110 - 90) + (isHover ? 85 : 90);
+        intervalCount = 0;
+        intervalsTillNextChange = getNewIntervalsTillNextChange();
+      }
+      currentDegree += (targetDegree - currentDegree) * 0.05;
+      currentSaturation += (targetSaturation - currentSaturation) * 0.05;
+      currentContrast += (targetContrast - currentContrast) * 0.05;
+      currentBrightness += (targetBrightness - currentBrightness) * 0.05;
+      updateFilter();
     }
-    currentDegree += (targetDegree - currentDegree) * 0.05;
-    currentSaturation += (targetSaturation - currentSaturation) * 0.05;
-    currentContrast += (targetContrast - currentContrast) * 0.05;
-    currentBrightness += (targetBrightness - currentBrightness) * 0.05;
-    updateFilter();
   }, interval);
 }
 function handleDisengage(element, intervalId) {
@@ -65,6 +79,8 @@ hoverShift.forEach(element => {
     intervalId = startShift(element, getRandomInterval(), true);
     disengageTimeout = setTimeout(() => handleDisengage(element, intervalId), 888);
   });
-  element.addEventListener('mouseout', () => {handleDisengage(element, intervalId);});
+  element.addEventListener('mouseout', () => {
+    handleDisengage(element, intervalId);
+  });
 });
 }
