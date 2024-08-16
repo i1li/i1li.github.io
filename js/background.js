@@ -4,7 +4,10 @@ const box = document.getElementById("box");
 const overlay = document.getElementById("overlay");
 let hueIndex = 0;
 let intervalCount = 0;
-function getRandomHueIncrement() {return Math.random() < 0.5 ? Math.random() * -1 - .7 : Math.random() * 1 + .7;}
+let isWindowActive = true;
+window.addEventListener('focus', () => isWindowActive = true);
+window.addEventListener('blur', () => isWindowActive = false);
+function getRandomHueIncrement() {return Math.random() < 0.5 ? Math.random() * -.75 - .75 : Math.random() * .75 + .75;}
 let hueIncrement = getRandomHueIncrement();
 function getIntervalsTillNextChange() {return Math.floor(Math.random() * 66) + 33;}
 let intervalsTillNextChange = getIntervalsTillNextChange();
@@ -25,15 +28,17 @@ function setGradient(element, index) {
     element.style.backgroundImage = gradients.join(', ');
 }
 function updateColors() {
-    hueIndex = (hueIndex + hueIncrement + 360) % 360;
-    intervalCount++;
-    if (intervalCount >= intervalsTillNextChange) {
-        hueIncrement = getRandomHueIncrement();
-        intervalCount = 0;
-        intervalsTillNextChange = getIntervalsTillNextChange();
+        if (isWindowActive) {
+        hueIndex = (hueIndex + hueIncrement + 360) % 360;
+        intervalCount++;
+        if (intervalCount >= intervalsTillNextChange) {
+            hueIncrement = getRandomHueIncrement();
+            intervalCount = 0;
+            intervalsTillNextChange = getIntervalsTillNextChange();
+        }
+        setGradient(box, hueIndex);
+        setGradient(overlay, 360 - hueIndex); 
     }
-    setGradient(box, hueIndex);
-    setGradient(overlay, 360 - hueIndex); 
 }
 setGradient(box, 0);
 setGradient(overlay, 360);
