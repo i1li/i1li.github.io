@@ -49,8 +49,8 @@ function startShift(element, interval, isHover = false) {
         intervalCount = 0;
         intervalsTillNextChange = getNewIntervalsTillNextChange();
       }
-      currentDegree += (targetDegree - currentDegree) * 0.01;
-      currentSaturation += (targetSaturation - currentSaturation) * 0.01;
+      currentDegree += (targetDegree - currentDegree) * 0.001;
+      currentSaturation += (targetSaturation - currentSaturation) * 0.005;
       currentContrast += (targetContrast - currentContrast) * 0.01;
       currentBrightness += (targetBrightness - currentBrightness) * 0.01;
       updateFilter();

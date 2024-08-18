@@ -67,7 +67,7 @@ if (detectMobile()) {
             state.intervalsTillNextChange = getIntervalsTillNextChange();
         }
         if (isOverlay) {
-            state.transitionProgress += .002 / state.transitionDuration; 
+            state.transitionProgress += .0005 / state.transitionDuration; 
             if (state.transitionProgress >= 1) {
                 state.transitionProgress = 0; 
                 state.currentOverlayOffset = state.targetOverlayOffset; 
