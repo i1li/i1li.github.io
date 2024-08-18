@@ -14,8 +14,7 @@ My favorite features are the <a href="#Lightest YouTube Embed">custom video embe
 <b>Quickstart:</b> Use a quick deploy button above, or clone this repo locally, open a terminal in the project directory,<br/> & enter either:</p>
 
 ```bash
-npm i express
-npm i dotenv
+npm i express dotenv
 node serv.js
 ```
 <p align="center">(the simplest option), or, if you'd like to use Netlify's <a href="https://www.netlify.com/platform/core/functions/">serverless functions</a>, enter the following. (<a href="#Netlify Content Gate">example of serverless function.</a>)

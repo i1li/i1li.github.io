@@ -59,6 +59,9 @@
     top: 0;
     left: 0;
 }
+#box {
+    mix-blend-mode: difference;
+}
 #overlay {
     mix-blend-mode: overlay;
 }
