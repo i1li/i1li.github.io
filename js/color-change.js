@@ -3,7 +3,7 @@ if (detectMobile()) {
 const hoverShift = document.querySelectorAll('button, a, a.dark-mode, footer, .article-nav-bottom, #site-nav a, .section-nav a');
 const alwaysShift = document.querySelectorAll('header, #site-nav .col, .section-nav .col, .article-header, footer, .article-title, #site-title, #light-dark-zoom');
 function getRandomDegree() {return Math.random() < 0.5 ? Math.floor(Math.random() * -270) - 45 : Math.floor(Math.random() * 270) + 46;}
-function getNewIntervalsTillNextChange() {return Math.floor(Math.random() * 22) + 11;}
+function getNewIntervalsTillNextChange() {return Math.floor(Math.random() * 11) + 7;}
 function getRandomInterval() {return 111 + Math.floor(Math.random() * 1000);}
 let isWindowActive = true;
 window.addEventListener('focus', () => isWindowActive = true);
@@ -49,7 +49,7 @@ function startShift(element, interval, isHover = false) {
         intervalCount = 0;
         intervalsTillNextChange = getNewIntervalsTillNextChange();
       }
-      currentDegree += (targetDegree - currentDegree) * 0.001;
+      currentDegree += (targetDegree - currentDegree) * (0.005 + Math.random() * 0.005);
       currentSaturation += (targetSaturation - currentSaturation) * 0.005;
       currentContrast += (targetContrast - currentContrast) * 0.01;
       currentBrightness += (targetBrightness - currentBrightness) * 0.01;

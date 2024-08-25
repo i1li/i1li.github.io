@@ -2,7 +2,10 @@
 if (detectMobile()) {
     const box = document.getElementById("box");
     const overlay = document.getElementById("overlay");
-    let isWindowActive = true;
+    let isWindowActive = !document.hidden;
+    document.addEventListener('visibilitychange', () => {
+        isWindowActive = !document.hidden;
+    });
     window.addEventListener('focus', () => isWindowActive = true);
     window.addEventListener('blur', () => isWindowActive = false);
     function getRandomHueIncrement() {
@@ -76,15 +79,19 @@ if (detectMobile()) {
             }
         }
     }
-    function updateColors() {
-        if (isWindowActive) {
+    let lastUpdateTime = 0;
+    const updateInterval = 33; 
+    function updateColors(timestamp) {
+        if (isWindowActive && timestamp - lastUpdateTime >= updateInterval) {
             updateLayerState(boxState, false);
             updateLayerState(overlayState, true);
             setGradient(box, boxState);
             setGradient(overlay, overlayState, true);
+            lastUpdateTime = timestamp;
         }
+        requestAnimationFrame(updateColors);
     }
     setGradient(box, boxState);
     setGradient(overlay, overlayState, true);
-    setInterval(updateColors, 33);
+    requestAnimationFrame(updateColors);
 }
