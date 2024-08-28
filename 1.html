@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Randomly Fluid Irregular Polygons with Drop Shadows</title>
     <style>
-        body { margin: 0; overflow: hidden; background: black; }
-        canvas { display: block; }
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: black;
+        }
+
+        canvas {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <canvas id="canvas"></canvas>
     <script>
@@ -18,84 +27,129 @@
         const bufferCtx = bufferCanvas.getContext('2d');
         let width, height;
         const shapes = [];
-        const SHAPE_COUNT = 111;
-        const BASE_SIZE = 0.015;
-        const SPEED = 15;
-        const BLUR_AMOUNT = 3.3;
-        const SCALE_CHANGE_RATE = 0.1;
-        const SHADOW_SCALES = [1.11, 1.3, 1.5, 1.83, 2.22, 3.3];
-        const FRAME_RATE = 30;
+        const SHAPE_COUNT = 55;
+        const BASE_SIZE = 0.005;
+        const BASE_SIZE_MULTIPLIER = 13.69;
+        const BLUR_AMOUNT = 3;
+        const SHADOW_SCALES = [1.15, 1.37, 1.83, 2.22, 3.3];
+        const FRAME_RATE = 60;
         const FRAME_INTERVAL = 1000 / FRAME_RATE;
+
+        // Perlin noise implementation
+        class SimplexNoise {
+            constructor(seed = Math.random()) {
+                this.grad3 = [
+                    [1, 1, 0], [-1, 1, 0], [1, -1, 0], [-1, -1, 0],
+                    [1, 0, 1], [-1, 0, 1], [1, 0, -1], [-1, 0, -1],
+                    [0, 1, 1], [0, -1, 1], [0, 1, -1], [0, -1, -1]
+                ];
+                this.p = [];
+                for (let i = 0; i < 256; i++) {
+                    this.p[i] = Math.floor(seed * 256);
+                }
+                this.perm = [];
+                for (let i = 0; i < 512; i++) {
+                    this.perm[i] = this.p[i & 255];
+                }
+            }
+
+            dot(g, x, y) {
+                return g[0] * x + g[1] * y;
+            }
+
+            noise(xin, yin) {
+                const F2 = 0.5 * (Math.sqrt(3.0) - 1.0);
+                const G2 = (3.0 - Math.sqrt(3.0)) / 6.0;
+                let n0, n1, n2;
+                let s = (xin + yin) * F2;
+                let i = Math.floor(xin + s);
+                let j = Math.floor(yin + s);
+                let t = (i + j) * G2;
+                let X0 = i - t;
+                let Y0 = j - t;
+                let x0 = xin - X0;
+                let y0 = yin - Y0;
+                let i1, j1;
+                if (x0 > y0) {
+                    i1 = 1;
+                    j1 = 0;
+                } else {
+                    i1 = 0;
+                    j1 = 1;
+                }
+                let x1 = x0 - i1 + G2;
+                let y1 = y0 - j1 + G2;
+                let x2 = x0 - 1.0 + 2.0 * G2;
+                let y2 = y0 - 1.0 + 2.0 * G2;
+                let ii = i & 255;
+                let jj = j & 255;
+                let gi0 = this.perm[ii + this.perm[jj]] % 12;
+                let gi1 = this.perm[ii + i1 + this.perm[jj + j1]] % 12;
+                let gi2 = this.perm[ii + 1 + this.perm[jj + 1]] % 12;
+                let t0 = 0.5 - x0 * x0 - y0 * y0;
+                if (t0 < 0) {
+                    n0 = 0.0;
+                } else {
+                    t0 *= t0;
+                    n0 = t0 * t0 * this.dot(this.grad3[gi0], x0, y0);
+                }
+                let t1 = 0.5 - x1 * x1 - y1 * y1;
+                if (t1 < 0) {
+                    n1 = 0.0;
+                } else {
+                    t1 *= t1;
+                    n1 = t1 * t1 * this.dot(this.grad3[gi1], x1, y1);
+                }
+                let t2 = 0.5 - x2 * x2 - y2 * y2;
+                if (t2 < 0) {
+                    n2 = 0.0;
+                } else {
+                    t2 *= t2;
+                    n2 = t2 * t2 * this.dot(this.grad3[gi2], x2, y2);
+                }
+                return 70.0 * (n0 + n1 + n2);
+            }
+        }
+
+        const noise = new SimplexNoise(Math.random());
+
         function resizeCanvas() {
             width = canvas.width = bufferCanvas.width = window.innerWidth;
             height = canvas.height = bufferCanvas.height = window.innerHeight;
         }
+
         function random(min, max) {
             return Math.random() * (max - min) + min;
         }
-        function createShape() {
-            const size = Math.min(width, height) * random(BASE_SIZE, BASE_SIZE * 5);
-            const sides = Math.floor(random(7, 40));
-            const vertices = new Float32Array(sides * 2);
-            for (let i = 0; i < sides; i++) {
-                const angle = (i / sides) * Math.PI * random(1,7);
-                const distance = size * random(0.01, 3);
-                vertices[i*2] = Math.cos(angle) * distance;
-                vertices[i*2+1] = Math.sin(angle) * distance;
-            }
-            return {
-                vertices,
-                hue: random(0, 360),
-                alpha: random(0.07, 0.25),
-                x: random(0, width),
-                y: random(0, height),
-                vx: random(-SPEED, SPEED),
-                vy: random(-SPEED, SPEED),
-                rotation: random(0, Math.PI * 2),
-                rotationSpeed: random(-.6, .6),
-                hueShift: random(-50, 50),
-                alphaShift: random(-0.15, 0.15),
-                scale: 1,
-                targetScale: 1,
-            };
-        }
-        function drawShapes(ctx) {
+
+        function createAndChangeShapes(deltaTime) {
+            const time = Date.now() * random(0.0001,0.1);
             shapes.forEach(shape => {
-                ctx.save();
-                ctx.translate(shape.x, shape.y);
-                ctx.rotate(shape.rotation);
-                ctx.scale(shape.scale, shape.scale);
-                for (let i = SHADOW_SCALES.length - 1; i >= 0; i--) {
-                    const scale = SHADOW_SCALES[i];
-                    const shadowAlpha = 0.05;
-                    ctx.save();
-                    ctx.scale(scale, scale);
-                    ctx.beginPath();
-                    ctx.moveTo(shape.vertices[0], shape.vertices[1]);
-                    for (let j = 2; j < shape.vertices.length; j += 2) {
-                        ctx.lineTo(shape.vertices[j], shape.vertices[j + 1]);
-                    }
-                    ctx.closePath();
-                    ctx.fillStyle = `hsla(${shape.hue}, 100%, 50%, ${shadowAlpha})`;
-                    ctx.fill();
-                    ctx.restore();
+                // Apply Perlin noise for acceleration and direction changes
+                let accelerationFactor = noise.noise(shape.x * 0.005, time);
+                let directionChange = noise.noise(shape.y * 0.005, time);
+                
+                // Modify velocity based on Perlin noise
+                shape.vx += accelerationFactor * random(-0.75, 0.75) * deltaTime;
+                shape.vy += accelerationFactor * random(-0.75, 0.75) * deltaTime;
+
+                // Apply random drastic direction changes
+                if (Math.random() < 0.01) {
+                    shape.vx += directionChange * random(-50, 50);
+                    shape.vy += directionChange * random(-50, 50);
                 }
-                ctx.beginPath();
-                ctx.moveTo(shape.vertices[0], shape.vertices[1]);
-                for (let i = 2; i < shape.vertices.length; i += 2) {
-                    ctx.lineTo(shape.vertices[i], shape.vertices[i + 1]);
-                }
-                ctx.closePath();
-                ctx.fillStyle = `hsla(${shape.hue}, 100%, 50%, ${shape.alpha})`;
-                ctx.fill();
-                ctx.restore();
-            });
-        }
-        function updateShapes(deltaTime) {
-            shapes.forEach(shape => {
+
+                // Limit maximum velocity to prevent shapes from moving too fast
+                const maxSpeed = 5.5;
+                shape.vx = Math.max(-maxSpeed, Math.min(maxSpeed, shape.vx));
+                shape.vy = Math.max(-maxSpeed, Math.min(maxSpeed, shape.vy));
+
+                // Update position with new velocities
                 shape.x += shape.vx * deltaTime;
                 shape.y += shape.vy * deltaTime;
                 shape.rotation += shape.rotationSpeed * deltaTime;
+
+                // Bounce off the edges
                 if (shape.x < 0 || shape.x > width) {
                     shape.vx *= -1;
                     shape.x = Math.max(0, Math.min(width, shape.x));
@@ -106,35 +160,107 @@
                     shape.y = Math.max(0, Math.min(height, shape.y));
                     shape.vx += random(-50, 50);
                 }
+
+                // Update color and transparency
                 shape.hue = (shape.hue + shape.hueShift * deltaTime + 360) % 360;
-                shape.alpha = Math.max(0.07, Math.min(0.25, shape.alpha + shape.alphaShift * deltaTime));
-                const scaleDiff = shape.targetScale - shape.scale;
-                const scaleChange = Math.sign(scaleDiff) * Math.min(Math.abs(scaleDiff), SCALE_CHANGE_RATE * deltaTime);
-                shape.scale += scaleChange;
-                if (shape.scale < 0.3 || shape.scale > 2.5) {
-                    shape.targetScale = 1;
-                }
-                shape.scale = Math.max(0.3, Math.min(2.5, shape.scale));
+                shape.alpha = Math.max(0.01, Math.min(0.35, shape.alpha + shape.alphaShift * deltaTime));
+
+                // Update scale with Perlin noise
+                const scaleNoise = noise.noise(shape.x * 0.002, shape.y * 0.002);
+                shape.scale += scaleNoise * 0.1 * deltaTime;
+                shape.scale = Math.max(0.3, Math.min(2.2, shape.scale));
+
+                // Update slant and skew with Perlin noise
+                shape.slantX += noise.noise(shape.slantX * 0.002, time) * shape.slantXSpeed * deltaTime;
+                shape.slantY += noise.noise(shape.slantY * 0.002, time) * shape.slantYSpeed * deltaTime;
+                shape.skewX += noise.noise(shape.skewX * 0.002, time) * shape.skewXSpeed * deltaTime;
+                shape.skewY += noise.noise(shape.skewY * 0.002, time) * shape.skewYSpeed * deltaTime;
+
+                // Limit slant and skew
+                if (Math.abs(shape.slantX) > 0.75) shape.slantX = 0.75 * Math.sign(shape.slantX);
+                if (Math.abs(shape.slantY) > 0.75) shape.slantY = 0.75 * Math.sign(shape.slantY);
+                if (Math.abs(shape.skewX) > 0.75) shape.skewX = 0.75 * Math.sign(shape.skewX);
+                if (Math.abs(shape.skewY) > 0.75) shape.skewY = 0.75 * Math.sign(shape.skewY);
             });
         }
-        function randomlyChangeShape() {
-            const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
-            randomShape.vx = random(-SPEED, SPEED);
-            randomShape.vy = random(-SPEED, SPEED);
-            randomShape.rotationSpeed = random(-.6, .6);
-            randomShape.targetScale = Math.max(0.5, Math.min(2, randomShape.scale * random(0.7, 1.3)));
+
+        function drawShapes(ctx) {
+            shapes.forEach(shape => {
+                ctx.save();
+                ctx.translate(shape.x, shape.y);
+                ctx.rotate(shape.rotation);
+                ctx.scale(shape.scale, shape.scale);
+                ctx.transform(
+                    1 + shape.skewX, shape.slantY,
+                    shape.slantX, 1 + shape.skewY,
+                    0, 0
+                );
+                let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+                for (let i = 0; i < shape.vertices.length; i += 2) {
+                    minX = Math.min(minX, shape.vertices[i]);
+                    minY = Math.min(minY, shape.vertices[i + 1]);
+                    maxX = Math.max(maxX, shape.vertices[i]);
+                    maxY = Math.max(maxY, shape.vertices[i + 1]);
+                }
+                function createGradient(flip) {
+                    const gradient = ctx.createLinearGradient(
+                        flip ? maxX : minX,
+                        flip ? maxY : minY,
+                        flip ? minX : maxX,
+                        flip ? minY : maxY
+                    );
+                    const color1 = `hsla(${shape.hue}, 100%, 50%, 1)`;
+                    const color2 = `hsla(${getOppositeColor(shape.hue)}, 100%, 50%, 1)`;
+                    gradient.addColorStop(0, flip ? color2 : color1);
+                    gradient.addColorStop(0.15, flip ? color2 : color1);
+                    gradient.addColorStop(0.85, flip ? color1 : color2);
+                    gradient.addColorStop(1, flip ? color1 : color2);
+                    return gradient;
+                }
+
+                for (let i = SHADOW_SCALES.length - 1; i >= 0; i--) {
+                    const scale = SHADOW_SCALES[i];
+                    const shadowAlpha = 0.04;
+                    ctx.save();
+                    ctx.scale(scale, scale);
+                    ctx.beginPath();
+                    ctx.moveTo(shape.vertices[0], shape.vertices[1]);
+                    for (let j = 2; j < shape.vertices.length; j += 2) {
+                        ctx.lineTo(shape.vertices[j], shape.vertices[j + 1]);
+                    }
+                    ctx.closePath();
+                    ctx.fillStyle = createGradient(i % 2 === 0);
+                    ctx.globalAlpha = shadowAlpha;
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                ctx.beginPath();
+                ctx.moveTo(shape.vertices[0], shape.vertices[1]);
+                for (let i = 2; i < shape.vertices.length; i += 2) {
+                    ctx.lineTo(shape.vertices[i], shape.vertices[i + 1]);
+                }
+                ctx.closePath();
+                ctx.fillStyle = createGradient(SHADOW_SCALES.length % 2 === 0);
+                ctx.globalAlpha = shape.alpha;
+                ctx.fill();
+                ctx.restore();
+            });
         }
+
+        function getOppositeColor(hue) {
+            return (hue + 180) % 360;
+        }
+
         let lastTime = 0;
         let accumulator = 0;
+
         function animate(currentTime) {
-            const deltaTime = (currentTime - lastTime) * 0.001;
+            const deltaTime = (currentTime - lastTime) * random(0.0006, 0.0009);
             lastTime = currentTime;
             accumulator += deltaTime;
             while (accumulator >= FRAME_INTERVAL / 1000) {
-                updateShapes(FRAME_INTERVAL / 1000);
-                if (Math.random() < 0.33) {
-                    randomlyChangeShape();
-                }
+                createAndChangeShapes(FRAME_INTERVAL / 1000);
                 accumulator -= FRAME_INTERVAL / 1000;
             }
             bufferCtx.clearRect(0, 0, width, height);
@@ -145,10 +271,47 @@
             ctx.filter = 'none';
             requestAnimationFrame(animate);
         }
+
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
-        for (let i = 0; i < SHAPE_COUNT; i++) shapes.push(createShape());
+
+        for (let i = 0; i < SHAPE_COUNT; i++) {
+            const size = Math.min(width, height) * random(BASE_SIZE, BASE_SIZE * BASE_SIZE_MULTIPLIER);
+            const sides = Math.floor(random(22, 44));
+            const vertices = new Float32Array(sides * 2);
+            for (let j = 0; j < sides; j++) {
+                const angle = (j / sides) * Math.PI * random(-77, 77);
+                const distance = size * random(0.01, 6);
+                vertices[j * 2] = Math.cos(angle) * distance;
+                vertices[j * 2 + 1] = Math.sin(angle) * distance;
+            }
+            shapes.push({
+                vertices,
+                hue: random(0, 360),
+                alpha: random(0.03, 0.2),
+                x: random(0, width),
+                y: random(0, height),
+                vx: random(-2, 2),
+                vy: random(-2, 2),
+                rotation: random(0, Math.PI * 2),
+                rotationSpeed: random(-0.35, 0.35),
+                hueShift: random(-25, 25),
+                alphaShift: random(-0.3, 0.3),
+                scale: 1,
+                targetScale: 1,
+                slantX: 0,
+                slantY: 0,
+                skewX: 0,
+                skewY: 0,
+                slantXSpeed: random(-0.35, 0.35),
+                slantYSpeed: random(-0.35, 0.35),
+                skewXSpeed: random(-0.35, 0.35),
+                skewYSpeed: random(-0.35, 0.35),
+            });
+        }
+
         animate(0);
     </script>
 </body>
+
 </html>
