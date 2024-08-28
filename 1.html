@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Randomly Fluid Irregular Polygons with Drop Shadows</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: black; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const bufferCanvas = document.createElement('canvas');
+        const bufferCtx = bufferCanvas.getContext('2d');
+        let width, height;
+        const shapes = [];
+        const SHAPE_COUNT = 111;
+        const BASE_SIZE = 0.015;
+        const SPEED = 15;
+        const BLUR_AMOUNT = 3.3;
+        const SCALE_CHANGE_RATE = 0.1;
+        const SHADOW_SCALES = [1.11, 1.3, 1.5, 1.83, 2.22, 3.3];
+        const FRAME_RATE = 30;
+        const FRAME_INTERVAL = 1000 / FRAME_RATE;
+        function resizeCanvas() {
+            width = canvas.width = bufferCanvas.width = window.innerWidth;
+            height = canvas.height = bufferCanvas.height = window.innerHeight;
+        }
+        function random(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+        function createShape() {
+            const size = Math.min(width, height) * random(BASE_SIZE, BASE_SIZE * 5);
+            const sides = Math.floor(random(7, 40));
+            const vertices = new Float32Array(sides * 2);
+            for (let i = 0; i < sides; i++) {
+                const angle = (i / sides) * Math.PI * random(1,7);
+                const distance = size * random(0.01, 3);
+                vertices[i*2] = Math.cos(angle) * distance;
+                vertices[i*2+1] = Math.sin(angle) * distance;
+            }
+            return {
+                vertices,
+                hue: random(0, 360),
+                alpha: random(0.07, 0.25),
+                x: random(0, width),
+                y: random(0, height),
+                vx: random(-SPEED, SPEED),
+                vy: random(-SPEED, SPEED),
+                rotation: random(0, Math.PI * 2),
+                rotationSpeed: random(-.6, .6),
+                hueShift: random(-50, 50),
+                alphaShift: random(-0.15, 0.15),
+                scale: 1,
+                targetScale: 1,
+            };
+        }
+        function drawShapes(ctx) {
+            shapes.forEach(shape => {
+                ctx.save();
+                ctx.translate(shape.x, shape.y);
+                ctx.rotate(shape.rotation);
+                ctx.scale(shape.scale, shape.scale);
+                for (let i = SHADOW_SCALES.length - 1; i >= 0; i--) {
+                    const scale = SHADOW_SCALES[i];
+                    const shadowAlpha = 0.05;
+                    ctx.save();
+                    ctx.scale(scale, scale);
+                    ctx.beginPath();
+                    ctx.moveTo(shape.vertices[0], shape.vertices[1]);
+                    for (let j = 2; j < shape.vertices.length; j += 2) {
+                        ctx.lineTo(shape.vertices[j], shape.vertices[j + 1]);
+                    }
+                    ctx.closePath();
+                    ctx.fillStyle = `hsla(${shape.hue}, 100%, 50%, ${shadowAlpha})`;
+                    ctx.fill();
+                    ctx.restore();
+                }
+                ctx.beginPath();
+                ctx.moveTo(shape.vertices[0], shape.vertices[1]);
+                for (let i = 2; i < shape.vertices.length; i += 2) {
+                    ctx.lineTo(shape.vertices[i], shape.vertices[i + 1]);
+                }
+                ctx.closePath();
+                ctx.fillStyle = `hsla(${shape.hue}, 100%, 50%, ${shape.alpha})`;
+                ctx.fill();
+                ctx.restore();
+            });
+        }
+        function updateShapes(deltaTime) {
+            shapes.forEach(shape => {
+                shape.x += shape.vx * deltaTime;
+                shape.y += shape.vy * deltaTime;
+                shape.rotation += shape.rotationSpeed * deltaTime;
+                if (shape.x < 0 || shape.x > width) {
+                    shape.vx *= -1;
+                    shape.x = Math.max(0, Math.min(width, shape.x));
+                    shape.vy += random(-50, 50);
+                }
+                if (shape.y < 0 || shape.y > height) {
+                    shape.vy *= -1;
+                    shape.y = Math.max(0, Math.min(height, shape.y));
+                    shape.vx += random(-50, 50);
+                }
+                shape.hue = (shape.hue + shape.hueShift * deltaTime + 360) % 360;
+                shape.alpha = Math.max(0.07, Math.min(0.25, shape.alpha + shape.alphaShift * deltaTime));
+                const scaleDiff = shape.targetScale - shape.scale;
+                const scaleChange = Math.sign(scaleDiff) * Math.min(Math.abs(scaleDiff), SCALE_CHANGE_RATE * deltaTime);
+                shape.scale += scaleChange;
+                if (shape.scale < 0.3 || shape.scale > 2.5) {
+                    shape.targetScale = 1;
+                }
+                shape.scale = Math.max(0.3, Math.min(2.5, shape.scale));
+            });
+        }
+        function randomlyChangeShape() {
+            const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
+            randomShape.vx = random(-SPEED, SPEED);
+            randomShape.vy = random(-SPEED, SPEED);
+            randomShape.rotationSpeed = random(-.6, .6);
+            randomShape.targetScale = Math.max(0.5, Math.min(2, randomShape.scale * random(0.7, 1.3)));
+        }
+        let lastTime = 0;
+        let accumulator = 0;
+        function animate(currentTime) {
+            const deltaTime = (currentTime - lastTime) * 0.001;
+            lastTime = currentTime;
+            accumulator += deltaTime;
+            while (accumulator >= FRAME_INTERVAL / 1000) {
+                updateShapes(FRAME_INTERVAL / 1000);
+                if (Math.random() < 0.33) {
+                    randomlyChangeShape();
+                }
+                accumulator -= FRAME_INTERVAL / 1000;
+            }
+            bufferCtx.clearRect(0, 0, width, height);
+            drawShapes(bufferCtx);
+            ctx.filter = `blur(${BLUR_AMOUNT}px)`;
+            ctx.clearRect(0, 0, width, height);
+            ctx.drawImage(bufferCanvas, 0, 0);
+            ctx.filter = 'none';
+            requestAnimationFrame(animate);
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        for (let i = 0; i < SHAPE_COUNT; i++) shapes.push(createShape());
+        animate(0);
+    </script>
+</body>
+</html>
