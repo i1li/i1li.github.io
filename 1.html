@@ -27,8 +27,8 @@
         const bufferCtx = bufferCanvas.getContext('2d');
         let width, height;
         const shapes = [];
-        const SHAPE_COUNT = 55;
-        const BASE_SIZE = 0.005;
+        const SHAPE_COUNT = 65;
+        const BASE_SIZE = 0.0055;
         const BASE_SIZE_MULTIPLIER = 13.69;
         const BLUR_AMOUNT = 3;
         const SHADOW_SCALES = [1.15, 1.37, 1.83, 2.22, 3.3];
@@ -123,64 +123,59 @@
         }
 
         function createAndChangeShapes(deltaTime) {
-            const time = Date.now() * random(0.0001,0.1);
+            const time = Date.now() * 0.0001;
             shapes.forEach(shape => {
-                // Apply Perlin noise for acceleration and direction changes
-                let accelerationFactor = noise.noise(shape.x * 0.005, time);
-                let directionChange = noise.noise(shape.y * 0.005, time);
-                
-                // Modify velocity based on Perlin noise
-                shape.vx += accelerationFactor * random(-0.75, 0.75) * deltaTime;
-                shape.vy += accelerationFactor * random(-0.75, 0.75) * deltaTime;
+                // Smooth noise application
+                let noiseValueX = noise.noise(shape.x * 0.002, time) * 0.5;
+                let noiseValueY = noise.noise(shape.y * 0.002, time) * 0.5;
 
-                // Apply random drastic direction changes
-                if (Math.random() < 0.01) {
-                    shape.vx += directionChange * random(-50, 50);
-                    shape.vy += directionChange * random(-50, 50);
+                // Gradually change velocity based on noise
+                shape.vx += (noiseValueX - shape.vx) * deltaTime * 0.1;
+                shape.vy += (noiseValueY - shape.vy) * deltaTime * 0.1;
+
+                // Apply smaller random changes
+                if (Math.random() < 0.005) {
+                    shape.vx += random(-50, 50);
+                    shape.vy += random(-50, 50);
                 }
 
-                // Limit maximum velocity to prevent shapes from moving too fast
+                // Limit maximum velocity
                 const maxSpeed = 5.5;
                 shape.vx = Math.max(-maxSpeed, Math.min(maxSpeed, shape.vx));
                 shape.vy = Math.max(-maxSpeed, Math.min(maxSpeed, shape.vy));
 
-                // Update position with new velocities
+                // Update position
                 shape.x += shape.vx * deltaTime;
                 shape.y += shape.vy * deltaTime;
                 shape.rotation += shape.rotationSpeed * deltaTime;
 
-                // Bounce off the edges
+                // Bounce off edges
                 if (shape.x < 0 || shape.x > width) {
                     shape.vx *= -1;
                     shape.x = Math.max(0, Math.min(width, shape.x));
-                    shape.vy += random(-50, 50);
                 }
                 if (shape.y < 0 || shape.y > height) {
                     shape.vy *= -1;
                     shape.y = Math.max(0, Math.min(height, shape.y));
-                    shape.vx += random(-50, 50);
                 }
 
-                // Update color and transparency
-                shape.hue = (shape.hue + shape.hueShift * deltaTime + 360) % 360;
-                shape.alpha = Math.max(0.01, Math.min(0.35, shape.alpha + shape.alphaShift * deltaTime));
-
-                // Update scale with Perlin noise
-                const scaleNoise = noise.noise(shape.x * 0.002, shape.y * 0.002);
-                shape.scale += scaleNoise * 0.1 * deltaTime;
-                shape.scale = Math.max(0.3, Math.min(2.2, shape.scale));
-
-                // Update slant and skew with Perlin noise
-                shape.slantX += noise.noise(shape.slantX * 0.002, time) * shape.slantXSpeed * deltaTime;
-                shape.slantY += noise.noise(shape.slantY * 0.002, time) * shape.slantYSpeed * deltaTime;
-                shape.skewX += noise.noise(shape.skewX * 0.002, time) * shape.skewXSpeed * deltaTime;
-                shape.skewY += noise.noise(shape.skewY * 0.002, time) * shape.skewYSpeed * deltaTime;
+                // Update slant and skew with smoother noise application
+                shape.slantX += (noise.noise(shape.slantNoiseOffsetX + shape.x * 0.002, time) * shape.slantXSpeed - shape.slantX) * deltaTime * 0.1;
+                shape.slantY += (noise.noise(shape.slantNoiseOffsetY + shape.y * 0.002, time) * shape.slantYSpeed - shape.slantY) * deltaTime * 0.1;
+                shape.skewX += (noise.noise(shape.skewNoiseOffsetX + shape.x * 0.002, time) * shape.skewXSpeed - shape.skewX) * deltaTime * 0.1;
+                shape.skewY += (noise.noise(shape.skewNoiseOffsetY + shape.y * 0.002, time) * shape.skewYSpeed - shape.skewY) * deltaTime * 0.1;
 
                 // Limit slant and skew
-                if (Math.abs(shape.slantX) > 0.75) shape.slantX = 0.75 * Math.sign(shape.slantX);
-                if (Math.abs(shape.slantY) > 0.75) shape.slantY = 0.75 * Math.sign(shape.slantY);
-                if (Math.abs(shape.skewX) > 0.75) shape.skewX = 0.75 * Math.sign(shape.skewX);
-                if (Math.abs(shape.skewY) > 0.75) shape.skewY = 0.75 * Math.sign(shape.skewY);
+                if (Math.abs(shape.slantX) > 1) shape.slantX = 1 * Math.sign(shape.slantX);
+                if (Math.abs(shape.slantY) > 1) shape.slantY = 1 * Math.sign(shape.slantY);
+                if (Math.abs(shape.skewX) > 1) shape.skewX = 1 * Math.sign(shape.skewX);
+                if (Math.abs(shape.skewY) > 1) shape.skewY = 1 * Math.sign(shape.skewY);
+                
+                // Update other properties (color, scale, etc.)
+                shape.hue = (shape.hue + shape.hueShift * deltaTime + 360) % 360;
+                shape.alpha = Math.max(0.01, Math.min(0.35, shape.alpha + shape.alphaShift * deltaTime));
+                shape.scale += noise.noise(shape.x * 0.002, shape.y * 0.002) * 0.01 * deltaTime;
+                shape.scale = Math.max(0.3, Math.min(2.2, shape.scale));
             });
         }
 
@@ -188,13 +183,14 @@
             shapes.forEach(shape => {
                 ctx.save();
                 ctx.translate(shape.x, shape.y);
-                ctx.rotate(shape.rotation);
-                ctx.scale(shape.scale, shape.scale);
                 ctx.transform(
                     1 + shape.skewX, shape.slantY,
                     shape.slantX, 1 + shape.skewY,
                     0, 0
                 );
+                ctx.rotate(shape.rotation);
+                ctx.scale(shape.scale, shape.scale);
+
                 let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
                 for (let i = 0; i < shape.vertices.length; i += 2) {
                     minX = Math.min(minX, shape.vertices[i]);
@@ -303,10 +299,14 @@
                 slantY: 0,
                 skewX: 0,
                 skewY: 0,
-                slantXSpeed: random(-0.35, 0.35),
-                slantYSpeed: random(-0.35, 0.35),
-                skewXSpeed: random(-0.35, 0.35),
-                skewYSpeed: random(-0.35, 0.35),
+                slantXSpeed: random(-10, 10),
+                slantYSpeed: random(-10, 10),
+                skewXSpeed: random(-10, 10),
+                skewYSpeed: random(-10, 10),
+                slantNoiseOffsetX: random(0, 1000),
+                slantNoiseOffsetY: random(0, 1000),
+                skewNoiseOffsetX: random(0, 1000),
+                skewNoiseOffsetY: random(0, 1000),
             });
         }
 
