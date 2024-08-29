@@ -27,11 +27,11 @@
         const bufferCtx = bufferCanvas.getContext('2d');
         let width, height;
         const shapes = [];
-        const SHAPE_COUNT = 65;
-        const BASE_SIZE = 0.0055;
-        const BASE_SIZE_MULTIPLIER = 13.69;
+        const SHAPE_COUNT = 62;
+        const BASE_SIZE = 0.007;
+        const BASE_SIZE_MULTIPLIER = 13;
         const BLUR_AMOUNT = 3;
-        const SHADOW_SCALES = [1.15, 1.37, 1.83, 2.22, 3.3];
+        const SHADOW_SCALES = [1.5, 2.3, 3.6];
         const FRAME_RATE = 60;
         const FRAME_INTERVAL = 1000 / FRAME_RATE;
 
@@ -126,23 +126,12 @@
             const time = Date.now() * 0.0001;
             shapes.forEach(shape => {
                 // Smooth noise application
-                let noiseValueX = noise.noise(shape.x * 0.002, time) * 0.5;
-                let noiseValueY = noise.noise(shape.y * 0.002, time) * 0.5;
+                let noiseValueX = noise.noise(shape.x * 0.002, time) * random(0.00001, .2);
+                let noiseValueY = noise.noise(shape.y * 0.002, time) * random(0.00001, .2);
 
                 // Gradually change velocity based on noise
-                shape.vx += (noiseValueX - shape.vx) * deltaTime * 0.1;
-                shape.vy += (noiseValueY - shape.vy) * deltaTime * 0.1;
-
-                // Apply smaller random changes
-                if (Math.random() < 0.005) {
-                    shape.vx += random(-50, 50);
-                    shape.vy += random(-50, 50);
-                }
-
-                // Limit maximum velocity
-                const maxSpeed = 5.5;
-                shape.vx = Math.max(-maxSpeed, Math.min(maxSpeed, shape.vx));
-                shape.vy = Math.max(-maxSpeed, Math.min(maxSpeed, shape.vy));
+                shape.vx += (noiseValueX - shape.vx) * deltaTime * random(0.00001, .2);
+                shape.vy += (noiseValueY - shape.vy) * deltaTime * random(0.00001, .2);
 
                 // Update position
                 shape.x += shape.vx * deltaTime;
@@ -170,10 +159,11 @@
                 if (Math.abs(shape.slantY) > 1) shape.slantY = 1 * Math.sign(shape.slantY);
                 if (Math.abs(shape.skewX) > 1) shape.skewX = 1 * Math.sign(shape.skewX);
                 if (Math.abs(shape.skewY) > 1) shape.skewY = 1 * Math.sign(shape.skewY);
-                
-                // Update other properties (color, scale, etc.)
+
+                // Update hue and alpha using noise
                 shape.hue = (shape.hue + shape.hueShift * deltaTime + 360) % 360;
-                shape.alpha = Math.max(0.01, Math.min(0.35, shape.alpha + shape.alphaShift * deltaTime));
+                const alphaNoise = noise.noise(shape.x * 0.005, shape.y * 0.005 + time);
+                shape.alpha = Math.max(0.05, Math.min(0.4, (alphaNoise + 1) / 2)); // Convert noise value to [0, 1] range and scale it
                 shape.scale += noise.noise(shape.x * 0.002, shape.y * 0.002) * 0.01 * deltaTime;
                 shape.scale = Math.max(0.3, Math.min(2.2, shape.scale));
             });
@@ -198,6 +188,7 @@
                     maxX = Math.max(maxX, shape.vertices[i]);
                     maxY = Math.max(maxY, shape.vertices[i + 1]);
                 }
+
                 function createGradient(flip) {
                     const gradient = ctx.createLinearGradient(
                         flip ? maxX : minX,
@@ -216,13 +207,28 @@
 
                 for (let i = SHADOW_SCALES.length - 1; i >= 0; i--) {
                     const scale = SHADOW_SCALES[i];
-                    const shadowAlpha = 0.04;
+                    const shadowAlpha = 0.06;
                     ctx.save();
                     ctx.scale(scale, scale);
                     ctx.beginPath();
-                    ctx.moveTo(shape.vertices[0], shape.vertices[1]);
-                    for (let j = 2; j < shape.vertices.length; j += 2) {
-                        ctx.lineTo(shape.vertices[j], shape.vertices[j + 1]);
+
+                    const vertices = shape.vertices;
+                    const roundedCorners = shape.roundedCorners;
+
+                    ctx.moveTo(vertices[0], vertices[1]);
+                    for (let j = 0; j < vertices.length; j += 2) {
+                        const currentX = vertices[j];
+                        const currentY = vertices[j + 1];
+                        const nextX = vertices[(j + 2) % vertices.length];
+                        const nextY = vertices[(j + 3) % vertices.length];
+
+                        if (roundedCorners[j / 2]) {
+                            const controlX = (currentX + nextX) / 2;
+                            const controlY = (currentY + nextY) / 2;
+                            ctx.quadraticCurveTo(currentX, currentY, controlX, controlY);
+                        } else {
+                            ctx.lineTo(nextX, nextY);
+                        }
                     }
                     ctx.closePath();
                     ctx.fillStyle = createGradient(i % 2 === 0);
@@ -232,9 +238,23 @@
                 }
 
                 ctx.beginPath();
-                ctx.moveTo(shape.vertices[0], shape.vertices[1]);
-                for (let i = 2; i < shape.vertices.length; i += 2) {
-                    ctx.lineTo(shape.vertices[i], shape.vertices[i + 1]);
+                const vertices = shape.vertices;
+                const roundedCorners = shape.roundedCorners;
+
+                ctx.moveTo(vertices[0], vertices[1]);
+                for (let i = 0; i < vertices.length; i += 2) {
+                    const currentX = vertices[i];
+                    const currentY = vertices[i + 1];
+                    const nextX = vertices[(i + 2) % vertices.length];
+                    const nextY = vertices[(i + 3) % vertices.length];
+
+                    if (roundedCorners[i / 2]) {
+                        const controlX = (currentX + nextX) / 2;
+                        const controlY = (currentY + nextY) / 2;
+                        ctx.quadraticCurveTo(currentX, currentY, controlX, controlY);
+                    } else {
+                        ctx.lineTo(nextX, nextY);
+                    }
                 }
                 ctx.closePath();
                 ctx.fillStyle = createGradient(SHADOW_SCALES.length % 2 === 0);
@@ -273,26 +293,35 @@
 
         for (let i = 0; i < SHAPE_COUNT; i++) {
             const size = Math.min(width, height) * random(BASE_SIZE, BASE_SIZE * BASE_SIZE_MULTIPLIER);
-            const sides = Math.floor(random(22, 44));
+            const sides = Math.floor(random(33, 44));
             const vertices = new Float32Array(sides * 2);
+            const roundedCorners = new Array(sides).fill(false);
+
             for (let j = 0; j < sides; j++) {
                 const angle = (j / sides) * Math.PI * random(-77, 77);
                 const distance = size * random(0.01, 6);
                 vertices[j * 2] = Math.cos(angle) * distance;
                 vertices[j * 2 + 1] = Math.sin(angle) * distance;
+
+                // Randomly select corners to be rounded
+                if (Math.random() < 0.8) {
+                    roundedCorners[j] = true;
+                }
             }
+
             shapes.push({
                 vertices,
+                roundedCorners,  // Store the rounded corners information
                 hue: random(0, 360),
-                alpha: random(0.03, 0.2),
+                alpha: random(0.03, 0.35),
                 x: random(0, width),
                 y: random(0, height),
                 vx: random(-2, 2),
                 vy: random(-2, 2),
                 rotation: random(0, Math.PI * 2),
                 rotationSpeed: random(-0.35, 0.35),
-                hueShift: random(-25, 25),
-                alphaShift: random(-0.3, 0.3),
+                hueShift: random(-40, 40),
+                alphaShift: random(-0.4, 0.4),
                 scale: 1,
                 targetScale: 1,
                 slantX: 0,
