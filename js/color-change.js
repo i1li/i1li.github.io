@@ -3,9 +3,12 @@ if (detectMobile()) {
 const hoverShift = document.querySelectorAll('button, a, a.dark-mode, footer, .article-nav-bottom, #site-nav a, .section-nav a');
 const alwaysShift = document.querySelectorAll('header, #site-nav .col, .section-nav .col, .article-header, footer, .article-title, #site-title, #light-dark-zoom');
 function getRandomDegree() {return Math.random() < 0.5 ? Math.floor(Math.random() * -270) - 45 : Math.floor(Math.random() * 270) + 46;}
-function getNewIntervalsTillNextChange() {return Math.floor(Math.random() * 11) + 7;}
-function getRandomInterval() {return 111 + Math.floor(Math.random() * 1000);}
-let isWindowActive = true;
+function getNewIntervalsTillNextChange() {return Math.floor(Math.random() * 5) + 7;}
+function getRandomInterval() {return Math.floor(Math.random() * 1000) + 333;}
+let isWindowActive = !document.hidden;
+document.addEventListener('visibilitychange', () => {
+    isWindowActive = !document.hidden;
+});
 window.addEventListener('focus', () => isWindowActive = true);
 window.addEventListener('blur', () => isWindowActive = false);
 function isElementInViewport(el) {
@@ -49,10 +52,10 @@ function startShift(element, interval, isHover = false) {
         intervalCount = 0;
         intervalsTillNextChange = getNewIntervalsTillNextChange();
       }
-      currentDegree += (targetDegree - currentDegree) * (0.005 + Math.random() * 0.005);
-      currentSaturation += (targetSaturation - currentSaturation) * 0.005;
-      currentContrast += (targetContrast - currentContrast) * 0.01;
-      currentBrightness += (targetBrightness - currentBrightness) * 0.01;
+      currentDegree += (targetDegree - currentDegree) * (Math.random() * 0.015);
+      currentSaturation += (targetSaturation - currentSaturation) * (Math.random() * 0.015);
+      currentContrast += (targetContrast - currentContrast) * (Math.random() * 0.015);
+      currentBrightness += (targetBrightness - currentBrightness) * (Math.random() * 0.015);
       updateFilter();
     }
   }, interval);
