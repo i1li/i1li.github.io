@@ -1,7 +1,6 @@
 * {border-radius:.3em; scrollbar-color: rgba(22,222,222,.7) rgba(0,0,72,.7); overscroll-behavior: none; scroll-behavior: smooth; scroll-snap-type: none;}
-header:hover {background: linear-gradient(to top, rgba(0, 22, 0, .3), rgba(128, 0, 128, 0.4));}
-header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 22, 128, 0.3));
-    position: sticky;
+header:hover {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 22, 128, 0.3));}
+header {position: sticky;
     top: 0;
     height: 5em;
     z-index: 1;
@@ -12,6 +11,7 @@ header {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 2
     border-left: solid 2px rgba(255,0,0,.15);
     border-right: solid 2px rgba(111,0,111,.4);
     border-radius: 0 0 .7em .7em;
+    background: linear-gradient(to top, rgba(0, 22, 0, .3), rgba(128, 0, 128, 0.2));
     backdrop-filter: brightness(115%) contrast(90%) saturate(270%);}
 .scrolled-down:hover {background: linear-gradient(to top, rgba(0, 0, 0, .6), rgba(128, 128, 128, 0.6)); opacity: 1;}
 .scrolled-down h1 {font-size: 1.5em; position: absolute; left:0; filter: drop-shadow(0 0 1rem white);}
@@ -62,12 +62,12 @@ filter: drop-shadow(0 0 1rem rgba(127, 127, 127, 0.85));}
     backdrop-filter: contrast(333%) grayscale(70%) brightness(90%) saturate(250%);
     border-radius: .3em .3em .5em .5em;
     border: 1px solid rgba(0, 171, 63, 0.6);}
-#site-nav {background: linear-gradient(to bottom, rgba(222, 22, 22, .35), rgba(128, 0, 128, 0.3));
-    padding: .2em 0 .7em;
+#site-nav {padding: .2em 0 .7em;
     font-size: 1.1em;
     backdrop-filter: brightness(90%) contrast(120%) saturate(250%);
+    background: linear-gradient(to top, rgba(222, 22, 22, .2), rgba(128, 0, 128, 0.2));
     border: 1px solid rgba(4, 223, 231, 0.5);}
-#site-nav:hover {background: linear-gradient(to top, rgba(222, 22, 22, .2), rgba(128, 0, 128, 0.2));}
+#site-nav:hover {background: linear-gradient(to bottom, rgba(222, 22, 22, .3), rgba(128, 0, 128, 0.3));}
 #site-nav .col a {opacity: .75; padding:.15em .5em; filter: drop-shadow(0 0 .8em rgba(128, 128, 128, .5));}
 #site-nav .col a:hover {opacity: .9;}
 a:link, a:visited {text-shadow: 1px 2px 1em rgba(141, 0, 12, .5), 0 0 .3em rgba(0, 255, 115, 1), 0 0 .5em rgba(255, 0, 191, 1);
