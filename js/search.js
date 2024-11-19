@@ -3,7 +3,12 @@ function search() {
   const articles = document.querySelectorAll('article');
   const searchResultsContainer = document.getElementById('searchResults');
   searchResultsContainer.innerHTML = '';
-  if (searchQuery.length < 3) {
+
+  if (searchQuery.length === 0) {
+    searchResultsContainer.innerHTML = '<p>Enter a search term</p>';
+    searchResultsContainer.style.display = 'block';
+    return;
+  } else if (searchQuery.length < 3) {
     searchResultsContainer.style.display = 'none';
     return;
   }
@@ -51,6 +56,7 @@ function openSearchOverlay() {
   document.getElementById("searchInput").focus();
   document.body.style.overflow = 'hidden';
   document.addEventListener('keydown', handleKeyPress);
+  search();
 }
 function closeSearchOverlay() {
   document.getElementById("searchOverlay").style.display = "none";

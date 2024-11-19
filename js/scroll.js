@@ -12,11 +12,13 @@ function handleScroll() {
     header.classList.remove('scrolled-down');
   }
   if (document.body.scrollTop > scrollTransition * 7 || document.documentElement.scrollTop > scrollTransition * 7) {
-    toTop.style.display = "block";
-  } else {
-    toTop.style.display = "none";
+      toTop.style.opacity = "0.4";
+      toTop.style.pointerEvents = "auto";
+    } else {
+      toTop.style.opacity = "0";
+      toTop.style.pointerEvents = "none";
+    }
   }
-}
 function updateURLOnScroll() {
   const articles = document.querySelectorAll('article');
   let currentArticle, currentSection;
