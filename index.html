@@ -9,12 +9,19 @@
 <div id="bg-wrapper"><div id="bg-wrapper2"><div id="bg-wrapper3"></div></div></div>
 <div id="bg"><div id="box"></div><div id="overlay"></div></div>
 <span id="toTop" onclick="goToTop()" title="Go to top"><img alt="Go to top" class="to-top" decoding="async" src="/img/top.png"></span>
-<div id="fullScreenOverlay" onclick="closeOverlay()"><span id="close-button" onclick="closeOverlay()">&times;</span><img id="overlayImage"></div>
+<div id="fullScreenOverlay" onclick="closeOverlay()"><span class="close-button" onclick="closeOverlay()">&times;</span><img id="overlayImage"></div>
+<div id="searchOverlay" class="search-overlay">
+<span class="close-button" onclick="closeSearchOverlay()">&times;</span>
+<div class="search-overlay-content"><div class="search-input-container">
+<input type="text" id="searchInput" placeholder="Search...">
+</div>
+<div class="search-results-wrapper"><div id="searchResults">
+</div></div></div></div>  
 
 <header class="container"><table><tr><td style="width:50%;">
 <h1><span id="site-title"><a href="/" class="no-bg" title="Home"><img alt="Home" class="img-header img-opaq" decoding="async" src="/img/yinyang.png"></a>
 <a href="/" id="site-title-text" class="no-bg" title="Home">i&i</a></span></h1></td><td style="width:50%;">
-<span id="light-dark-zoom"><button id="zoom-out" title="Zoom out">−</button><button id="zoom-in" title="Zoom in">+</button>
+<span id="toolbar"><a id="search" href="#">Search🔍</a><button id="zoom-out" title="Zoom out">−</button><button id="zoom-in" title="Zoom in">+</button>
 <span class="mode-toggle"><button id="mode-toggle" title="Dark / Light">🌙 / ☀️</button></span></span></td></tr></table></header>
 
 <div class="container"><div class="row justify-content-center"><div class="col-md-9">
@@ -1488,4 +1495,5 @@ class="no-embed"
 <script src="/js/display-toggle.js"></script>
 <script src="/js/image-overlay.js"></script>
 <script src="/js/color-change.js"></script>
+<script src="/js/search.js"></script>
 </div></div></div></body></html>
