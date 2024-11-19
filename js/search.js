@@ -68,4 +68,6 @@ document.getElementById('search').addEventListener('click', function(e) {
   e.preventDefault();
   openSearchOverlay();
 });
-document.getElementById('searchInput').addEventListener('input', search);
+document.getElementById('searchInput').addEventListener('input', throttle(function() {
+  search();
+}, 500));
