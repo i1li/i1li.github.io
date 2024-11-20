@@ -70,7 +70,7 @@ npm i dotenv
 node yt-ids.js
 ```
 
-<h3 id="shuffle.js"><a href="/js/shuffle.js">shuffle.js</a></h3>
+<h3 id="shuffle.js"><a href="/yt/shuffle.js">shuffle.js</a></h3>
 
 - proccessAndCombine combines all video IDs, (limiting how many come from each playlist), from the music section into one `<y-t>` element, at the top of [/edu/vibes](https://y0.netlify.app/edu/vibes).
 - shuffleAndDraw shuffles an array of playlists & videos extracted from the music section, with its own 'next' button. It then "draws" from the shuffled array, cloning the drawn `<y-t>` element into the 'draw' `<div>`. [Demo at top of main page](https://y0.netlify.app/)

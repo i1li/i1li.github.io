@@ -68,17 +68,6 @@ class YTEmbed extends HTMLElement {
       this.appendChild(this.wrapper);
     }
   }  
-  debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  }
   toggleVideo() {
     const iframeExists = this.wrapper.querySelector('iframe');
     if (!iframeExists) {
@@ -194,7 +183,6 @@ class YTEmbed extends HTMLElement {
     remoteControl.appendChild(linkToVideo);
     this.checkViewport();
   }
-  
   checkViewport() {
     const remoteControl = document.getElementById('remote-control');
     const expandIcon = document.getElementById('expand-icon');
@@ -229,9 +217,7 @@ class YTEmbed extends HTMLElement {
   }
   
   setupViewportCheck() {
-    window.addEventListener('scroll', this.debouncedCheckViewport);
-    window.addEventListener('touchmove', this.debouncedCheckViewport);
-    window.addEventListener('resize', this.debouncedCheckViewport);
+    ['scroll', 'touchmove', 'resize'].forEach(event => window.addEventListener(event, this.debouncedCheckViewport));
     this.checkViewport();
   }
   isOutOfViewport() {
@@ -264,9 +250,7 @@ class YTEmbed extends HTMLElement {
     }
   }
   removeEventListeners() {
-    window.removeEventListener('scroll', this.debouncedCheckViewport);
-    window.removeEventListener('touchmove', this.debouncedCheckViewport);
-    window.removeEventListener('resize', this.debouncedCheckViewport);
+    ['scroll', 'touchmove', 'resize'].forEach(event => window.removeEventListener(event, this.debouncedCheckViewport));
   }
   removeRemoteControl() {
     const remoteControl = document.getElementById('remote-control');
@@ -282,6 +266,17 @@ class YTEmbed extends HTMLElement {
       document.body.removeChild(nowPlayingText);
     }
     this.removeEventListeners()
+  }
+  debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
   }
 }
 customElements.define('y-t', YTEmbed);
