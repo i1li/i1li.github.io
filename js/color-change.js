@@ -65,14 +65,16 @@ function handleDisengage(element, intervalId) {
   element.style.filter = 'none';
 }
 alwaysShift.forEach((element) => {
-  element.intervalId = startShift(element, getRandomInterval());
+  element.intervalId = throttle(() => {
+    return startShift(element, getRandomInterval());
+  }, 20)();
 });
 hoverShift.forEach(element => {
   let intervalId;
   let disengageTimeout;
-  element.addEventListener('mouseover', () => {
+  element.addEventListener('mouseover', throttle(() => {
     intervalId = startShift(element, getRandomInterval(), true);
-  });
+  }, 80));  
   element.addEventListener('click', () => {
     clearInterval(intervalId);
     intervalId = startShift(element, getRandomInterval(), true);
@@ -82,8 +84,8 @@ hoverShift.forEach(element => {
     intervalId = startShift(element, getRandomInterval(), true);
     disengageTimeout = setTimeout(() => handleDisengage(element, intervalId), 888);
   });
-  element.addEventListener('mouseout', () => {
+  element.addEventListener('mouseout', throttle(() => {
     handleDisengage(element, intervalId);
-  });
+  }, 200));  
 });
 }

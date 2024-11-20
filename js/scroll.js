@@ -51,7 +51,7 @@ function updateURLOnScroll() {
 window.addEventListener('scroll', throttle(function() {
   updateURLOnScroll();
   handleScroll();
-}, 250));
+}, 500));
 function throttle(func, limit) {
   let lastFunc;
   let lastRan;
