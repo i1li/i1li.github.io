@@ -52,13 +52,13 @@ netlify dev
 
 - Stripped version of Lightest Youtube Embed to toggle display of any iframe or other content. [Demo at /jesus-and-his-religion](https://y0.netlify.app/jesus-and-his-religion/)
 
-### [yt-titles.js](/yt-titles.js)
+### [yt-titles.js](/yt/yt-titles.js)
 - Updates all `<y-t>` elements on the page,  `<y-t v="YouTube Video ID">` becomes `<y-t v="YouTube ID" t="The Video's Title">` To use, open a terminal in the project directory, & enter:
 ```bash
 node yt-titles.js
 ```
 
-### [yt-ids.js](/yt-ids.js)
+### [yt-ids.js](/yt/yt-ids.js)
 - Extracts all IDs found within the 'v' attribute of `<y-t>` tags in the "music" `<div>`. 
 - For playlists, it gets all the available video IDs for each, then moves the playlist ID from the 'v' attribute to 'p', listing all video IDs in the 'v' attribute.
 - Accepts multiple playlist IDs per `<y-t>` element, allowing playlist combination.
@@ -100,7 +100,6 @@ The hybrid shuffle function combines two different techniques to optimize perfor
 - Several layers of semi-transparent gradients for background & page elements.
 - Dynamic cursor hover & filter effects.
 - [color-change.js](/js/color-change.js) - Random color on hover, click, or touch of links and buttons. Also shifts colors of other elements at randomly varying rate, regardless of hover.
-
 
 <h3 id="Sticky Header & Scroll-to-Top Button">Sticky Header & Scroll-to-Top Button</h3>
 
