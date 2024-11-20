@@ -141,31 +141,40 @@ class YTEmbed extends HTMLElement {
     if (!remoteControl) {
       remoteControl = document.createElement('div');
       remoteControl.id = 'remote-control';
-      remoteControl.style.display = 'none';
+      remoteControl.style.opacity = '0';
+      remoteControl.style.pointerEvents = 'none';
       document.body.appendChild(remoteControl);
       const nowPlayingText = document.createElement('div');
       nowPlayingText.id = 'now-playing-text';
       nowPlayingText.innerHTML = '🔊Now<br>Playing:';
-      nowPlayingText.style.display = 'none';
+      nowPlayingText.style.opacity = '0';
+      nowPlayingText.style.pointerEvents = 'none';
       document.body.appendChild(nowPlayingText);
       const expandIcon = document.createElement('img');
       expandIcon.src = '/img/left-chevron.png';
       expandIcon.alt = 'Expand Remote Control';
       expandIcon.id = 'expand-icon';
-      expandIcon.style.display = 'none';
+      expandIcon.style.opacity = '0';
+      expandIcon.style.pointerEvents = 'none';
       document.body.appendChild(expandIcon);
       const showRemoteControl = () => {
-        remoteControl.style.display = 'flex';
-        expandIcon.style.display = 'none';
-        nowPlayingText.style.display = 'none';
+        remoteControl.style.opacity = '0.7';
+        remoteControl.style.pointerEvents = 'auto';
+        expandIcon.style.opacity = '0';
+        expandIcon.style.pointerEvents = 'none';
+        nowPlayingText.style.opacity = '0';
+        nowPlayingText.style.pointerEvents = 'none';
       };
       expandIcon.onclick = showRemoteControl;
       expandIcon.onmouseenter = showRemoteControl;
       remoteControl.onmouseleave = () => {
         if (this.isOutOfViewport()) {
-          remoteControl.style.display = 'none';
-          expandIcon.style.display = 'block';
-          nowPlayingText.style.display = 'block';
+          remoteControl.style.opacity = '0';
+          remoteControl.style.pointerEvents = 'none';
+          expandIcon.style.opacity = '0.2';
+          expandIcon.style.pointerEvents = 'auto';
+          nowPlayingText.style.opacity = '0.55';
+          nowPlayingText.style.pointerEvents = 'auto';
         }
       };
     }
@@ -185,20 +194,40 @@ class YTEmbed extends HTMLElement {
     remoteControl.appendChild(linkToVideo);
     this.checkViewport();
   }
+  
   checkViewport() {
     const remoteControl = document.getElementById('remote-control');
     const expandIcon = document.getElementById('expand-icon');
     const nowPlayingText = document.getElementById('now-playing-text');
     if (this.isOutOfViewport()) {
-      if (remoteControl) remoteControl.style.display = 'none';
-      if (expandIcon) expandIcon.style.display = 'block';
-      if (nowPlayingText) nowPlayingText.style.display = 'block';
+      if (remoteControl) {
+        remoteControl.style.opacity = '0';
+        remoteControl.style.pointerEvents = 'none';
+      }
+      if (expandIcon) {
+        expandIcon.style.opacity = '0.2';
+        expandIcon.style.pointerEvents = 'auto';
+      }
+      if (nowPlayingText) {
+        nowPlayingText.style.opacity = '0.55';
+        nowPlayingText.style.pointerEvents = 'auto';
+      }
     } else {
-      if (remoteControl) remoteControl.style.display = 'none';
-      if (expandIcon) expandIcon.style.display = 'none';
-      if (nowPlayingText) nowPlayingText.style.display = 'none';
+      if (remoteControl) {
+        remoteControl.style.opacity = '0';
+        remoteControl.style.pointerEvents = 'none';
+      }
+      if (expandIcon) {
+        expandIcon.style.opacity = '0';
+        expandIcon.style.pointerEvents = 'none';
+      }
+      if (nowPlayingText) {
+        nowPlayingText.style.opacity = '0';
+        nowPlayingText.style.pointerEvents = 'none';
+      }
     }
   }
+  
   setupViewportCheck() {
     window.addEventListener('scroll', this.debouncedCheckViewport);
     window.addEventListener('touchmove', this.debouncedCheckViewport);

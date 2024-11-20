@@ -6,9 +6,17 @@ const htmlContent = fs.readFileSync('index.html', 'utf8');
 const searchDivRegex = /id="shuffle">([\s\S]*?)<\/div>/;
 const searchDiv = htmlContent.match(searchDivRegex)?.[1] || '';
 const playlistIdRegex = /(?:p="([^"]+)"|v="([^"]+)")/g;
-const noEmbedRegex = /"no-embeds"[^>]*>([^<]*)<\/div>/;
 const totalVideosRegex = /"total-videos">([^<]*)<\/span>/;
-const noEmbedIds = searchDiv.match(noEmbedRegex)?.[1].trim().split(',') || [];
+function readExcludedIds() {
+  try {
+    const data = fs.readFileSync('exclude.txt', 'utf8');
+    return data.split(',').map(id => id.trim()).filter(id => id !== '');
+  } catch (err) {
+    console.error('Error reading exclude.txt:', err);
+    return [];
+  }
+}
+const excludedIds = readExcludedIds();
 if (!KEY) {
   throw new Error('API key is missing or empty. Please provide a valid API key. https://developers.google.com/youtube/v3/getting-started#before-you-start');
 }
@@ -62,7 +70,7 @@ const getPlaylistItems = async (playlistIDs) => {
         });
         const availableVideos = result.items.filter((item) => 
           item.status.privacyStatus === 'public' && 
-          !noEmbedIds.includes(item.snippet.resourceId.videoId)
+          !excludedIds.includes(item.snippet.resourceId.videoId)
         );
         videoIds = [...videoIds, ...availableVideos.map((item) => item.snippet.resourceId.videoId)];
         totalItems += result.items.length;
@@ -94,7 +102,7 @@ const writeOutput = async () => {
     playlistIdsInTag = [...new Set([...playlistIdsInTag, ...playlistIdsInV])];
     videoIdsInTag = videoIdsInTag.filter(id => !id.match(/^(PL|FL|OL|TL|UU)/));
     const newVideoIds = playlistIdsInTag.flatMap(playlistId => availableVideoIds[playlistId] || []);
-    const combinedVideoIds = [...new Set([...videoIdsInTag, ...newVideoIds])].filter(id => !noEmbedIds.includes(id));
+    const combinedVideoIds = [...new Set([...videoIdsInTag, ...newVideoIds])].filter(id => !excludedIds.includes(id));
     totalVideoCount += combinedVideoIds.length;
     let newAttributes = attributes;
     if (playlistIdsInTag.length > 0) {
