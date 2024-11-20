@@ -84,8 +84,8 @@ hoverShift.forEach(element => {
     intervalId = startShift(element, getRandomInterval(), true);
     disengageTimeout = setTimeout(() => handleDisengage(element, intervalId), 888);
   });
-  element.addEventListener('mouseout', throttle(() => {
+  element.addEventListener('mouseout', debounce(() => {
     handleDisengage(element, intervalId);
-  }, 200));  
-});
+  }, 20));
+  });
 }

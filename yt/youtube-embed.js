@@ -9,7 +9,7 @@ class YTEmbed extends HTMLElement {
     this.videoIds = videoIds;
     let linkUrl , embedUrl;
     this.debouncedCheckViewport = this.checkViewport.bind(this);
-    this.debouncedCheckViewport = this.debounce(this.debouncedCheckViewport, 250);
+    this.debouncedCheckViewport = debounce(this.debouncedCheckViewport, 250);
     switch (true) {
       default:
         if (this.classList.contains('no-link-embed')) {
@@ -242,8 +242,7 @@ class YTEmbed extends HTMLElement {
       if (path) {
         navigate(path.substring(1));
         setTimeout(() => {
-          const yOffset = -100;
-          const y = nowPlaying.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          const y = nowPlaying.getBoundingClientRect().top + window.pageYOffset - window.innerHeight * 0.1;
           window.scrollTo({ top: y, behavior: 'smooth' });
         }, 100);
       }
@@ -267,16 +266,14 @@ class YTEmbed extends HTMLElement {
     }
     this.removeEventListeners()
   }
-  debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  }
 }
 customElements.define('y-t', YTEmbed);
+function debounce(func, delay) {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+}
