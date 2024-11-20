@@ -151,7 +151,7 @@ class YTEmbed extends HTMLElement {
       nowPlayingText.style.pointerEvents = 'none';
       document.body.appendChild(nowPlayingText);
       const expandIcon = document.createElement('img');
-      expandIcon.src = '/img/left-chevron.png';
+      expandIcon.src = '/yt/expand-icon.png';
       expandIcon.alt = 'Expand Remote Control';
       expandIcon.id = 'expand-icon';
       expandIcon.style.opacity = '0';

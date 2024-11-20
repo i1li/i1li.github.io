@@ -1,8 +1,9 @@
 require('dotenv').config();
 const KEY = process.env.KEY
+const path = require('path');
 const fs = require('fs');
 const https = require('https');
-const htmlContent = fs.readFileSync('index.html', 'utf8');
+const htmlContent = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 const searchDivRegex = /id="shuffle">([\s\S]*?)<\/div>/;
 const searchDiv = htmlContent.match(searchDivRegex)?.[1] || '';
 const playlistIdRegex = /(?:p="([^"]+)"|v="([^"]+)")/g;

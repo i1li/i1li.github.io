@@ -1,6 +1,7 @@
+const path = require('path');
 const fs = require('fs');
 const https = require('https');
-let htmlContent = fs.readFileSync('index.html', 'utf8');
+const htmlContent = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 const regex = /<y-t\s+v="([^"]+)"(?:(?!t).)*?>/g;
 async function fetchTitle(videoId) {
   const response = await new Promise((resolve, reject) => {
