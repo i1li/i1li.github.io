@@ -8,8 +8,8 @@ class YTEmbed extends HTMLElement {
     const videoIds = this.id.split(',');
     this.videoIds = videoIds;
     let linkUrl , embedUrl;
-    this.debouncedCheckViewport = this.checkViewport.bind(this);
-    this.debouncedCheckViewport = debounce(this.debouncedCheckViewport, 250);
+    this.throttledCheckViewport = this.checkViewport.bind(this);
+    this.throttledCheckViewport = throttle(this.throttledCheckViewport, 500);
     switch (true) {
       default:
         if (this.classList.contains('no-link-embed')) {
@@ -215,9 +215,8 @@ class YTEmbed extends HTMLElement {
       }
     }
   }
-  
   setupViewportCheck() {
-    ['scroll', 'touchmove', 'resize'].forEach(event => window.addEventListener(event, this.debouncedCheckViewport));
+    ['scroll', 'touchmove', 'resize'].forEach(event => window.addEventListener(event, this.throttledCheckViewport));
     this.checkViewport();
   }
   isOutOfViewport() {
@@ -249,7 +248,7 @@ class YTEmbed extends HTMLElement {
     }
   }
   removeEventListeners() {
-    ['scroll', 'touchmove', 'resize'].forEach(event => window.removeEventListener(event, this.debouncedCheckViewport));
+    ['scroll', 'touchmove', 'resize'].forEach(event => window.removeEventListener(event, this.throttledCheckViewport));
   }
   removeRemoteControl() {
     const remoteControl = document.getElementById('remote-control');
@@ -268,12 +267,23 @@ class YTEmbed extends HTMLElement {
   }
 }
 customElements.define('y-t', YTEmbed);
-function debounce(func, delay) {
-  let timeoutId;
-  return function (...args) {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      func.apply(this, args);
-    }, delay);
-  };
+function throttle(func, limit) {
+  let lastFunc;
+  let lastRan;
+  return function() {
+    const context = this;
+    const args = arguments;
+    if (!lastRan) {
+      func.apply(context, args);
+      lastRan = Date.now();
+    } else {
+      clearTimeout(lastFunc);
+      lastFunc = setTimeout(function() {
+        if ((Date.now() - lastRan) >= limit) {
+          func.apply(context, args);
+          lastRan = Date.now();
+        }
+      }, Math.max(0, limit - (Date.now() - lastRan)));
+    }
+  }
 }
