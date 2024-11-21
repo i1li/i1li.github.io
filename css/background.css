@@ -61,9 +61,11 @@
 }
 #box {
     mix-blend-mode: difference;
-    z-index:1;
+    z-index:3;
+    transition: all .15s;
 }
 #overlay {
     mix-blend-mode: overlay;
     z-index:2;
+    transition: all .3s;
 }

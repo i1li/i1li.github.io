@@ -262,6 +262,7 @@ article {min-height:80vh; border: dotted 1px rgba(255,255,0,.1);}
     backdrop-filter: brightness(70%) contrast(200%) grayscale(50%) blur(.1em) saturate(150%);}
 #toTop {transition: all .45s;
     z-index: 5;
+    pointer-events: none;
     position: fixed;
     bottom: 0;
     right: 2.5%;
