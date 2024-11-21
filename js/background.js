@@ -12,13 +12,21 @@ function getRandomHueIncrement() {
     return Math.random() < 0.5 ? Math.random() * -0.6 - 1.15 : Math.random() * 0.6 + 1.15;
 }
 function getIntervalsTillNextChange() {
-    return Math.floor(Math.random() * 33) + 10;
+    return Math.floor(Math.random() * 12) + 3;
 }
+const intervalDuration = 150;
 function getRandomOverlayOffset() {
     return Math.floor(Math.random() * 11) + 3; 
 }
 function getRandomFilterValue() {
-    return Math.floor(Math.random() * 301) + 3; 
+    return Math.floor(Math.random() * 80) + 85; 
+}
+function getRandomOpacityValue(currentOpacity) {
+    const change = (Math.random() * 0.4 - 0.2); 
+    let newOpacity = currentOpacity + change;
+    if (newOpacity < 0.65) newOpacity = 0.7;
+    if (newOpacity > .95) newOpacity = .9;
+    return newOpacity;
 }
 const BOX_HUE_STEP = 7;
 const BOX_HUE_ANGLE = 360 / BOX_HUE_STEP;
@@ -34,14 +42,16 @@ function createLayerState(isOverlay) {
         currentOverlayOffset: isOverlay ? getRandomOverlayOffset() : 0,
         targetOverlayOffset: isOverlay ? getRandomOverlayOffset() : 0,
         transitionProgress: 0,
-        transitionDuration: isOverlay ? getIntervalsTillNextChange() : 0,
+        transitionDuration: isOverlay ? getIntervalsTillNextChange() * intervalDuration : 0,
         hueStep: isOverlay ? getRandomOverlayOffset() : BOX_HUE_STEP,
         currentContrast: 100,
         currentBrightness: 100,
         currentSaturation: 100,
-        targetContrast: 100,
-        targetBrightness: 100,
-        targetSaturation: 100
+        targetContrast: getRandomFilterValue(),
+        targetBrightness: getRandomFilterValue(),
+        targetSaturation: getRandomFilterValue(),
+        currentOpacity: 0.75,
+        targetOpacity: getRandomOpacityValue()
     };
 }
 let boxState = createLayerState(false);
@@ -50,8 +60,8 @@ function easeInOutCubic(t) {
     return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 function setGradient(element, state, isOverlay = false) {
-    const width = element.offsetWidth;
-    const height = element.offsetHeight;
+    const width = element.offsetWidth || element.clientWidth; 
+    const height = element.offsetHeight || element.clientHeight;
     const diagonal = Math.sqrt(width * width + height * height);
     const percentage = (diagonal / (Math.max(width, height) * Math.sqrt(2))) * 100;
     let gradients = [];
@@ -66,42 +76,41 @@ function setGradient(element, state, isOverlay = false) {
     }
     element.style.backgroundImage = gradients.join(', ');
     element.style.filter = `contrast(${state.currentContrast}%) brightness(${state.currentBrightness}%) saturate(${state.currentSaturation}%)`;
+    element.style.opacity = state.currentOpacity; 
 }
 function updateLayerState(state, isOverlay) {
     state.hueIndex = (state.hueIndex + state.hueIncrement + 360) % 360;
     state.intervalCount++;
-    if (state.intervalCount >= state.intervalsTillNextChange) {
-        state.hueIncrement = getRandomHueIncrement();
-        if (isOverlay) {
-            state.targetOverlayOffset = getRandomOverlayOffset();
-        }
-        state.intervalCount = 0;
-        state.intervalsTillNextChange = getIntervalsTillNextChange();
-        state.transitionDuration = state.intervalsTillNextChange;
-        state.targetContrast = getRandomFilterValue();
-        state.targetBrightness = getRandomFilterValue();
-        state.targetSaturation = getRandomFilterValue();
-        state.transitionProgress = 0;
-    }
-    state.transitionProgress += 0.0005 / state.transitionDuration;
+    state.transitionProgress += intervalDuration * (Math.random() * 0.00045 + 0.00005);
     if (state.transitionProgress > 1) state.transitionProgress = 1;
     const t = easeInOutCubic(state.transitionProgress);
     if (isOverlay) {
-        state.currentOverlayOffset = state.currentOverlayOffset + (state.targetOverlayOffset - state.currentOverlayOffset) * t;
+        state.currentOverlayOffset += (state.targetOverlayOffset - state.currentOverlayOffset) * t;
     }
-    state.currentContrast = state.currentContrast + (state.targetContrast - state.currentContrast) * t;
-    state.currentBrightness = state.currentBrightness + (state.targetBrightness - state.currentBrightness) * t;
-    state.currentSaturation = state.currentSaturation + (state.targetSaturation - state.currentSaturation) * t;
+    state.currentContrast += (state.targetContrast - state.currentContrast) * t;
+    state.currentBrightness += (state.targetBrightness - state.currentBrightness) * t;
+    state.currentSaturation += (state.targetSaturation - state.currentSaturation) * t;
+    state.currentOpacity += (state.targetOpacity - state.currentOpacity) * t;
+    if (state.intervalCount >= state.intervalsTillNextChange && state.transitionProgress >= 1) {
+        state.intervalCount = 0;
+        state.transitionProgress = 0;
+        state.hueIncrement = getRandomHueIncrement();
+        state.intervalsTillNextChange = getIntervalsTillNextChange();
+        state.transitionDuration = state.intervalsTillNextChange * intervalDuration;
+        state.targetContrast = getRandomFilterValue();
+        state.targetBrightness = getRandomFilterValue();
+        state.targetSaturation = getRandomFilterValue();
+        state.targetOpacity = getRandomOpacityValue(state.currentOpacity);
+    }
 }
-let lastUpdateTime = 0;
-const updateInterval = 33; 
+let lastUpdateTime = performance.now();
 function updateColors(timestamp) {
-    if (isWindowActive && timestamp - lastUpdateTime >= updateInterval) {
+    if (isWindowActive && timestamp - lastUpdateTime >= intervalDuration) {
         updateLayerState(boxState, false);
         updateLayerState(overlayState, true);
         setGradient(box, boxState);
         setGradient(overlay, overlayState, true);
-        lastUpdateTime = timestamp;
+        lastUpdateTime += intervalDuration; 
     }
     requestAnimationFrame(updateColors);
 }

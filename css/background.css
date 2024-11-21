@@ -27,7 +27,7 @@
     margin-top:-100vh;
     background: linear-gradient(to bottom, 
     rgba(128, 128, 128, .5) 0%,
-    rgba(128, 128, 128, 0) 50%,
+    rgba(128, 128, 128, .05) 50%,
     rgba(128, 128, 128, .5) 100%);
     border-radius:0;}
 #bg-wrapper3 {position: relative;
@@ -41,7 +41,7 @@
     background: linear-gradient(to right, 
     rgba(128, 128, 128, .5) 0%,
     rgba(128, 128, 128, .3) 15%,
-    rgba(128, 128, 128, 0) 50%,
+    rgba(128, 128, 128, .05) 50%,
     rgba(128, 128, 128, .3) 85%,
     rgba(128, 128, 128, .5) 100%);
     border-radius:0;}
@@ -61,7 +61,9 @@
 }
 #box {
     mix-blend-mode: difference;
+    z-index:1;
 }
 #overlay {
     mix-blend-mode: overlay;
+    z-index:2;
 }
