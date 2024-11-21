@@ -4,6 +4,10 @@ if (detectMobile()) {
     let isWindowActive = !document.hidden;
     document.addEventListener('visibilitychange', () => {
         isWindowActive = !document.hidden;
+        if (!document.hidden) {
+            lastUpdateTime = performance.now();
+            accumulatedTime = 0;
+        }
     });
     window.addEventListener('focus', () => isWindowActive = true);
     window.addEventListener('blur', () => isWindowActive = false);
@@ -48,7 +52,7 @@ if (detectMobile()) {
     function getRandomHueStep(isOverlay) {
         return isOverlay ? randomlyModifyValue(Math.floor(Math.random() * 4) + 5) : BOX_HUE_STEP;
     }
-    const intervalDuration = 200;
+    const intervalDuration = 250;
     const BOX_HUE_STEP = 7;
     const BOX_HUE_ANGLE = 360 / BOX_HUE_STEP;
     function getAdjustedHue(currentStep, hueAngle) {
@@ -125,18 +129,24 @@ if (detectMobile()) {
             state.targetOpacity = getRandomOpacityValue(state.currentOpacity, isOverlay);
         }
     }
-    let lastUpdateTime = performance.now();
-    function updateColors(timestamp) {
-        if (isWindowActive && timestamp - lastUpdateTime >= intervalDuration) {
+let lastUpdateTime = performance.now();
+let accumulatedTime = 0;
+function updateColors(timestamp) {
+        const deltaTime = timestamp - lastUpdateTime;
+        accumulatedTime += deltaTime;
+        while (accumulatedTime >= intervalDuration) {
             updateLayerState(boxState, false);
             updateLayerState(overlayState, true);
             setGradient(box, boxState);
             setGradient(overlay, overlayState, true);
-            lastUpdateTime += intervalDuration; 
+            accumulatedTime -= intervalDuration;
         }
-        requestAnimationFrame(updateColors);
-    }
+    lastUpdateTime = timestamp;
+    requestAnimationFrame(updateColors);
+}
+if (isWindowActive) {
     setGradient(box, boxState);
     setGradient(overlay, overlayState, true);
     requestAnimationFrame(updateColors);
+}
 }
