@@ -1,4 +1,4 @@
-if (detectMobile()) {
+if (!isMobile) {
 const box = document.getElementById("box");
 const overlay = document.getElementById("overlay");
 let isWindowActive = !document.hidden;

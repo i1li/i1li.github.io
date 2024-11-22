@@ -156,7 +156,7 @@ a:hover {text-decoration: dotted underline;
     border: .1em rgba(22,22,22,.1) ridge;
     background: linear-gradient(to top, rgba(22,22,222, .2), rgba(22, 222, 222, .5));}
 article {min-height:80vh; border: dotted 1px rgba(255,255,0,.1);}
-.article-header {background-image: url("/img/bg.png");
+.article-header {background-image: url("../img/bg.png");
     transition: all 1.1s ease-in;
     background-size: 191px;
     background-attachment: scroll;
@@ -228,14 +228,14 @@ article {min-height:80vh; border: dotted 1px rgba(255,255,0,.1);}
     margin-right:.5em;
     width: 33%;
     padding:1.1em 2% .9em 0 !important;}
-.article-content-wrapper {background-image: url("/img/bginvert.png");
+.article-content-wrapper {background-image: url("../img/bginvert.png");
     background-size: 20000px;
     background-position-x: -222px;
     background-attachment: scroll;
     border: inset .15em rgba(100,100,100,.2);
     border-bottom:solid .2em rgba(255,0,0,.2);
     border-top:0;}
-.article-content-wrapper.dark-mode {background-image: url("/img/bginvert.png");
+.article-content-wrapper.dark-mode {background-image: url("../img/bginvert.png");
     background-size: 20000px;
     background-position-x: -222px;
     background-attachment: fixed;
@@ -243,7 +243,7 @@ article {min-height:80vh; border: dotted 1px rgba(255,255,0,.1);}
     border-bottom:solid .1em rgba(255,0,0,.4);
     border-top:0;}
 .article-content {border: solid 1px rgba(255,0,0,.2);
-    background-image: url("/img/bginvert.png");
+    background-image: url("../img/bginvert.png");
     background-attachment: fixed;
     background-size: 10000px;
     background-position-x: -200px;
@@ -254,7 +254,7 @@ article {min-height:80vh; border: dotted 1px rgba(255,255,0,.1);}
     backdrop-filter: brightness(95%) contrast(200%) grayscale(50%) blur(.1em) saturate(120%);}
 .article-content:hover.dark-mode {background: radial-gradient(rgba(0, 0, 0, .2), rgba(128, 128, 128, 0.2));}
 .article-content.dark-mode {border: solid 1px rgba(255,0,0,.2);
-    background-image: url("/img/bg.png");
+    background-image: url("../img/bg.png");
     background-attachment: scroll;
     background-size: 22000px;
     background-position-x: -200px;

@@ -27,8 +27,8 @@ netlify dev
 
 <h3 id="SPA Navigation & Content Loading">SPA Navigation & Content Loading</h3>
 
-- [spa.js](/js/spa.js) For SPA (Single Page App) routing across different hosting environments, the app uses [netlify.toml](/netlify.toml) on Netlify, or 
-- [404.html](/404.html) & [github-pages.js](/js/github-pages.js) on [GitHub Pages](https://i1li.github.io/), or
+- [spa.js](/src/js/spa.js) For SPA (Single Page App) routing across different hosting environments, the app uses [netlify.toml](/netlify.toml) on Netlify, or 
+- [404.html](/404.html) & [github-pages.js](/src/js/github-pages.js) on [GitHub Pages](https://i1li.github.io/), or
 - [serv.js](/serv.js) elsewhere.
 - Enables seamless navigation within the application without full page reloads, improving user experience without complication of a framework.
 - Default "display all posts" view at root directory, with posts auto-expanding upon scroll, shows a welcome intro message & navigation links at top of page.
@@ -42,13 +42,13 @@ netlify dev
 - Allows proper permalinks for specific areas of posts (target links, a.k.a. hashlinks or subpages), so they get a url of /route/target instead of /route#target
 - [Demo at /edu/mind](https://y0.netlify.app/edu/mind)
 
-<h3 id="Lightest YouTube Embed"><a href="https://github.com/i1li/lightest-youtube-embed">Lightest Youtube Embed</a> - (<a href="/js/youtube-embed.js">youtube-embed.js</a>)</h3>
+<h3 id="Lightest YouTube Embed"><a href="https://github.com/i1li/lightest-youtube-embed">Lightest Youtube Embed</a> - (<a href="/src/yt/youtube-embed.js">youtube-embed.js</a>)</h3>
 
 - Easy to use YouTube embed that saves space, bandwidth, & privacy. With a bare amount of code (`<y-t v="videoid"></y-t>`), it responsively fits videos & playlists that only load once user clicks play button. [Demo at /edu](https://y0.netlify.app/edu/)
 - Includes a remote control function at bottom right of page, allowing quick media control while navigating throughout the site.
 - Automatically stops any current playing videos if user clicks play on another video.
 
-<h3 id="Simple Toggle (display-toggle.js)"><a href="/js/display-toggle.js">Simple Toggle (display-toggle.js)</a></h3>
+<h3 id="Simple Toggle (display-toggle.js)"><a href="/src/js/display-toggle.js">Simple Toggle (display-toggle.js)</a></h3>
 
 - Stripped version of Lightest Youtube Embed to toggle display of any iframe or other content. [Demo at /jesus-and-his-religion](https://y0.netlify.app/jesus-and-his-religion/)
 
@@ -82,30 +82,37 @@ The hybrid shuffle function combines two different techniques to optimize perfor
 
 <h3 id="Light/Dark Mode Toggle">Light/Dark Mode Toggle</h3>
 
-- [light-dark.js](/js/light-dark.js) Allows users to switch between light & dark themes, enhancing accessibility & user preference.
+- [light-dark.js](/src/js/light-dark.js) Allows users to switch between light & dark themes, enhancing accessibility & user preference.
 - Utilizes `window.matchMedia` to detect & respect the system's preferred color scheme, & `localStorage` to persist the user's theme choice across sessions.
 
 <h3 id="Zoom In/Out Functionality">Zoom In/Out Functionality</h3>
   
-- [zoom.js](/js/zoom.js) Provides users with the ability to adjust the text size for better readability.
+- [zoom.js](/src/js/zoom.js) Provides users with the ability to adjust the text size for better readability.
 - Dynamically adjusts the font size of key elements on the page based on user interaction, with the zoom level persisted in `localStorage`.
 
-<h3 id="Full Screen Image Overlay"><a href="/js/image-overlay.js">Full Screen Image Overlay (image-overlay.js)</a></h3>
+<h3 id="Full Screen Image Overlay"><a href="/src/js/image-overlay.js">Full Screen Image Overlay (image-overlay.js)</a></h3>
 
 - Responsive full screen overlay when user clicks to expand image. Exits by clicking anywhere, pressing any key, or clicking "x"
 
 <h3 id="Background Gradient Shift, & other CSS Effects">Background Gradient Shift, & other CSS Effects</h3>
 
-- [background.js](/js/background.js) & [background.css](/css/background.css) create a constantly shifting, full-spectrum gradient.
+- [background.js](/src/js/background.js) & [background.css](/src/css/background.css) create a constantly shifting, full-spectrum gradient.
 - Several layers of semi-transparent gradients for background & page elements.
 - Dynamic cursor hover & filter effects.
-- [color-change.js](/js/color-change.js) - Random color on hover, click, or touch of links and buttons. Also shifts colors of other elements at randomly varying rate, regardless of hover.
+- [color-change.js](/src/js/color-change.js) - Random color on hover, click, or touch of links and buttons. Also shifts colors of other elements at randomly varying rate, regardless of hover.
 
 <h3 id="Sticky Header & Scroll-to-Top Button">Sticky Header & Scroll-to-Top Button</h3>
 
-- [scroll.js](/js/scroll.js) Improves navigation & accessibility by providing a sticky header & a convenient way to return to the top of the page.  
+- [scroll.js](/src/js/scroll.js) Improves navigation & accessibility by providing a sticky header & a convenient way to return to the top of the page.  
 - The sticky header adjusts its style based on the scroll position, becoming more compact as the user scrolls down.
 - A "scroll to top" button appears after scrolling down, allowing quick return to the top of the page with a single click.
+
+<h3 id="Custom Build Script">Custom Build Script</h3>
+- [build.js](build.js) minifies and bundles files from /src to /dist
+To use, ```bash
+npm i esbuild
+node build.js
+```
 
 <h3 id="Responsive Design">Responsive Design</h3>
 
@@ -119,7 +126,7 @@ The hybrid shuffle function combines two different techniques to optimize perfor
 
 <h3 id="Device Detection">Device Detection</h3>
 
-- [detect-mobile.js](/js/detect-mobile.js) - Detects when the page is loaded from a mobile device, to save processing power from being used on extra effects that are less likely to work on mobile devices, like in [background.js](/js/background.js) and [color-change.js](/js/color-change.js)
+- [detect-mobile.js](/src/js/detect-mobile.js) - Detects when the page is loaded from a mobile device, to save processing power from being used on extra effects that are less likely to work on mobile devices, like in [background.js](/src/js/background.js) and [color-change.js](/src/js/color-change.js)
 
 <h3 id="Automatic External Links Handling">Automatic External Links Handling</h3>
 

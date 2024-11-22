@@ -1,11 +1,12 @@
 require('dotenv').config();
 const PORT = process.env.PORT || 5000;
 const express = require('express');
+const path = require('path');
 const serv = express();
 const { exec } = require('child_process');
-serv.use(express.static(__dirname));
+serv.use(express.static(path.join(__dirname, 'dist')));
 serv.get('*', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
     new URL(req.url, `http://${req.headers.host}`);
 });
 serv.listen(PORT, () => {
