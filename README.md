@@ -108,8 +108,10 @@ The hybrid shuffle function combines two different techniques to optimize perfor
 - A "scroll to top" button appears after scrolling down, allowing quick return to the top of the page with a single click.
 
 <h3 id="Custom Build Script">Custom Build Script</h3>
+
 - [build.js](build.js) minifies and bundles files from /src to /dist
-To use, ```bash
+To use:
+ ```bash
 npm i esbuild
 node build.js
 ```
