@@ -2,7 +2,7 @@ const esbuild = require('esbuild');
 const fs = require('fs');
 const path = require('path');
 let html = fs.readFileSync('src/index.html', 'utf8');
-const itemsToCopy = ['favicon.ico', '404.html', 'img', 'netlify.toml'];
+const itemsToCopy = ['favicon.ico', '404.html', 'img'];
 const addComment = (content, fileType) => {
     const comment = "Hello and God bless! Christ is King! https://github.com/i1li/i";
     switch(fileType) {
