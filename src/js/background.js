@@ -25,18 +25,18 @@ function easeWithNoise(t, noiseScale = 0.1, noiseAmplitude = 0.05) {
 }
 const box = document.getElementById("box");
 const overlay = document.getElementById("overlay");
-window.addEventListener('focus', () => isWindowActive = true);
-window.addEventListener('blur', () => isWindowActive = false);
 let lastUpdateTime = performance.now();
 let accumulatedTime = 0;
 const intervalDuration = 300;
-document.addEventListener('visibilitychange', () => {
-  isWindowActive = !document.hidden;
-  if (!document.hidden) {
-    lastUpdateTime = performance.now();
-    accumulatedTime = 0;
-  }
-});
+window.addEventListener('focus', throttle(() => isWindowActive = true, 500));
+window.addEventListener('blur', throttle(() => isWindowActive = false, 500));
+document.addEventListener('visibilitychange', throttle(() => {
+    isWindowActive = !document.hidden;
+    if (!document.hidden) {
+      lastUpdateTime = performance.now();
+      accumulatedTime = 0;
+    }
+  }, 500));  
 function randomlyModifyValue(value, minFactor = 0.85, maxFactor = 1.15) {
   if (Math.random() < 0.333) {
     const factor = Math.random() * (maxFactor - minFactor) + minFactor;
@@ -107,16 +107,6 @@ function setGradient(element, state, isOverlay = false) {
   element.style.opacity = state.currentOpacity;    
   element.style.filter = `contrast(${state.currentContrast}%) brightness(${state.currentBrightness}%) saturate(${state.currentSaturation}%) hue-rotate(${state.hueShift}deg)`;
 }
-function updateColors(timestamp) {
-  const deltaTime = timestamp - lastUpdateTime;
-  accumulatedTime += deltaTime;
-  updateLayerState(boxState, false, deltaTime);
-  updateLayerState(overlayState, true, deltaTime);
-  setGradient(box, boxState);
-  setGradient(overlay, overlayState, true);
-  lastUpdateTime = timestamp;
-  requestAnimationFrame(updateColors);
-}
 function updateLayerState(state, isOverlay, deltaTime) {
   state.intervalCount += deltaTime;
   state.transitionProgress += (deltaTime / state.transitionDuration) * (.2 + (Math.random() * .5));
@@ -145,7 +135,20 @@ function updateLayerState(state, isOverlay, deltaTime) {
     state.targetOpacity = getRandomOpacityValue(isOverlay);
   }
 }
-if (isWindowActive) {requestAnimationFrame(updateColors);}
-
-
+function updateColors(timestamp) {
+    const deltaTime = timestamp - lastUpdateTime;
+    accumulatedTime += deltaTime;
+    updateLayerState(boxState, false, deltaTime);
+    updateLayerState(overlayState, true, deltaTime);
+    setGradient(box, boxState);
+    setGradient(overlay, overlayState, true);
+    lastUpdateTime = timestamp;
+    throttledAnimationFrame(updateColors);
+}
+const throttledAnimationFrame = throttle((callback) => {
+    requestAnimationFrame(callback);
+  }, 16);
+  if (isWindowActive) {
+    throttledAnimationFrame(updateColors);
+  }
 }
