@@ -1,3 +1,5 @@
+# This is just the example GitHub workflow (https://github.com/actions/starter-workflows/blob/main/pages/static.yml) edited to serve only the /dist folder to GitHub Pages. The "static" limitation is overcome with the script in 404.html (https://github.com/i1li/i/blob/main/src/404.html)
+
 name: Deploy static content to Pages from /dist
 on:
   push:
