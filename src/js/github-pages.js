@@ -11,9 +11,11 @@
 // the single page app to route accordingly.
 
 // Updated to modern syntax in 2024 for https://github.com/i1li/i
-if (window.SPA404Redirect) {
-  const decoded = window.SPA404Redirect.search.slice(1).split('&').map(s => s.replace(/~and~/g, '&')).join('?');
-  const newUrl = window.SPA404Redirect.origin + window.SPA404Redirect.pathname.slice(0, -1) + decoded + window.SPA404Redirect.hash;
-  window.history.replaceState(null, null, newUrl);
-  delete window.SPA404Redirect;
-}
+(() => {
+  if (window.SPA404Redirect) {
+    const decoded = window.SPA404Redirect.search.slice(1).split('&').map(s => s.replace(/~and~/g, '&')).join('?');
+    const newUrl = window.SPA404Redirect.origin + window.SPA404Redirect.pathname.slice(0, -1) + decoded + window.SPA404Redirect.hash;
+    window.history.replaceState(null, null, newUrl);
+    delete window.SPA404Redirect;
+  }
+})();
