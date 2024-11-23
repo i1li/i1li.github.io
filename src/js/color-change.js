@@ -1,23 +1,19 @@
-// Only run this code on non-mobile devices
 if (!isMobile) {
 const hoverShift = document.querySelectorAll('button, a, a.dark-mode, footer, .article-nav-bottom, #site-nav a, .section-nav a');
 const alwaysShift = document.querySelectorAll('header, #site-nav .col, .section-nav .col, .article-header, footer, .article-title, #site-title, #toolbar');
 function getRandomDegree() {return Math.random() < 0.5 ? Math.floor(Math.random() * -270) - 45 : Math.floor(Math.random() * 270) + 46;}
-function getNewIntervalsTillNextChange() {return Math.floor(Math.random() * 5) + 7;}
-function getRandomInterval() {return Math.floor(Math.random() * 1000) + 333;}
-let isWindowActive = !document.hidden;
-document.addEventListener('visibilitychange', () => {
-    isWindowActive = !document.hidden;
-});
-window.addEventListener('focus', () => isWindowActive = true);
-window.addEventListener('blur', () => isWindowActive = false);
+function getNewIntervalsTillNextChange() {return Math.floor(Math.random() * 30) + 20;}
+function getRandomInterval() {return Math.floor(Math.random() * 1000) + 500;}
 function isElementInViewport(el) {
   const rect = el.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+  const verticalEdgeThreshold = viewportHeight * 0.5;
   return (
-    rect.top >= 0 &&
+    rect.top >= -verticalEdgeThreshold &&
     rect.left >= 0 &&
-    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    rect.bottom <= viewportHeight + verticalEdgeThreshold &&
+    rect.right <= viewportWidth
   );
 }
 function startShift(element, interval, isHover = false) {
@@ -29,9 +25,12 @@ function startShift(element, interval, isHover = false) {
   let targetContrast = 100;
   let currentBrightness = 100;
   let targetBrightness = 100;
-  let intervalCount = 0;
+  let progress = 0;
   let intervalsTillNextChange = getNewIntervalsTillNextChange();
+  let lastTime = performance.now();
+  let isRunning = true;
   function updateFilter() {
+    if (!isRunning) return;
     element.style.filter = `
       hue-rotate(${currentDegree}deg)
       saturate(${currentSaturation}%)
@@ -40,54 +39,68 @@ function startShift(element, interval, isHover = false) {
       ${isHover ? 'drop-shadow(0 0 1em rgba(255, 255, 255, 0.5))' : ''}
     `;
   }
-  updateFilter();
-  return setInterval(() => {
+  function animate(time) {
+    if (!isRunning) return;
     if (isWindowActive && isElementInViewport(element)) {
-      intervalCount++;
-      if (intervalCount >= intervalsTillNextChange) {
+      const deltaTime = time - lastTime;
+      lastTime = time;
+      progress += deltaTime / (interval * intervalsTillNextChange);
+      if (progress >= 1) {
         targetDegree += getRandomDegree();
         targetSaturation = Math.random() * (125 - 90) + 90;
         targetContrast = Math.random() * (isHover ? 170 - 80 : 120 - 80) + 80;
         targetBrightness = Math.random() * (isHover ? 135 - 85 : 110 - 90) + (isHover ? 85 : 90);
-        intervalCount = 0;
+        progress = 0;
         intervalsTillNextChange = getNewIntervalsTillNextChange();
       }
-      currentDegree += (targetDegree - currentDegree) * (Math.random() * 0.015);
-      currentSaturation += (targetSaturation - currentSaturation) * (Math.random() * 0.015);
-      currentContrast += (targetContrast - currentContrast) * (Math.random() * 0.015);
-      currentBrightness += (targetBrightness - currentBrightness) * (Math.random() * 0.015);
+      const t = easeWithNoise(progress);
+      currentDegree += (targetDegree - currentDegree) * t;
+      currentSaturation += (targetSaturation - currentSaturation) * t;
+      currentContrast += (targetContrast - currentContrast) * t;
+      currentBrightness += (targetBrightness - currentBrightness) * t;
       updateFilter();
     }
-  }, interval);
+    if (isRunning) {
+      requestAnimationFrame(animate);
+    }
+  }
+  requestAnimationFrame(animate);
+  return () => {
+    isRunning = false;
+    element.style.filter = 'none';
+  };
 }
-function handleDisengage(element, intervalId) {
-  clearInterval(intervalId);
+function handleDisengage(element, stopAnimationFunction) {
+  if (stopAnimationFunction) {
+    stopAnimationFunction();
+  }
   element.style.filter = 'none';
 }
 alwaysShift.forEach((element) => {
-  element.intervalId = throttle(() => {
+  element.animateFunction = throttle(() => {
     return startShift(element, getRandomInterval());
-  }, 20)();
+  }, 30)();
 });
 hoverShift.forEach(element => {
-  let intervalId;
+  let stopAnimationFunction;
   let disengageTimeout;
   element.addEventListener('mouseover', throttle(() => {
-    intervalId = startShift(element, getRandomInterval(), true);
-  }, 80));  
+    if (stopAnimationFunction) stopAnimationFunction();
+    stopAnimationFunction = startShift(element, getRandomInterval(), true);
+  }, 30));  
   element.addEventListener('click', () => {
-    clearInterval(intervalId);
-    intervalId = startShift(element, getRandomInterval(), true);
+    if (stopAnimationFunction) stopAnimationFunction();
+    stopAnimationFunction = startShift(element, getRandomInterval(), true);
   });
   element.addEventListener('touchstart', () => {
-    clearInterval(intervalId);
-    intervalId = startShift(element, getRandomInterval(), true);
-    disengageTimeout = setTimeout(() => handleDisengage(element, intervalId), 888);
+    if (stopAnimationFunction) stopAnimationFunction();
+    stopAnimationFunction = startShift(element, getRandomInterval(), true);
+    disengageTimeout = setTimeout(() => handleDisengage(element, stopAnimationFunction), 888);
   });
   element.addEventListener('mouseout', debounce(() => {
-    handleDisengage(element, intervalId);
-  }, 20));
-  });
+    handleDisengage(element, stopAnimationFunction);
+  }, 30));
+});
 }
 function debounce(func, delay) {
   let timeoutId;
