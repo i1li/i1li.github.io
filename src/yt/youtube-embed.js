@@ -139,13 +139,10 @@ class YTEmbed extends HTMLElement {
       nowPlayingText.style.opacity = '0';
       nowPlayingText.style.pointerEvents = 'none';
       document.body.appendChild(nowPlayingText);
-      const expandIcon = document.createElement('img');
-      expandIcon.src = '/yt/expand-icon.png';
-      expandIcon.alt = 'Expand Remote Control';
+      const expandIcon = document.createElement('div');
       expandIcon.id = 'expand-icon';
-      expandIcon.style.opacity = '0';
-      expandIcon.style.pointerEvents = 'none';
-      document.body.appendChild(expandIcon);
+      expandIcon.setAttribute('aria-label', 'Expand Remote Control');
+      document.body.appendChild(expandIcon);      
       const showRemoteControl = () => {
         remoteControl.style.opacity = '0.7';
         remoteControl.style.pointerEvents = 'auto';

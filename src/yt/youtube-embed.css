@@ -16,11 +16,14 @@
 }
 #expand-icon {
   width: 2.5rem;
-  opacity: .2;
   position: fixed;
   bottom: 5rem;
   right: .2rem;
-  padding: 1em 0 0 1em;
+  padding:1rem 0;
+  background-image:url(../img/expand-icon.png);
+  background-repeat:no-repeat;
+  background-size: cover;
+  background-position:center;
 }
 #now-playing-text {
   font-size: .7rem;
