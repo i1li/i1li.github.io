@@ -1,42 +1,20 @@
-let isWindowActive = !document.hidden;
 if (!isMobile) {
-function easeInOutCubic(t) {
-  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-}
-const permutation = [...Array(256)].map(() => Math.floor(Math.random() * 256));
-const p = [...permutation, ...permutation];
-function fade(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
-function lerp(t, a, b) { return a + t * (b - a); }
-function grad(hash, x) {
-    const h = hash & 15;
-    const grad = 1 + (h & 7);
-    return (h & 8 ? -grad : grad) * x;
-}
-function noise(x) {
-    const X = Math.floor(x) & 255;
-    x -= Math.floor(x);
-    const u = fade(x);
-    return lerp(u, grad(p[X], x), grad(p[X+1], x-1));
-}
-function easeWithNoise(t, noiseScale = 0.1, noiseAmplitude = 0.05) {
-    const easedT = easeInOutCubic(t);
-    const noiseValue = noise(t * noiseScale) * noiseAmplitude;
-    return Math.max(0, Math.min(1, easedT + noiseValue));
-}
-const box = document.getElementById("box");
-const overlay = document.getElementById("overlay");
 let lastUpdateTime = performance.now();
 let accumulatedTime = 0;
 const intervalDuration = 300;
 window.addEventListener('focus', throttle(() => isWindowActive = true, 500));
 window.addEventListener('blur', throttle(() => isWindowActive = false, 500));
 document.addEventListener('visibilitychange', throttle(() => {
-    isWindowActive = !document.hidden;
-    if (!document.hidden) {
-      lastUpdateTime = performance.now();
-      accumulatedTime = 0;
-    }
-  }, 500));  
+  isWindowActive = !document.hidden;
+  if (!document.hidden) {
+    lastUpdateTime = performance.now();
+    accumulatedTime = 0;
+  }
+}, 500));  
+const shiftLayer1 = document.getElementById("shift-layer1");
+const shiftLayer2 = document.getElementById("shift-layer2");
+let shiftLayer1State = createLayerState(false);
+let shiftLayer2State = createLayerState(true);
 function randomlyModifyValue(value, minFactor = 0.85, maxFactor = 1.15) {
   if (Math.random() < 0.333) {
     const factor = Math.random() * (maxFactor - minFactor) + minFactor;
@@ -44,51 +22,49 @@ function randomlyModifyValue(value, minFactor = 0.85, maxFactor = 1.15) {
   }
   return Math.round(value);
 }
-function getRandomInRange(isOverlay, min, max, modifier = 1) {
-  return isOverlay ? randomlyModifyValue(Math.random() * (max - min) + min) * modifier : randomlyModifyValue(Math.random() * (max - min) + min) * modifier;
+function getRandomInRange(isShiftLayer2, min, max, modifier = 1) {
+  return isShiftLayer2 ? randomlyModifyValue(Math.random() * (max - min) + min) * modifier : randomlyModifyValue(Math.random() * (max - min) + min) * modifier;
 }
-function getRandomHueIncrement(isOverlay) {
-  return getRandomInRange(isOverlay, -3, 3);
+function getRandomHueIncrement(isShiftLayer2) {
+  return getRandomInRange(isShiftLayer2, -3, 3);
 }
-function getIntervalsTillNextChange(isOverlay) {
-  return getRandomInRange(isOverlay, 10, 20);
+function getIntervalsTillNextChange(isShiftLayer2) {
+  return getRandomInRange(isShiftLayer2, 10, 20);
 }
-function getRandomFilterValue(isOverlay) {
-  return getRandomInRange(isOverlay, 87, 185);
+function getRandomFilterValue(isShiftLayer2) {
+  return getRandomInRange(isShiftLayer2, 87, 185);
 }
-function getRandomOpacityValue(isOverlay) {
-  return getRandomInRange(isOverlay, 0.6, 1);
+function getRandomOpacityValue(isShiftLayer2) {
+  return getRandomInRange(isShiftLayer2, 0.6, 1);
 }
-function getRandomHueStep(isOverlay) {
-  return isOverlay ? 7 * Math.ceil(Math.random() * 3) : randomlyModifyValue(Math.ceil(Math.random() * 5) + 2);
+function getRandomHueStep(isShiftLayer2) {
+  return isShiftLayer2 ? 7 * Math.ceil(Math.random() * 3) : randomlyModifyValue(Math.ceil(Math.random() * 5) + 2);
 }
-function createLayerState(isOverlay) {
-  const intervalsTillNextChange = getIntervalsTillNextChange(isOverlay);
+function createLayerState(isShiftLayer2) {
+  const intervalsTillNextChange = getIntervalsTillNextChange(isShiftLayer2);
   return {
-    hueIncrement: getRandomHueIncrement(isOverlay),
+    hueIncrement: getRandomHueIncrement(isShiftLayer2),
     intervalCount: 0,
-    intervalsTillNextChange: intervalsTillNextChange,
+    intervalsTillNextChange: isShiftLayer2 ? intervalsTillNextChange : Math.round(intervalsTillNextChange * Math.random()),
     transitionProgress: 0,
-    transitionDuration: isOverlay ? intervalsTillNextChange * intervalDuration : 0,
-    currentHueStep: getRandomHueStep(isOverlay),
+    transitionDuration: intervalsTillNextChange * intervalDuration,
+    currentHueStep: getRandomHueStep(isShiftLayer2),
     currentContrast: 100,
     currentBrightness: 100,
     currentSaturation: 100,
     currentOpacity: 0.75,
-    targetHueStep: getRandomHueStep(isOverlay),
-    targetContrast: getRandomFilterValue(isOverlay),
-    targetBrightness: getRandomFilterValue(isOverlay),
-    targetSaturation: getRandomFilterValue(isOverlay),
-    targetOpacity: getRandomOpacityValue(isOverlay),
+    targetHueStep: getRandomHueStep(isShiftLayer2),
+    targetContrast: getRandomFilterValue(isShiftLayer2),
+    targetBrightness: getRandomFilterValue(isShiftLayer2),
+    targetSaturation: getRandomFilterValue(isShiftLayer2),
+    targetOpacity: getRandomOpacityValue(isShiftLayer2),
     hueShift: 0
   };
 }
-let boxState = createLayerState(false);
-let overlayState = createLayerState(true);
-function setGradient(element, state, isOverlay = false) {
+function setGradient(element, state, isShiftLayer2 = false) {
   function getAdjustedHue(currentStep, hueAngle) {
-      return (currentStep * hueAngle);
-      }
+    return (currentStep * hueAngle);
+    }
   const width = element.offsetWidth || element.clientWidth; 
   const height = element.offsetHeight || element.clientHeight;
   const diagonal = Math.sqrt(width * width + height * height);
@@ -100,19 +76,19 @@ function setGradient(element, state, isOverlay = false) {
     const angle = i * hueAngle;
     const x = 50 + 50 * Math.cos(angle * Math.PI / 180);
     const y = 50 + 50 * Math.sin(angle * Math.PI / 180);
-    const currentStep = isOverlay ? i + state.currentHueStep : i;
+    const currentStep = isShiftLayer2 ? i + state.currentHueStep : i;
     gradients.push(`radial-gradient(ellipse farthest-corner at ${x}% ${y}%, hsl(${getAdjustedHue(currentStep, hueAngle)}, 100%, 50%), transparent ${percentage}%)`);
   }
   element.style.backgroundImage = gradients.join(', ');
   element.style.opacity = state.currentOpacity;    
   element.style.filter = `contrast(${state.currentContrast}%) brightness(${state.currentBrightness}%) saturate(${state.currentSaturation}%) hue-rotate(${state.hueShift}deg)`;
 }
-function updateLayerState(state, isOverlay, deltaTime) {
+function updateLayerState(state, isShiftLayer2, deltaTime) {
   state.intervalCount += deltaTime;
   state.transitionProgress += (deltaTime / state.transitionDuration) * (.2 + (Math.random() * .5));
   if (state.transitionProgress > 1) state.transitionProgress = 1;
   const t = easeWithNoise(state.transitionProgress);
-  if (isOverlay) {
+  if (isShiftLayer2) {
     state.currentHueStep += (state.targetHueStep - state.currentHueStep) * (t * 0.0005) * Math.random();
   } else {
     state.currentHueStep += (state.targetHueStep - state.currentHueStep) * (t * 0.005) * Math.random();
@@ -125,30 +101,30 @@ function updateLayerState(state, isOverlay, deltaTime) {
   if (state.intervalCount >= state.intervalsTillNextChange * intervalDuration) {
     state.intervalCount = 0;
     state.transitionProgress = 0;
-    state.hueIncrement = getRandomHueIncrement(isOverlay);
-    state.intervalsTillNextChange = getIntervalsTillNextChange(isOverlay);
+    state.hueIncrement = getRandomHueIncrement(isShiftLayer2);
+    state.intervalsTillNextChange = getIntervalsTillNextChange(isShiftLayer2);
     state.transitionDuration = state.intervalsTillNextChange * intervalDuration;
-    state.targetHueStep = getRandomHueStep(isOverlay);
-    state.targetContrast = getRandomFilterValue(isOverlay);
-    state.targetBrightness = getRandomFilterValue(isOverlay);
-    state.targetSaturation = getRandomFilterValue(isOverlay);
-    state.targetOpacity = getRandomOpacityValue(isOverlay);
+    state.targetHueStep = getRandomHueStep(isShiftLayer2);
+    state.targetContrast = getRandomFilterValue(isShiftLayer2);
+    state.targetBrightness = getRandomFilterValue(isShiftLayer2);
+    state.targetSaturation = getRandomFilterValue(isShiftLayer2);
+    state.targetOpacity = getRandomOpacityValue(isShiftLayer2);
   }
 }
 function updateColors(timestamp) {
     const deltaTime = timestamp - lastUpdateTime;
     accumulatedTime += deltaTime;
-    updateLayerState(boxState, false, deltaTime);
-    updateLayerState(overlayState, true, deltaTime);
-    setGradient(box, boxState);
-    setGradient(overlay, overlayState, true);
+    updateLayerState(shiftLayer1State, false, deltaTime);
+    updateLayerState(shiftLayer2State, true, deltaTime);
+    setGradient(shiftLayer1, shiftLayer1State);
+    setGradient(shiftLayer2, shiftLayer2State, true);
     lastUpdateTime = timestamp;
     throttledAnimationFrame(updateColors);
 }
 const throttledAnimationFrame = throttle((callback) => {
     requestAnimationFrame(callback);
-  }, 16);
-  if (isWindowActive) {
-    throttledAnimationFrame(updateColors);
-  }
+}, 16);
+if (isWindowActive) {
+  throttledAnimationFrame(updateColors);
+}
 }

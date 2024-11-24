@@ -4,13 +4,15 @@ const express = require('express');
 const path = require('path');
 const serv = express();
 const { exec } = require('child_process');
-serv.use(express.static(path.join(__dirname, 'dist')));
+const isDev = process.argv.includes('dev');
+const staticDir = isDev ? 'src' : 'dist';
+serv.use(express.static(path.join(__dirname, staticDir)));
 serv.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    res.sendFile(path.join(__dirname, staticDir, 'index.html'));
     new URL(req.url, `http://${req.headers.host}`);
 });
 serv.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT} - \x1b[34mhttp://localhost:${PORT}/\x1b[0m`);
+    console.log(`Server is running on port ${PORT} in ${isDev ? 'development' : 'production'} mode - \x1b[34mhttp://localhost:${PORT}/\x1b[0m`);
     openBrowser(`http://localhost:${PORT}/`);
 });
 function openBrowser(url) {

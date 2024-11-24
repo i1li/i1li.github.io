@@ -52,18 +52,18 @@
     border-radius:0;
     mix-blend-mode: color;
 }
-#box, #overlay {
+#shift-layer1, #shift-layer2 {
     width: 100%;
     height: 100%;
     position: fixed;
     top: 0;
     left: 0;
 }
-#box {
+#shift-layer1 {
     mix-blend-mode: difference;
     z-index:3;
 }
-#overlay {
+#shift-layer2 {
     mix-blend-mode: overlay;
     z-index:2;
 }

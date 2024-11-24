@@ -264,23 +264,3 @@ class YTEmbed extends HTMLElement {
   }
 }
 customElements.define('y-t', YTEmbed);
-function throttle(func, limit) {
-  let lastFunc;
-  let lastRan;
-  return function() {
-    const context = this;
-    const args = arguments;
-    if (!lastRan) {
-      func.apply(context, args);
-      lastRan = Date.now();
-    } else {
-      clearTimeout(lastFunc);
-      lastFunc = setTimeout(function() {
-        if ((Date.now() - lastRan) >= limit) {
-          func.apply(context, args);
-          lastRan = Date.now();
-        }
-      }, Math.max(0, limit - (Date.now() - lastRan)));
-    }
-  }
-}
