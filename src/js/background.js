@@ -38,7 +38,7 @@ function getRandomFilterValue(element) {
   return Math.round(randomValue * 10) / 10; 
 }
 function getRandomOpacityValue(element) {
-  const randomValue = getRandomInRange(0.6, 1, 1, element);
+  const randomValue = getRandomInRange(65, 95, 1, element);
   return Math.round(randomValue * 10) / 10; 
 }
 function getRandomGradientSteps(element) {
@@ -86,8 +86,7 @@ function setGradient(element, state) {
     gradients.push(`radial-gradient(ellipse farthest-corner at ${Math.round(x * 10) / 10}% ${Math.round(y * 10) / 10}%, hsl(${getAdjustedHue(currentGradientStep, gradientAngle)}, 100%, 50%), transparent ${Math.round(percentage * 10) / 10}%)`);
   }
   element.style.backgroundImage = gradients.join(', ');
-  element.style.opacity = state.currentOpacity;    
-  element.style.filter = `contrast(${state.currentContrast}%) brightness(${state.currentBrightness}%) saturate(${state.currentSaturation}%) hue-rotate(${state.currentHueShift}deg)`;
+  element.style.filter = `opacity(${state.currentOpacity}%) contrast(${state.currentContrast}%) brightness(${state.currentBrightness}%) saturate(${state.currentSaturation}%) hue-rotate(${state.currentHueShift}deg)`;
 }
 function updateLayerState(state, element, deltaTime) {
   const { currentLayer } = getShiftLayerInfo(element);

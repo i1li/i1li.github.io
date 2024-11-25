@@ -54,10 +54,10 @@ function startShift(element, interval, isHover = false) {
         intervalsTillNextChange = getNewIntervalsTillNextChange();
       }
       const t = () => metaRecursiveEaseNoise(progress);
-      currentDegree += (targetDegree - currentDegree) * t();
-      currentSaturation += (targetSaturation - currentSaturation) * t();
-      currentContrast += (targetContrast - currentContrast) * t();
-      currentBrightness += (targetBrightness - currentBrightness) * t();
+      currentDegree += Math.round((targetDegree - currentDegree) * t() * 10) / 10;
+      currentSaturation += Math.round((targetSaturation - currentSaturation) * t() * 10) / 10;
+      currentContrast += Math.round((targetContrast - currentContrast) * t() * 10) / 10;
+      currentBrightness += Math.round((targetBrightness - currentBrightness) * t() * 10) / 10;
       updateFilter();
     }
     if (isRunning) {
