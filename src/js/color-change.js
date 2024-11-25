@@ -2,8 +2,7 @@ if (!isMobile) {
 const hoverShift = document.querySelectorAll('button, a, a.dark-mode, footer, .article-nav-bottom, #site-nav a, .section-nav a');
 const alwaysShift = document.querySelectorAll('header, #site-nav .col, .section-nav .col, .article-header, footer, .article-title, #site-title, #toolbar');
 function getRandomDegree() {return Math.random() < 0.5 ? Math.floor(Math.random() * -270) - 45 : Math.floor(Math.random() * 270) + 46;}
-function getNewIntervalsTillNextChange() {return Math.floor(Math.random() * 30) + 20;}
-function getRandomInterval() {return Math.floor(Math.random() * 1000) + 500;}
+function getRandomInterval() {return Math.floor(Math.random() * 5000) + 3000;}
 function isElementInViewport(el) {
   const rect = el.getBoundingClientRect();
   const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
@@ -26,7 +25,6 @@ function startShift(element, interval, isHover = false) {
   let currentBrightness = 100;
   let targetBrightness = 100;
   let progress = 0;
-  let intervalsTillNextChange = getNewIntervalsTillNextChange();
   let lastTime = performance.now();
   let isRunning = true;
   function updateFilter() {
@@ -44,17 +42,16 @@ function startShift(element, interval, isHover = false) {
     if (isWindowActive && isElementInViewport(element)) {
       const deltaTime = time - lastTime;
       lastTime = time;
-      progress += deltaTime / (interval * intervalsTillNextChange);
+      progress += (deltaTime / interval);
       if (progress >= 1) {
-        targetDegree += getRandomDegree();
+        targetDegree = getRandomDegree();
         targetSaturation = Math.random() * (125 - 90) + 90;
         targetContrast = Math.random() * (isHover ? 170 - 80 : 120 - 80) + 80;
         targetBrightness = Math.random() * (isHover ? 135 - 85 : 110 - 90) + (isHover ? 85 : 90);
         progress = 0;
-        intervalsTillNextChange = getNewIntervalsTillNextChange();
       }
       const t = () => metaRecursiveEaseNoise(progress);
-      currentDegree += Math.round((targetDegree - currentDegree) * t() * 10) / 10;
+      currentDegree += Math.round((targetDegree - currentDegree) * t() * .1) / 10;
       currentSaturation += Math.round((targetSaturation - currentSaturation) * t() * 10) / 10;
       currentContrast += Math.round((targetContrast - currentContrast) * t() * 10) / 10;
       currentBrightness += Math.round((targetBrightness - currentBrightness) * t() * 10) / 10;

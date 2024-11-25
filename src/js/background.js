@@ -47,7 +47,6 @@ function getRandomGradientSteps(element) {
 }
 function createLayerState(element) {
   const { currentLayer } = getShiftLayerInfo(element);
-  const intervalsTillNextChange = currentLayer === 2 ? 150 : 400;
   return {
     transitionCurrentTime: 0,
     transitionProgress: 0,
@@ -89,11 +88,11 @@ function setGradient(element, state) {
   element.style.filter = `opacity(${state.currentOpacity}%) contrast(${state.currentContrast}%) brightness(${state.currentBrightness}%) saturate(${state.currentSaturation}%) hue-rotate(${state.currentHueShift}deg)`;
 }
 function updateLayerState(state, element, deltaTime) {
-  const { currentLayer } = getShiftLayerInfo(element);
   state.transitionCurrentTime += deltaTime;
   state.transitionProgress += (deltaTime / state.transitionDuration);
   if (state.transitionProgress > 1) state.transitionProgress = 1;
   const t = () => metaRecursiveEaseNoise(state.transitionProgress);
+  const { currentLayer } = getShiftLayerInfo(element);
   if (currentLayer === 2) {
     state.currentGradientSteps += (state.targetGradientSteps - state.currentGradientSteps) * (t() * 0.0005) * Math.random();
   } else {
@@ -116,18 +115,17 @@ function updateLayerState(state, element, deltaTime) {
     state.targetOpacity = getRandomOpacityValue(element);
   }
 }
-function updateColors(timestamp) {
+function updateColors(updateTime) {
   if (!isWindowActive) {
     requestAnimationFrame(updateColors);
     return;
   }
-  const deltaTime = timestamp - lastUpdateTime;
-  accumulatedTime += deltaTime;
+  const deltaTime = updateTime - lastUpdateTime;
+  lastUpdateTime = updateTime;
   updateLayerState(shiftLayer1State, shiftLayer1, deltaTime);
   updateLayerState(shiftLayer2State, shiftLayer2, deltaTime);
   setGradient(shiftLayer1, shiftLayer1State);
   setGradient(shiftLayer2, shiftLayer2State);
-  lastUpdateTime = timestamp;
   requestAnimationFrame(updateColors);
 }
 requestAnimationFrame(updateColors);

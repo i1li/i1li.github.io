@@ -1,12 +1,10 @@
 let isWindowActive = !document.hidden;
 let lastUpdateTime = performance.now();
-let accumulatedTime = 0;
 const updateWindowStatus = throttle(() => {
   const wasActive = isWindowActive;
-  isWindowActive = !document.hidden && document.hasFocus();
+  isWindowActive = !document.hidden || document.hasFocus();
   if (isWindowActive && !wasActive) {
     lastUpdateTime = performance.now();
-    accumulatedTime = 0;
   }
 }, 500);
 window.addEventListener('focus', updateWindowStatus);

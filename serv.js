@@ -12,7 +12,7 @@ serv.get('*', (req, res) => {
     new URL(req.url, `http://${req.headers.host}`);
 });
 serv.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT} in ${isDev ? 'development' : 'production'} mode - \x1b[34mhttp://localhost:${PORT}/\x1b[0m`);
+    console.log(`Server is running on port ${PORT} in ${isDev ? 'development mode from /src' : 'production mode from /dist'}\n\x1b[34mhttp://localhost:${PORT}/\x1b[0m`);
     openBrowser(`http://localhost:${PORT}/`);
 });
 function openBrowser(url) {
