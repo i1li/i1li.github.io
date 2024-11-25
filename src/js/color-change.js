@@ -8,7 +8,7 @@ function isElementInViewport(el) {
   const rect = el.getBoundingClientRect();
   const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
   const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-  const verticalEdgeThreshold = viewportHeight * 0.5;
+  const verticalEdgeThreshold = viewportHeight * 0.7;
   return (
     rect.top >= -verticalEdgeThreshold &&
     rect.left >= 0 &&
@@ -53,11 +53,11 @@ function startShift(element, interval, isHover = false) {
         progress = 0;
         intervalsTillNextChange = getNewIntervalsTillNextChange();
       }
-      const t = easeWithNoise(progress);
-      currentDegree += (targetDegree - currentDegree) * t;
-      currentSaturation += (targetSaturation - currentSaturation) * t;
-      currentContrast += (targetContrast - currentContrast) * t;
-      currentBrightness += (targetBrightness - currentBrightness) * t;
+      const t = () => metaRecursiveEaseNoise(progress);
+      currentDegree += (targetDegree - currentDegree) * t();
+      currentSaturation += (targetSaturation - currentSaturation) * t();
+      currentContrast += (targetContrast - currentContrast) * t();
+      currentBrightness += (targetBrightness - currentBrightness) * t();
       updateFilter();
     }
     if (isRunning) {

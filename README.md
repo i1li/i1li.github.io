@@ -11,13 +11,20 @@ My favorite features are the <a href="#Lightest YouTube Embed">custom video embe
 <a href="https://app.netlify.com/start/deploy?repository=https://github.com/i1li/i1li.github.io"><img src="img/button-netlify.svg" alt="Deploy to Netlify"></a>
 <a href="https://vscode.dev/github/i1li/i1li.github.io"><img src="img/button-vscode.svg" alt="Open in VSCode"></a><br/>
 <a href="https://y0.netlify.app/">Demo site</a> contains my personal writing & learning resources.<br/>
-<b>Quickstart:</b> Use a quick deploy button above, or clone this repo locally, open a terminal in the project directory,<br/> & enter either:</p>
+<b>Quickstart:</b> Use a quick deploy button above, or clone this repo locally, open a terminal in the project directory,<br/> & enter the following:</p>
 
 ```bash
 npm i express dotenv
 node serv.js
 ```
-<p align="center">(the simplest option), or, if you'd like to use Netlify's <a href="https://www.netlify.com/platform/core/functions/">serverless functions</a>, enter the following. (<a href="#Netlify Content Gate">example of serverless function.</a>)
+This serves the files from `/dist` which are created by `build.js`. If you'd like to test changes you made without running the build script, run:
+
+```bash
+node serv.js dev
+```
+To serve the files from `/src`
+
+<p align="center">Or, if you'd like to use Netlify's <a href="https://www.netlify.com/platform/core/functions/">serverless functions</a>, enter the following. (<a href="#Netlify Content Gate">example of serverless function.</a>)
 </p>
 
 ```bash
@@ -109,8 +116,7 @@ The hybrid shuffle function combines two different techniques to optimize perfor
 
 <h3 id="Custom Build Script">Custom Build Script</h3>
 
-- [build.js](build.js) minifies and bundles files from /src to /dist
-To use:
+- [build.js](build.js) minifies and bundles files from `/src` to `/dist`. To use enter:
  ```bash
 npm i esbuild
 node build.js
