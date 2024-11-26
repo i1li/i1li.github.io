@@ -61,9 +61,7 @@
 }
 #shift-layer1 {
     mix-blend-mode: difference;
-    z-index:3;
 }
 #shift-layer2 {
     mix-blend-mode: overlay;
-    z-index:2;
 }

@@ -1,13 +1,13 @@
 if (!isMobile) {
-const hoverShift = document.querySelectorAll('button, a, a.dark-mode, footer, .article-nav-bottom, #site-nav a, .section-nav a');
-const alwaysShift = document.querySelectorAll('header, #site-nav .col, .section-nav .col, .article-header, footer, .article-title, #site-title, #toolbar');
+const hoverShift = document.querySelectorAll('button, a, .article-nav-bottom, footer');
+const alwaysShift = document.querySelectorAll('header, #site-title, #toolbar, nav .col a, .article-header, .article-title, .section-nav, .section-nav .col a, footer');
 function getRandomDegree() {return Math.random() < 0.5 ? Math.floor(Math.random() * -270) - 45 : Math.floor(Math.random() * 270) + 46;}
 function getRandomInterval() {return Math.floor(Math.random() * 5000) + 3000;}
 function isElementInViewport(el) {
   const rect = el.getBoundingClientRect();
   const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
   const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-  const verticalEdgeThreshold = viewportHeight * 0.7;
+  const verticalEdgeThreshold = viewportHeight * 0.8;
   return (
     rect.top >= -verticalEdgeThreshold &&
     rect.left >= 0 &&

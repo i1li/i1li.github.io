@@ -1,8 +1,11 @@
 const esbuild = require('esbuild');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 let html = fs.readFileSync('src/index.html', 'utf8');
 const itemsToCopy = ['favicon.ico', '404.html', 'img'];
+const cacheBuster = () => crypto.randomBytes(3).toString('hex').slice(0, 5);
+const uniqueHash = cacheBuster();
 const addComment = (content, fileType) => {
     const comment = "Hello and God bless! Christ is King! https://github.com/i1li/i";
     switch(fileType) {
@@ -43,7 +46,7 @@ async function bundleJS() {
     }
     concatenatedJS = concatenatedJS.replace(/\s+/g, ' ');
     concatenatedJS = addComment(concatenatedJS, 'js');
-    fs.writeFileSync('dist/bundle.js', concatenatedJS);
+    fs.writeFileSync(`dist/bundle-${uniqueHash}.js`, concatenatedJS);
 }
 async function bundleCSS() {
     let concatenatedCSS = '';
@@ -57,23 +60,23 @@ async function bundleCSS() {
         concatenatedCSS += result.outputFiles[0].text.trim();
     }
     concatenatedCSS = addComment(concatenatedCSS, 'css');
-    fs.writeFileSync('dist/bundle.css', concatenatedCSS);
+    fs.writeFileSync(`dist/bundle-${uniqueHash}.css`, concatenatedCSS);
 }
 Promise.all([bundleJS(), bundleCSS()])
     .then(() => {
         html = html.replace(/<script.*?<\/script>/g, '');
-        html = html.replace('</body>', '<script src="bundle.js"></script></body>');
+        html = html.replace('</body>', `<script src="bundle-${uniqueHash}.js"></script></body>`);
         html = html.replace(/<link.*?stylesheet.*?>/g, '');
-        html = html.replace('</head>', '<link rel="stylesheet" href="bundle.css"></head>');
+        html = html.replace('</head>', `<link rel="stylesheet" href="bundle-${uniqueHash}.css"></head>`);
         html = html.replace(/\s+/g, ' ');
         html = addComment(html, 'html');
         fs.writeFileSync('dist/index.html', html);
-        console.log('Bundling complete');
+        console.log('Build complete');
     })
-.catch((error) => {
-    console.error('Bundling failed:', error);
-    process.exit(1);
-});
+    .catch((error) => {
+        console.error('Build failed:', error);
+        process.exit(1);
+    });
 const copyFilesAndDirs = (itemsToCopy) => {
     itemsToCopy.forEach(item => {
         const sourcePath = path.join(__dirname, 'src', item);

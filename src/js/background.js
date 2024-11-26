@@ -1,8 +1,10 @@
 if (!isMobile) {
 const shiftLayer1 = document.getElementById("shift-layer1");
 const shiftLayer2 = document.getElementById("shift-layer2");
+const bg = document.getElementById('bg');
 let shiftLayer1State = createLayerState(shiftLayer1);
 let shiftLayer2State = createLayerState(shiftLayer2);
+let bgState = createBgLayerState(bg);
 function getShiftLayerInfo(element) {
   const allLayers = document.querySelectorAll('[id^="shift-layer"]');
   const totalLayers = allLayers.length;
@@ -18,6 +20,9 @@ function randomlyModifyValue(value, minFactor = 0.85, maxFactor = 1.15) {
   return Math.round(value);
 }
 function getRandomInRange(min, max, modifier = 1, element) {
+  if (!element.id.startsWith('shift-layer')) {
+    return (Math.random() * (max - min) + min) * modifier;
+  }
   const { currentLayer, totalLayers } = getShiftLayerInfo(element);
   for (let i = 1; i <= totalLayers; i++) {
     if (currentLayer === i) {
@@ -41,6 +46,10 @@ function getRandomOpacityValue(element) {
   const randomValue = getRandomInRange(65, 95, 1, element);
   return Math.round(randomValue * 10) / 10; 
 }
+function getRandomOpacityValue2(element) {
+  const randomValue = getRandomInRange(.26, .4, 1, element);
+  return Math.round(randomValue * 1000) / 1000; 
+}
 function getRandomGradientSteps(element) {
   const { currentLayer } = getShiftLayerInfo(element);
   return currentLayer === 2 ? 7 * Math.ceil(Math.random() * 3) : randomlyModifyValue(Math.ceil(Math.random() * 5) + 2);
@@ -63,6 +72,21 @@ function createLayerState(element) {
     targetSaturation: getRandomFilterValue(element),
     targetOpacity: getRandomOpacityValue(element),
     targetHueShift: getRandomHueShift(element),
+  };
+}
+function createBgLayerState(element) {
+  let initialOpacity;
+  if (element.id === 'bg') {
+    initialOpacity = 0.33;
+  } else {
+    initialOpacity = 1;
+  }
+  return {
+    transitionCurrentTime: 0,
+    transitionProgress: 0,
+    transitionDuration: getRandomTransitionDuration(element),
+    currentOpacity: initialOpacity,
+    targetOpacity: getRandomOpacityValue2(element),
   };
 }
 function setGradient(element, state) {
@@ -93,16 +117,20 @@ function updateLayerState(state, element, deltaTime) {
   if (state.transitionProgress > 1) state.transitionProgress = 1;
   const t = () => metaRecursiveEaseNoise(state.transitionProgress);
   const { currentLayer } = getShiftLayerInfo(element);
-  if (currentLayer === 2) {
-    state.currentGradientSteps += (state.targetGradientSteps - state.currentGradientSteps) * (t() * 0.0005) * Math.random();
+  if (currentLayer === 1) {
+    state.currentGradientSteps += Math.round((state.targetGradientSteps - state.currentGradientSteps) * (t() * 0.00005) * Math.random() * 10) / 10;
   } else {
-    state.currentGradientSteps += (state.targetGradientSteps - state.currentGradientSteps) * (t() * 0.005) * Math.random();
+    state.currentGradientSteps += Math.round((state.targetGradientSteps - state.currentGradientSteps) * (t() * 0.05) * Math.random() * 10) / 10;
+  }
+  if (currentLayer === 1) {
+    state.currentHueShift += Math.round((state.targetGradientSteps - state.currentHueShift) * (t() * 0.2) * Math.random() * 10) / 10;
+  } else {
+    state.currentHueShift += Math.round((state.targetGradientSteps - state.currentHueShift) * (t() * 0.0005) * Math.random() * 10) / 10;
   }
   state.currentContrast += Math.round((state.targetContrast - state.currentContrast) * t() * 10) / 10;
   state.currentBrightness += Math.round((state.targetBrightness - state.currentBrightness) * t() * 10) / 10;
   state.currentSaturation += Math.round((state.targetSaturation - state.currentSaturation) * t() * 10) / 10;
   state.currentOpacity += Math.round((state.targetOpacity - state.currentOpacity) * t() * 10) / 10;
-  state.currentHueShift += Math.round((state.targetHueShift - state.currentHueShift) * (t() * 0.05) * Math.random() * 10) / 10; 
   if (state.transitionCurrentTime >= state.transitionDuration) {
     state.transitionCurrentTime = 0;
     state.transitionProgress = 0;
@@ -113,6 +141,19 @@ function updateLayerState(state, element, deltaTime) {
     state.targetBrightness = getRandomFilterValue(element);
     state.targetSaturation = getRandomFilterValue(element);
     state.targetOpacity = getRandomOpacityValue(element);
+  }
+}
+function updateBgLayerState(state, element, deltaTime) {
+  state.transitionCurrentTime += deltaTime;
+  state.transitionProgress += (deltaTime / state.transitionDuration) * Math.random();
+  if (state.transitionProgress > 1) state.transitionProgress = 1;
+  const t = () => metaRecursiveEaseNoise(state.transitionProgress);
+  state.currentOpacity += Math.round((state.targetOpacity - state.currentOpacity) * t() * (Math.random() * .1) * 1000) / 1000;
+  if (state.transitionCurrentTime >= state.transitionDuration) {
+    state.transitionCurrentTime = 0;
+    state.transitionProgress = 0;
+    state.transitionDuration = getRandomTransitionDuration(element);
+    state.targetOpacity = element.id === 'bg' ? getRandomOpacityValue2(element) : getRandomOpacityValue(element);
   }
 }
 function updateColors(updateTime) {
@@ -126,6 +167,8 @@ function updateColors(updateTime) {
   updateLayerState(shiftLayer2State, shiftLayer2, deltaTime);
   setGradient(shiftLayer1, shiftLayer1State);
   setGradient(shiftLayer2, shiftLayer2State);
+  updateBgLayerState(bgState, bg, deltaTime);
+  bg.style.opacity = bgState.currentOpacity;
   requestAnimationFrame(updateColors);
 }
 requestAnimationFrame(updateColors);
