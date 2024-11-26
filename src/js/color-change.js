@@ -42,7 +42,7 @@ function startShift(element, interval, isHover = false) {
     if (isWindowActive && isElementInViewport(element)) {
       const deltaTime = time - lastTime;
       lastTime = time;
-      progress += (deltaTime / interval);
+      progress += (deltaTime / interval) * Math.random();
       if (progress >= 1) {
         targetDegree = getRandomDegree();
         targetSaturation = Math.random() * (125 - 90) + 90;
@@ -51,7 +51,7 @@ function startShift(element, interval, isHover = false) {
         progress = 0;
       }
       const t = () => metaRecursiveEaseNoise(progress);
-      currentDegree += Math.round((targetDegree - currentDegree) * t() * .1) / 10;
+      currentDegree += Math.round((targetDegree - currentDegree) * t() * (Math.random() * .15)) / 10;
       currentSaturation += Math.round((targetSaturation - currentSaturation) * t() * 10) / 10;
       currentContrast += Math.round((targetContrast - currentContrast) * t() * 10) / 10;
       currentBrightness += Math.round((targetBrightness - currentBrightness) * t() * 10) / 10;

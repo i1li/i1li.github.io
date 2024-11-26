@@ -148,7 +148,7 @@ function updateBgLayerState(state, element, deltaTime) {
   state.transitionProgress += (deltaTime / state.transitionDuration) * Math.random();
   if (state.transitionProgress > 1) state.transitionProgress = 1;
   const t = () => metaRecursiveEaseNoise(state.transitionProgress);
-  state.currentOpacity += Math.round((state.targetOpacity - state.currentOpacity) * t() * (Math.random() * .1) * 1000) / 1000;
+  state.currentOpacity += Math.round((state.targetOpacity - state.currentOpacity) * t() * (Math.random() * 1) * 1000) / 1000;
   if (state.transitionCurrentTime >= state.transitionDuration) {
     state.transitionCurrentTime = 0;
     state.transitionProgress = 0;
