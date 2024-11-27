@@ -1,82 +1,55 @@
-#bg-wrapper {position: sticky;
-    top:0;
-    width: 100%;
-    height: 100vh;
-    margin-top:-100vh;
+#bg-wrapper {
     background-color: rgb(222, 222, 222);
     background-blend-mode: color-burn;
-    background-attachment: fixed;
-    border-radius:0;}
-#bg-wrapper.dark-mode {position: sticky;
-    top:0;
-    width: 100%;
-    height: 100vh;
-    margin-top:-100vh;
+}
+#bg-wrapper.dark-mode {
     background-color: rgb(0, 0, 0);
     background-blend-mode: color-dodge;
-    border-radius:0;}
-#bg-img {position: relative;
-    top:0;
-    width: 100%;
-    height: 100vh;
+}
+#bg-img {
     background-blend-mode: overlay;
     background-image: url("../img/bg.png");
     background-attachment: fixed;
-    margin-top:-100vh;
-    border-radius:0;}
-#bg-img.dark-mode {position: relative;
-    top:0;
-    width: 100%;
-    height: 100vh;
+}
+#bg-img.dark-mode {
     background-blend-mode: difference;
     background-image: url("../img/bginvert.png");
     background-attachment: fixed;
-    margin-top:-100vh;
-    border-radius:0;}
-#bg-wrapper2 {position: relative;
-    top:0;
-    width: 100%;
-    height: 100vh;
+}
+#bg-wrapper2 {
     background-blend-mode: color-burn;
     backdrop-filter: contrast(155%) saturate(250%);
-    margin-top:-100vh;
     background: linear-gradient(to bottom, 
     rgba(128, 128, 128, .5) 0%,
     rgba(128, 128, 128, .05) 50%,
     rgba(128, 128, 128, .5) 100%);
-    border-radius:0;}
-#bg-wrapper3 {position: relative;
+}
+#bg-wrapper3 {
     opacity: .5;
-    top:0;
-    width: 100%;
-    height: 100vh;
     background-blend-mode: saturation;
     backdrop-filter: contrast(150%) saturate(350%);
-    margin-top:-100vh;
     background: linear-gradient(to right, 
     rgba(128, 128, 128, .5) 0%,
     rgba(128, 128, 128, .3) 15%,
     rgba(128, 128, 128, .05) 50%,
     rgba(128, 128, 128, .3) 85%,
     rgba(128, 128, 128, .5) 100%);
-    border-radius:0;}
-#bg {position: absolute;
-    top: 0;
-    left: 0;
-    opacity: .33;
-    border-radius:0;
-    mix-blend-mode: color;
 }
-#shift-layer1, #shift-layer2 {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
+#bg {
+    opacity: .33;
+    mix-blend-mode: color;
 }
 #shift-layer1 {
     mix-blend-mode: difference;
 }
 #shift-layer2 {
     mix-blend-mode: overlay;
+}
+#bg-wrapper, #bg-wrapper.dark-mode, #bg-img.dark-mode, #bg-img, #bg-wrapper2, #bg-wrapper3, #bg, #shift-layer1, #shift-layer2 {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-radius:0;
 }

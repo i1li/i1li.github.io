@@ -2,7 +2,7 @@ if (!isMobile) {
 const hoverShift = document.querySelectorAll('button, a, .article-nav-bottom, footer');
 const alwaysShift = document.querySelectorAll('header, #site-title, #toolbar, nav .col a, .article-header, .article-title, .section-nav, .section-nav .col a, footer');
 function getRandomDegree() {return Math.random() < 0.5 ? Math.floor(Math.random() * -270) - 45 : Math.floor(Math.random() * 270) + 46;}
-function getRandomInterval() {return Math.floor(Math.random() * 5000) + 3000;}
+function getRandomInterval() {return Math.floor(Math.random() * 14000) + 7000;}
 function isElementInViewport(el) {
   const rect = el.getBoundingClientRect();
   const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
@@ -42,7 +42,7 @@ function startShift(element, interval, isHover = false) {
     if (isWindowActive && isElementInViewport(element)) {
       const deltaTime = time - lastTime;
       lastTime = time;
-      progress += (deltaTime / interval) * (Math.random() * .55);
+      progress += (deltaTime / interval);
       if (progress >= 1) {
         targetDegree = getRandomDegree();
         targetSaturation = Math.random() * (125 - 90) + 90;
@@ -51,10 +51,10 @@ function startShift(element, interval, isHover = false) {
         progress = 0;
       }
       const t = () => metaRecursiveEaseNoise(progress);
-      currentDegree += Math.round((targetDegree - currentDegree) * t() * (Math.random() * .015)) / 10;
-      currentSaturation += Math.round((targetSaturation - currentSaturation) * t() * (Math.random() * .15)) / 10;
-      currentContrast += Math.round((targetContrast - currentContrast) * t() * (Math.random() * .15)) / 10;
-      currentBrightness += Math.round((targetBrightness - currentBrightness) * t() * (Math.random() * .15)) / 10;
+      currentDegree += Math.round((targetDegree - currentDegree) * t() * (Math.random() * .25)) / 10;
+      currentSaturation += Math.round((targetSaturation - currentSaturation) * t() * (Math.random())) / 10;
+      currentContrast += Math.round((targetContrast - currentContrast) * t() * (Math.random())) / 10;
+      currentBrightness += Math.round((targetBrightness - currentBrightness) * t() * (Math.random())) / 10;
       updateFilter();
     }
     if (isRunning) {

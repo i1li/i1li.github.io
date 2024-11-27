@@ -31,7 +31,7 @@ function getRandomInRange(min, max, modifier = 1, element) {
   }
 }
 function getRandomTransitionDuration(element) {
-  const randomValue = getRandomInRange(8000, 33000, 1, element);
+  const randomValue = getRandomInRange(7000, 21000, 1, element);
   return Math.round(randomValue); 
 }
 function getRandomHueShift(element) {
@@ -52,15 +52,15 @@ function getRandomOpacityValue2(element) {
 }
 function getRandomGradientSteps(element) {
   const { currentLayer } = getShiftLayerInfo(element);
-  return currentLayer === 2 ? 7 * Math.ceil(Math.random() * 3) : randomlyModifyValue(Math.ceil(Math.random() * 5) + 2);
+  return currentLayer === 1 ? 7 * Math.ceil(Math.random() * 7) : randomlyModifyValue(Math.ceil(Math.random() * 12) + 2);
 }
 function createLayerState(element) {
   const { currentLayer } = getShiftLayerInfo(element);
   return {
     transitionCurrentTime: 0,
     transitionProgress: 0,
-    transitionDuration: currentLayer === 2 ? 5000 : 8000,
-    currentGradientSteps: currentLayer === 2 ? 7 : 14,
+    transitionDuration: currentLayer === 1 ? 8000 : 5000,
+    currentGradientSteps: getRandomGradientSteps(element),
     currentContrast: 100,
     currentBrightness: 100,
     currentSaturation: 100,
