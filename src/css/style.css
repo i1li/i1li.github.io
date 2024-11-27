@@ -41,10 +41,10 @@ header {position: sticky;
     transition: all .2s ease-in-out;
     z-index: 2;}
 #site-title {display: flex; align-items: center; position:absolute; left: 5%;} .scrolled-down #site-title {left: 1%; margin-top: -.25em;}
-#site-title-text:hover {opacity:.9;}
-#site-title-text {opacity:.6;}
+#site-title-text:hover {opacity:.77;}
+#site-title-text {opacity:.55;}
 .img-header {height: 4rem; transition: all 1s ease;
-filter: drop-shadow(0 0 1rem rgba(127, 127, 127, 0.85));}
+filter: drop-shadow(0 0 1rem rgba(127, 127, 127, 0.75));}
 .img-header:hover {filter: invert(100%) !important; transition: all .5s ease-in-out; scale:1.07;}
 .no-bg {background: none !important;border: none !important;}
 #site-intro {text-align: center;

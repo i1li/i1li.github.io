@@ -119,18 +119,15 @@ function updateLayerState(state, element, deltaTime) {
   const { currentLayer } = getShiftLayerInfo(element);
   if (currentLayer === 1) {
     state.currentGradientSteps += Math.round((state.targetGradientSteps - state.currentGradientSteps) * (t() * 0.00005) * Math.random() * 10) / 10;
+    state.currentHueShift += Math.round((state.targetHueShift - state.currentHueShift) * (t() * 0.05) * Math.random() * 10) / 10;
   } else {
     state.currentGradientSteps += Math.round((state.targetGradientSteps - state.currentGradientSteps) * (t() * 0.05) * Math.random() * 10) / 10;
+    state.currentHueShift += Math.round((state.targetHueShift - state.currentHueShift) * (t() * 0.01) * Math.random() * 10) / 10;
   }
-  if (currentLayer === 1) {
-    state.currentHueShift += Math.round((state.targetGradientSteps - state.currentHueShift) * (t() * 0.2) * Math.random() * 10) / 10;
-  } else {
-    state.currentHueShift += Math.round((state.targetGradientSteps - state.currentHueShift) * (t() * 0.0005) * Math.random() * 10) / 10;
-  }
-  state.currentContrast += Math.round((state.targetContrast - state.currentContrast) * t() * 10) / 10;
-  state.currentBrightness += Math.round((state.targetBrightness - state.currentBrightness) * t() * 10) / 10;
-  state.currentSaturation += Math.round((state.targetSaturation - state.currentSaturation) * t() * 10) / 10;
-  state.currentOpacity += Math.round((state.targetOpacity - state.currentOpacity) * t() * 10) / 10;
+  state.currentContrast += Math.round((state.targetContrast - state.currentContrast) * (t() * Math.random()) * 10) / 10;
+  state.currentBrightness += Math.round((state.targetBrightness - state.currentBrightness) * (t() * Math.random()) * 10) / 10;
+  state.currentSaturation += Math.round((state.targetSaturation - state.currentSaturation) * (t() * Math.random()) * 10) / 10;
+  state.currentOpacity += Math.round((state.targetOpacity - state.currentOpacity) * (t() * Math.random()) * 10) / 10;
   if (state.transitionCurrentTime >= state.transitionDuration) {
     state.transitionCurrentTime = 0;
     state.transitionProgress = 0;
