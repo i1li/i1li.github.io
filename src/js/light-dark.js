@@ -2,7 +2,7 @@
 // Light / Dark
 function applyDarkMode(isDarkMode) {
   document.body.classList.toggle("dark-mode", isDarkMode);
-  document.querySelectorAll('a, .article-content, .article-content-wrapper, #bg-wrapper, #draw').forEach((element) => {
+  document.querySelectorAll('a, a:hover, a:visited, a:link, .article-content, .article-content:hover, .article-content-wrapper, #bg-wrapper, #bg-img, #draw').forEach((element) => {
     element.classList.toggle('dark-mode', isDarkMode);
   });
 }

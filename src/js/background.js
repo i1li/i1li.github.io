@@ -47,7 +47,7 @@ function getRandomOpacityValue(element) {
   return Math.round(randomValue * 10) / 10; 
 }
 function getRandomOpacityValue2(element) {
-  const randomValue = getRandomInRange(.26, .4, 1, element);
+  const randomValue = getRandomInRange(.29, .37, 1, element);
   return Math.round(randomValue * 1000) / 1000; 
 }
 function getRandomGradientSteps(element) {

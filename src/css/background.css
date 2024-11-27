@@ -4,8 +4,7 @@
     height: 100vh;
     margin-top:-100vh;
     background-color: rgb(222, 222, 222);
-    background-image: url("../img/bg.png");
-    background-blend-mode: luminosity;
+    background-blend-mode: color-burn;
     background-attachment: fixed;
     border-radius:0;}
 #bg-wrapper.dark-mode {position: sticky;
@@ -14,16 +13,32 @@
     height: 100vh;
     margin-top:-100vh;
     background-color: rgb(0, 0, 0);
-    background-image: url("../img/bginvert.png");
-    background-blend-mode: difference;
+    background-blend-mode: color-dodge;
+    border-radius:0;}
+#bg-img {position: relative;
+    top:0;
+    width: 100%;
+    height: 100vh;
+    background-blend-mode: overlay;
+    background-image: url("../img/bg.png");
     background-attachment: fixed;
+    margin-top:-100vh;
+    border-radius:0;}
+#bg-img.dark-mode {position: relative;
+    top:0;
+    width: 100%;
+    height: 100vh;
+    background-blend-mode: difference;
+    background-image: url("../img/bginvert.png");
+    background-attachment: fixed;
+    margin-top:-100vh;
     border-radius:0;}
 #bg-wrapper2 {position: relative;
     top:0;
     width: 100%;
     height: 100vh;
-    background-blend-mode: saturation;
-    backdrop-filter: contrast(150%) saturate(350%);
+    background-blend-mode: color-burn;
+    backdrop-filter: contrast(155%) saturate(250%);
     margin-top:-100vh;
     background: linear-gradient(to bottom, 
     rgba(128, 128, 128, .5) 0%,
