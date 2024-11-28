@@ -1,4 +1,4 @@
-if (!isMobile) {
+if (!isMobile || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 const shiftLayer1 = document.getElementById("shift-layer1");
 const shiftLayer2 = document.getElementById("shift-layer2");
 const bg = document.getElementById('bg');

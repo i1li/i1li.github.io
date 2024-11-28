@@ -96,19 +96,19 @@ function navigateToElement(element, isSection = false) {
       let offsetTop = element.getBoundingClientRect().top + window.scrollY;
       setTimeout(() => {
         const sectionCenterOffset = (element.getBoundingClientRect().top + element.getBoundingClientRect().bottom) / 2 + window.scrollY;
-        offsetTop = sectionCenterOffset - window.innerHeight * 0.15;
+        offsetTop = sectionCenterOffset - window.innerHeight * 0.2;
         window.scrollBy({top: offsetTop - window.scrollY});
         isInitialLoad = false;
       }, 200);
     }, 200);
   } else if (isInitialLoad) {
-    let offsetTop = element.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.1;
+    let offsetTop = element.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.2;
     window.scrollTo({
       top: offsetTop,
     });
     isInitialLoad = false;
   } else {
-    let offsetTop = element.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.2;
+    let offsetTop = element.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.1;
     window.scrollTo({
       top: offsetTop,
     });

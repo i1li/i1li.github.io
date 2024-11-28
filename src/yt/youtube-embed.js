@@ -238,7 +238,7 @@ class YTEmbed extends HTMLElement {
       if (path) {
         navigate(path.substring(1));
         setTimeout(() => {
-          const y = nowPlaying.getBoundingClientRect().top + window.pageYOffset - window.innerHeight * 0.2;
+          const y = nowPlaying.getBoundingClientRect().top + window.pageYOffset - window.innerHeight * 0.1;
           window.scrollTo({ top: y, behavior: 'smooth' });
         }, 20);
       }
