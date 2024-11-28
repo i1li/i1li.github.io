@@ -1,24 +1,24 @@
 * {border-radius:.3em; scrollbar-color: rgba(22,222,222,.7) rgba(0,0,72,.7); overscroll-behavior: none; scroll-behavior: smooth; scroll-snap-type: none;}
-header:hover {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(128, 22, 128, 0.3));}
+header:hover {background: linear-gradient(to bottom, rgba(255, 0, 0, .4) 0%, rgba(0, 222, 0, .15) 8%, rgba(128, 22, 128, 0.3) 96%, rgba(255, 0, 0, .4) 100%);}
 header {position: sticky;
     top: 0;
     height: 5em;
     width: 95%;
     margin:auto;
     z-index: 1;
-    padding-top: 1em;
+    padding: 1em 0 0 0;
     transition: all .45s;
     overflow: hidden;
     border-bottom: solid 2px rgba(0,0,255,.25);
     border-left: solid 2px rgba(255,0,0,.15);
     border-right: solid 2px rgba(111,0,111,.4);
     border-radius: 0 0 2em 2em;
-    background: linear-gradient(to top, rgba(0, 22, 0, .3), rgba(128, 0, 128, 0.2));
+    background: linear-gradient(to top, rgba(255, 0, 0, .25) 0%, rgba(0, 22, 0, .3) 4%, rgba(128, 0, 128, 0.2) 92%,  rgba(0, 0, 255, .5) 100%);
     backdrop-filter: brightness(115%) contrast(90%) saturate(270%);}
 .scrolled-down:hover {background: linear-gradient(to top, rgba(0, 0, 0, .6), rgba(128, 128, 128, 0.6)); opacity: 1;}
 .scrolled-down h1 {font-size: 140%; position: absolute; left:0; filter: drop-shadow(0 0 1rem white);}
 .scrolled-down .img-header {height: 2.9rem; filter: drop-shadow(0 0 1rem rgba(127, 127, 127, 0.45))}
-.scrolled-down #site-title-text {opacity: .33;}
+.scrolled-down #site-title-text {margin-left:-.2em; opacity: .33;}
 .scrolled-down #toolbar {opacity:.7;
     position: absolute;
     top: .2em;
@@ -30,11 +30,13 @@ header {position: sticky;
     opacity: .8;
     padding-top:0;
     backdrop-filter: blur(.07em) brightness(90%) contrast(115%) saturate(115%);
-    background: linear-gradient(to bottom, rgba(0, 0, 0, .5), rgba(128, 128, 128, 0.1));
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .5) 0%, rgba(128, 128, 128, 0.1) 99%, rgba(128, 128, 128, .75) 100%);
     min-width: 97%;
     overflow-x: hidden;
-    border-radius: 0 0 1em 1em;
-    border:none;}
+    border-bottom: none;
+    border-left: solid 2px rgba(255,0,0,.15);
+    border-right: solid 2px rgba(111,0,111,.4);
+    border-radius: 0 0 1em 1em;}
 #toolbar {opacity:.8;
     position: absolute;
     text-align: right;
@@ -43,7 +45,7 @@ header {position: sticky;
     font-size: 120%;
     transition: all .2s ease-in-out;
     z-index: 2;}
-#site-title {display: flex; align-items: center; position:absolute; left: 5%;} .scrolled-down #site-title {left: 1%; margin-top: -.25em;}
+#site-title {margin-left:-.1em; display: flex; align-items: center;} .scrolled-down #site-title {margin-top: -.25em;}
 #site-title-text:hover {opacity:.77;}
 #site-title-text {opacity:.55;}
 .img-header {height: 4rem; transition: all 1s ease;
