@@ -3,6 +3,8 @@ header:hover {background: linear-gradient(to bottom, rgba(0, 222, 0, .15), rgba(
 header {position: sticky;
     top: 0;
     height: 5em;
+    width: 95%;
+    margin:auto;
     z-index: 1;
     padding-top: 1em;
     transition: all .45s;
@@ -10,7 +12,7 @@ header {position: sticky;
     border-bottom: solid 2px rgba(0,0,255,.25);
     border-left: solid 2px rgba(255,0,0,.15);
     border-right: solid 2px rgba(111,0,111,.4);
-    border-radius: 0 0 .7em .7em;
+    border-radius: 0 0 2em 2em;
     background: linear-gradient(to top, rgba(0, 22, 0, .3), rgba(128, 0, 128, 0.2));
     backdrop-filter: brightness(115%) contrast(90%) saturate(270%);}
 .scrolled-down:hover {background: linear-gradient(to top, rgba(0, 0, 0, .6), rgba(128, 128, 128, 0.6)); opacity: 1;}
@@ -29,8 +31,9 @@ header {position: sticky;
     padding-top:0;
     backdrop-filter: blur(.07em) brightness(90%) contrast(115%) saturate(115%);
     background: linear-gradient(to bottom, rgba(0, 0, 0, .5), rgba(128, 128, 128, 0.1));
-    min-width: 95vw;
+    min-width: 97vw;
     overflow-x: hidden;
+    border-radius: 0 0 1em 1em;
     border:none;}
 #toolbar {opacity:.8;
     position: absolute;
@@ -65,8 +68,11 @@ filter: drop-shadow(0 0 1rem rgba(127, 127, 127, 0.75));}
     opacity:.9;}
 #site-nav {padding: .2em 0 .7em;
     font-size: 1.1em;
+    width: 85%;
+    margin: auto;
     backdrop-filter: brightness(90%) contrast(120%) saturate(250%);
     background: linear-gradient(to top, rgba(222, 22, 22, .2), rgba(128, 0, 128, 0.2));
+    border-radius: 1.5em;
     border: 1px solid rgba(4, 223, 231, 0.5);}
 #site-nav:hover {background: linear-gradient(to bottom, rgba(222, 22, 22, .2), rgba(128, 0, 128, 0.2));backdrop-filter: brightness(90%) contrast(130%) saturate(300%) blur(.025em);}
 #site-nav .col a {opacity: .75; padding:.15em .5em; filter: drop-shadow(0 0 .8em rgba(128, 128, 128, .5));}
@@ -330,9 +336,9 @@ img {opacity: 1; transition: all .7s ease-in-out; border-radius:0;} img:hover {o
 .img-sat:hover {filter: saturate(40); transition: all 3s ease-in-out;}
 .img-sat2:hover {filter: saturate(20); transition: all 3s ease-in-out;}
 .img-sat3:hover {filter: saturate(10); transition: all 3s ease-in-out;}
-.img-container {text-align: center; font-style: italic; font-size: 80%;}
-.img-container a {text-decoration: none; background: none!important; border: none;}
-.img-cred {opacity:.7} .img-cred:hover {opacity:1;}
+figure {text-align: center; font-style: italic; font-size: 80%; margin:0;}
+figure a {text-decoration: none; background: none!important; border: none;}
+figcaption {opacity:.7} figcaption:hover {opacity:1;}
 .img-fluid {object-fit:contain;min-width:400px;min-width:70%;margin:auto;max-width:99.5%;max-height:90vh;margin-top:0.5em;margin-bottom:0.5em;}
 #fullScreenOverlay {display: none;
     position: fixed;
@@ -365,12 +371,12 @@ details > summary {cursor: pointer;}
 details > summary:hover {cursor: pointer; text-decoration: underline;}
 .container{margin-right:auto;margin-left:auto}
 @media (min-width:376px){.container{max-width:376px}}@media (min-width:476px){.container{max-width:476px}}@media (min-width:576px){.container,.container-sm{max-width:540px}}@media (min-width:768px){.container{max-width:720px}}@media (min-width:992px){.container {max-width:960px}}@media (min-width:1200px){.container{max-width:1140px}}@media (min-width:1400px){.container{max-width:1320px}}
-@media only screen and (max-width: 767px) and (orientation: portrait) {html body, table{font-size: 92%;} p {text-align: initial;} .to-top {max-width:2.5em; margin-bottom:.2em; margin-right:-.5em; padding-left:.6em; padding-top:.5em;} .row-cols-auto>*{flex: 0 0 100%;min-width: 100%;} .col-md-9{width:80%;} .width95 {width: 97.5%; margin:auto;} .width95 p {width: 97.5%; margin:auto;} .width90 {width: 95%; margin:auto;} .width90 p {width: 95%; margin:auto;} blockquote {width: 96%;} h1 {font-size:1.3rem;} h2 {font-size:1.2rem;} h3 {font-size:1rem;}}
+@media only screen and (max-width: 767px) and (orientation: portrait) {html body, table{font-size: 92%;} p {text-align: initial;} .to-top {max-width:2.5em; margin-bottom:.2em; margin-right:-.5em; padding-left:.6em; padding-top:.5em;} .row-cols-auto>*{flex: 0 0 100%;min-width: 100%;} .col-md-9{width:80%;} .width95 {width: 97.5%; margin:auto;} .width95 p {width: 97.5%; margin:auto;} .width90 {width: 95%; margin:auto;} .width90 p {width: 95%; margin:auto;} blockquote {width: 96%;} h1 {font-size:1.3rem;} h2 {font-size:1.2rem;} h3 {font-size:1rem;} header {width: 98%;}}
 .row>*{width:100%;max-width:100%;}.row{display:flex;flex-wrap:wrap;}
 .col{flex:1 0 auto;margin-left:.7em;margin-right:.7em;margin-bottom:.2em}
 .row-cols-auto>*{flex:0 0 auto;width:auto}
 .row-cols-auto2>*{flex:0 0 auto;width:auto}
-.col-md-9{flex:0 0 auto;width:75%;position: relative;}
+.col-md-9{flex:0 0 auto;width:70%;position: relative;}
 .search-overlay {
     height: 100%;
     width: 100%;

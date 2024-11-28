@@ -1,6 +1,6 @@
 if (!isMobile) {
 const hoverShift = document.querySelectorAll('button, a, .article-nav-bottom, footer');
-const alwaysShift = document.querySelectorAll('header, #site-title, #toolbar, nav .col a, .article-header, .article-title, .section-nav, .section-nav .col a, footer');
+const alwaysShift = document.querySelectorAll('header, #site-title, #toolbar, nav .col a, .article-header, .article-title, .section-nav, footer');
 function getRandomDegree() {return Math.random() < 0.5 ? Math.floor(Math.random() * -270) - 45 : Math.floor(Math.random() * 270) + 46;}
 function getRandomInterval() {return Math.floor(Math.random() * 14000) + 7000;}
 function isElementInViewport(el) {
