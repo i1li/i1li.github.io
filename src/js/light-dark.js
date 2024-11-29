@@ -1,8 +1,6 @@
-
-// Light / Dark
 function applyDarkMode(isDarkMode) {
   document.body.classList.toggle("dark-mode", isDarkMode);
-  document.querySelectorAll('a, a:hover, a:visited, a:link, .article-content, .article-content:hover, .article-content-wrapper, #bg-wrapper, #bg-img, #draw').forEach((element) => {
+  document.querySelectorAll('*').forEach((element) => {
     element.classList.toggle('dark-mode', isDarkMode);
   });
 }
@@ -12,18 +10,16 @@ function toggleDarkMode() {
   localStorage.setItem('darkMode', darkMode);
 }
 let darkMode;
-const userPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-const userPrefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
 const savedMode = localStorage.getItem('darkMode');
 if (savedMode !== null) {
   darkMode = savedMode === 'true';
-} else if (userPrefersDark) {
+} else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
   darkMode = true;
-} else if (userPrefersLight) {
+} else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
   darkMode = false;
 } else {
   darkMode = true;
 }
 applyDarkMode(darkMode);
-const modeToggle = document.getElementById('mode-toggle');
+const modeToggle = document.getElementById('dark-light');
 modeToggle.addEventListener('click', toggleDarkMode);

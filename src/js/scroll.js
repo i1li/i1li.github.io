@@ -1,4 +1,4 @@
-// Sticky Header & Go to top
+// Sticky Header, Go to top of page, & update URL on scroll
 const toTop = document.getElementById("toTop");
 const header = document.querySelector('header');
 const headerHeight = 3 * parseFloat(getComputedStyle(document.documentElement).fontSize);

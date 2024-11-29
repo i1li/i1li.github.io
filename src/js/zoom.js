@@ -1,5 +1,4 @@
-// Zoom In / Out
-function adjustZoom(isZoomIn) {
+function pageZoom(isZoomIn) {
   const zoomFactor = isZoomIn ? 1.05 : 0.95;
   const zoom = document.querySelectorAll("html");
   zoom.forEach(function(element) {
@@ -15,8 +14,8 @@ function adjustZoom(isZoomIn) {
     document.documentElement.style.fontSize = savedFontSize + 'px';
   }
 document.getElementById("zoom-in").addEventListener("click", function() {
-  adjustZoom(true);
+  pageZoom(true);
 });
 document.getElementById("zoom-out").addEventListener("click", function() {
-  adjustZoom(false);
+  pageZoom(false);
 });

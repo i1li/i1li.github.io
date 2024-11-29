@@ -3,7 +3,6 @@ function search() {
   const articles = document.querySelectorAll('article');
   const searchResultsContainer = document.getElementById('searchResults');
   searchResultsContainer.innerHTML = '';
-
   if (searchQuery.length === 0) {
     searchResultsContainer.innerHTML = '<p>Enter a search term</p>';
     searchResultsContainer.style.display = 'block';
