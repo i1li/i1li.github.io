@@ -1,10 +1,41 @@
 // Single Page Application
 let isInitialLoad = true;
 let lastUpdatedPath = '';
-const path = window.location.pathname.substring(1);
-const hash = window.location.hash.substring(1);
+let path = window.location.pathname.substring(1);
+let hash = window.location.hash.substring(1);
 const articles = document.querySelectorAll('article');
 const welcome = document.getElementById('welcome');
+const headerVerse = document.getElementById('header-verse');
+const welcomeOverlay = document.getElementById('welcome-overlay');
+const welcomeDuration = 5000;
+const welcomeInitialOpacity = .95
+function easeInExpo(t) {
+    return t === 0 ? 0 : Math.pow(2, 10 * t - 10);
+}
+function animateOverlay(startTime) {
+    const now = performance.now();
+    const elapsedTime = now - startTime;
+    const progress = Math.min(elapsedTime / welcomeDuration, 1);
+    if (progress < 1) {
+        const opacity = welcomeInitialOpacity - easeInExpo(progress);
+        welcomeOverlay.style.opacity = opacity.toFixed(3);
+        requestAnimationFrame(() => animateOverlay(startTime));
+    } else {
+        welcomeOverlay.style.display = 'none';
+        welcomeOverlay.style.pointerEvents = 'none';
+        isInitialLoad = false;
+    }
+}
+document.addEventListener("DOMContentLoaded", function() {
+  if (isInitialLoad) {
+    displayRandomBibleVerse();
+    welcomeOverlay.style.opacity = welcomeInitialOpacity;
+    requestAnimationFrame((timestamp) => animateOverlay(timestamp));
+  }
+  if (isMobile) {
+    headerVerse.style.display = 'none';
+  }
+});
 const observer = new IntersectionObserver(function(entries, observer) {
   entries.forEach(function(entry) {
     if (entry.isIntersecting) {
@@ -57,10 +88,10 @@ function showSingleArticle(articleId, sectionId) {
       if (sectionId) {
         const section = container.querySelector(`.section-title#${sectionId}`);
         if (section) {
-          navigateToElement(section, true);
+          navigateToElement(section);
         }
       } else {
-        navigateToElement(container, false);
+        navigateToElement(container);
       }
       let path = `/${articleId}`;
       if (sectionId) {
@@ -83,34 +114,30 @@ function showAllArticles() {
     if (articleNavBottom) {articleNavBottom.remove();}
   });
   welcome.style.display = 'block';
-  header.classList.remove('scrolled-down');
   goToTop();
 }
-function navigateToElement(element, isSection = false) {
-  if (isSection && isInitialLoad) {
-    const article = element.closest('article');
-    article.scrollIntoView({
-      block: 'center'
-    });
+function navigateToElement(element) {
+  header.classList.add("scrolled-down");
+  let article = element.closest("article");
+  if (isInitialLoad) {
     setTimeout(() => {
-      let offsetTop = element.getBoundingClientRect().top + window.scrollY;
-      setTimeout(() => {
-        const sectionCenterOffset = (element.getBoundingClientRect().top + element.getBoundingClientRect().bottom) / 2 + window.scrollY;
-        offsetTop = sectionCenterOffset - window.innerHeight * 0.2;
-        window.scrollBy({top: offsetTop - window.scrollY});
-        isInitialLoad = false;
-      }, 200);
-    }, 200);
-  } else if (isInitialLoad) {
-    let offsetTop = element.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.2;
-    window.scrollTo({
-      top: offsetTop,
-    });
-    isInitialLoad = false;
+      article.scrollIntoView({
+        behavior: "instant",
+      });
+      let offsetTop = element.getBoundingClientRect().top + window.scrollY - headerHeight;
+      window.scrollTo({
+        top: offsetTop,
+        behavior: "instant",
+      });
+    }, 500);
   } else {
-    let offsetTop = element.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.1;
+    article.scrollIntoView({
+      behavior: "smooth",
+    });
+    let offsetTop = element.getBoundingClientRect().top + window.scrollY - headerHeight;
     window.scrollTo({
       top: offsetTop,
+      behavior: "smooth",
     });
   }
 }

@@ -6,6 +6,13 @@
 <link rel="stylesheet" type="text/css" href="/css/background.css">
 <link rel="stylesheet" type="text/css" href="/yt/youtube-embed.css">
 </head><body>
+
+<div id="welcome-overlay"><div class="welcome-overlay-content">
+<h1>Jesus Christ is King!</h1>
+<p>"<span class="bible-verse-text"></span>" - <a class="bible-verse-link" href=""></a></p>
+<p>God bless!</p>
+</div></div>
+
 <div id="bg-wrapper"><div id="bg-img"><div id="bg-wrapper2"><div id="bg-wrapper3"></div></div></div></div>
 <div id="bg"><div id="shift-layer1"><div id="shift-layer2"></div></div></div><div id="bg-frame-top"></div><div id="bg-frame-right"></div><div id="bg-frame-bottom"></div><div id="bg-frame-left"></div>
 
@@ -21,11 +28,13 @@
 <div class="search-results-wrapper"><div id="searchResults">
 </div></div></div></div>  
 
-<header><table><tr><td style="width:50%;">
+<header><span id="header-verse"><p class="no-indent center">"<span class="bible-verse-text"></span>" <nobr>- <a class="bible-verse-link" href=""></a></nobr></p></span>
+<table><tr><td style="width:50%;">
 <h1><span id="site-title"><a href="/" class="no-bg" title="Home"><img alt="Home" class="img-header img-opaq" decoding="async" src="/img/yinyang.png"></a>
 <a href="/" id="site-title-text" class="no-bg" title="Home">i&i</a></span></h1></td><td style="width:50%;">
 <span id="toolbar"><span id="search" title="Search"><span id="search-text">Search</span>🔍</span><button id="zoom-out" title="Zoom Out">−</button><button id="zoom-in" title="Zoom In">+</button>
-<span class="mode-toggle"><button id="mode-toggle" title="Dark / Light">🌙 / ☀️</button></span></span></td></tr></table></header>
+<span class="mode-toggle"><button id="mode-toggle" title="Dark / Light">🌙 / ☀️</button></span></span>
+</td></tr></table></header><div id="header-filler"></div>
 
 <div class="row justify-content-center"><div class="col-md-9">
 <div id="welcome"><p class="no-indent width90" id="site-intro">
@@ -1487,13 +1496,14 @@ class="no-embed"
 <footer><table style="width:100%;"><tr><td style="text-align:left; width:20%; padding-left:3.5%; padding-top:.6em;"><span id="toTopFooter" onclick="goToTop()" title="Go to top"><img alt="Go to top" class="img-footer" decoding="async" src="/img/top2.png"></span></td>
 <td style="text-align:center; width:60%; vertical-align:middle; padding-top:1em; font-size:1em; opacity:.7;"><a href="https://connect4more.netlify.app" class="no-bg" title="Connect for more.">Connect</a></td>
 <td style="text-align:right; width:20%; padding-right:2.5%; padding-top:.6em;"><a class="no-bg" title="Home" href="/"><img class="img-footer img-opaq" decoding="async" alt="Home" src="/img/yinyang.png"></a></td></tr></table></footer>
-
 <script src="/js/utils.js"></script>
-<script src="/js/background.js"></script>
-<script src="/js/github-pages.js"></script>
-<script src="/yt/shuffle.js"></script>
+
 <script src="/yt/youtube-embed.js"></script>
 <script src="/js/light-dark.js"></script>
+<script src="/yt/shuffle.js"></script>
+<script src="/js/bible-verses.js"></script>
+<script src="/js/background.js"></script>
+<script src="/js/github-pages.js"></script>
 <script src="/js/zoom.js"></script>
 <script src="/js/scroll.js"></script>
 <script src="/js/spa.js"></script>

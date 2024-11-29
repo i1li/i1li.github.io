@@ -1,17 +1,18 @@
 // Sticky Header & Go to top
-const scrollTransition = 50;
-const header = document.querySelector('header');
 const toTop = document.getElementById("toTop");
+const header = document.querySelector('header');
+const headerHeight = 3 * parseFloat(getComputedStyle(document.documentElement).fontSize);
 function goToTop() {
+  header.classList.remove('scrolled-down');
   window.scrollTo(0, 0);
 }
 function handleScroll() {
-  if (window.scrollY > scrollTransition) {
+  if (window.scrollY > headerHeight * .6) {
     header.classList.add('scrolled-down');
   } else {
     header.classList.remove('scrolled-down');
   }
-  if (document.body.scrollTop > scrollTransition * 7 || document.documentElement.scrollTop > scrollTransition * 7) {
+  if (document.body.scrollTop > window.innerHeight || document.documentElement.scrollTop > window.innerHeight) {
       toTop.style.opacity = "0.4";
       toTop.style.pointerEvents = "auto";
     } else {
