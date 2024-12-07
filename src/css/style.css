@@ -11,13 +11,6 @@
     align-items: center;
     z-index: 9999;
     opacity: 1;
-    overflow: hidden;
-}
-.welcome-overlay-content p,.welcome-overlay-content h1{
-    text-align: center;
-    color: white;
-    width: 70%;
-    margin: auto;
 }
 #header-verse:hover {
     opacity: 1;

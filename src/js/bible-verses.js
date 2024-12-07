@@ -126,3 +126,14 @@ function displayRandomBibleVerse() {
   }
   displayVerse();
 }
+const headerVerse = document.getElementById('header-verse');
+document.addEventListener("DOMContentLoaded", function() {
+  if (isInitialLoad) {
+    displayRandomBibleVerse();
+    welcomeOverlay.style.opacity = welcomeInitialOpacity;
+    requestAnimationFrame((timestamp) => animateOverlay(timestamp));
+  }
+  if (isMobile) {
+    headerVerse.style.display = 'none';
+  }
+});
