@@ -1,5 +1,4 @@
-
-function constructBLBUrl(verse) {
+function constructVerseURL(verse) {
 const [book, chapter_verse] = verse.split(' ');
 const [chapter, verse_range] = chapter_verse.split(':');
 const formatted_book = book.toLowerCase().substring(0, 3);
@@ -18,7 +17,7 @@ function displayRandomBibleVerse() {
     });
     document.querySelectorAll('.bible-verse-link').forEach(element => {
       element.textContent = bibleVerse[0];
-      element.href = constructBLBUrl(bibleVerse[0]);
+      element.href = constructVerseURL(bibleVerse[0]);
     });
     const wordCount = bibleVerse[1].split(' ').length;
     remainingTime = Math.max(wordCount * 650, 3300);

@@ -49,7 +49,7 @@ function metaRecursiveEaseNoise(t, depth = 0, maxDepth = Math.ceil(Math.random()
   const randomEase = easingFunctions[Math.floor(Math.random() * easingFunctions.length)];
   const randomNoise = noiseFunctions[Math.floor(Math.random() * noiseFunctions.length)];
   const noiseScale = Math.random();
-  const noiseAmplitude = Math.random() / 2;
+  const noiseAmplitude = noiseScale / 2;
   const easedT = randomEase(t);
   const noiseValue = metaRecursiveNoise(t * noiseScale, depth + 1, maxDepth, randomNoise) * noiseAmplitude;
   return Math.max(0, Math.min(1, easedT + noiseValue));

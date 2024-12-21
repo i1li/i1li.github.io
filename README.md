@@ -7,13 +7,12 @@ My favorite features are the <a href="#Lightest YouTube Embed">custom video embe
 <h4>Features:</h4>
 <p align="center">
 <a href="#Efficiency & Minimalism">Minimal, no frameworks</a>, just pure JavaScript (a.k.a. vanilla JavaScript), CSS, & HTML, <a href="#SPA Navigation & Content Loading">Single Page App (SPA)</a> <br/><a href="#Responsive Design">Responsive Design</a>: images, video, & text automatically adjust to fit accordingly across small & large screens. <br/><a href="#Light/Dark Mode Toggle">Light/Dark Mode</a>, <a href="#Zoom In/Out Functionality">Page Zoom</a>, <a href="#Full Screen Image Overlay">Full Screen Image Overlay</a>, <a href="#Sticky Header & Scroll-to-Top Button">Go to Top Button</a>, <a href="#Lightest YouTube Embed">Embedded Content Display Toggle</a>, <br/><a href="#Target Links / Hash Links As Subpages">Target Links as Subpages</a>, <a href="#Background Gradient Shift, & other CSS Effects">Custom CSS Color-Shifting Gradients</a>, <a href="#Lazy Loading">Lazy Loading</a>, <a href="#Device Detection">Device Detection</a>, <a href="#Automatic External Links Handling">External Link Handling</a>.<br/>
-<a href="https://github.com/codespaces/new?repo=https://github.com/i1li/i1li.github.io"><img src="img/button-codespaces.svg" alt="Open in GitHub Codespaces"></a>
-<a href="https://app.netlify.com/start/deploy?repository=https://github.com/i1li/i1li.github.io"><img src="img/button-netlify.svg" alt="Deploy to Netlify"></a>
-<a href="https://vscode.dev/github/i1li/i1li.github.io"><img src="img/button-vscode.svg" alt="Open in VSCode"></a><br/>
+<a href="https://github.com/codespaces/new?repo=https://github.com/i1li/i1li.github.io"><img src="dist/img/button-codespaces.svg" alt="Open in GitHub Codespaces"></a>
+<a href="https://app.netlify.com/start/deploy?repository=https://github.com/i1li/i1li.github.io"><img src="dist/img/button-netlify.svg" alt="Deploy to Netlify"></a>
+<a href="https://vscode.dev/github/i1li/i1li.github.io"><img src="dist/img/button-vscode.svg" alt="Open in VSCode"></a><br/>
 <a href="https://y0.netlify.app/">Demo site</a> contains my personal writing & learning resources.<br/>
-<b>Quickstart:</b> Use a quick deploy button above, or clone this repo locally, open a terminal in the project directory,<br/> & enter the following:</p>
 
-```bash
+```javascript
 npm i express dotenv
 node serv.js
 ```
@@ -27,7 +26,7 @@ To serve the files from `/src`
 <p align="center">Or, if you'd like to use Netlify's <a href="https://www.netlify.com/platform/core/functions/">serverless functions</a>, enter the following. (<a href="#Netlify Content Gate">example of serverless function.</a>)
 </p>
 
-```bash
+```javascript
 npm i netlify-cli
 netlify dev
 ```
@@ -61,7 +60,7 @@ netlify dev
 
 ### [yt-titles.js](/yt/yt-titles.js)
 - Updates all `<y-t>` elements on the page,  `<y-t v="YouTube Video ID">` becomes `<y-t v="YouTube ID" t="The Video's Title">` To use, open a terminal in the project directory, & enter:
-```bash
+```javascript
 node yt-titles.js
 ```
 
@@ -72,7 +71,7 @@ node yt-titles.js
 - Updates the total count of video IDs found in the "music" `<div>`, inserting the total in the description of the <a href="https://y0.netlify.app/edu/vibes">"Combined Shuffled Playlist"</a> within `<span id="total-count"></span>`
 - Video IDs from otherwise good playlists to exclude, for either not being available for embedding, or just not being good, can be included, comma-separated, in `exclude.txt`.
 - To use, put your [API Key](https://developers.google.com/youtube/v3/getting-started#before-you-start) at `KEY=` in the `.env` file, & then open a terminal in the project directory, & enter:
-```bash
+```javascript
 npm i dotenv
 node yt-ids.js
 ```
@@ -117,7 +116,7 @@ The hybrid shuffle function combines two different techniques to optimize perfor
 <h3 id="Custom Build Script">Custom Build Script</h3>
 
 - [build.js](build.js) minifies and bundles files from `/src` to `/dist`. To use enter:
- ```bash
+ ```javascript
 npm i esbuild
 node build.js
 ```
