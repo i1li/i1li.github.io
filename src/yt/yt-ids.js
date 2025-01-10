@@ -125,7 +125,7 @@ const writeOutput = async () => {
   const updatedHtmlContent = htmlContent
     .replace(searchDivRegex, `id="shuffle">${finalSearchDiv}</div>`)
     .replace(totalVideosRegex, `"total-videos">${formattedTotalVideoCount}</span>`);
-  fs.writeFileSync('index.html', updatedHtmlContent, 'utf8');
+  fs.writeFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
   console.log(`Total videos: ${formattedTotalVideoCount}`);
   console.log(`Number of errors: ${errorCount}`);
 };
