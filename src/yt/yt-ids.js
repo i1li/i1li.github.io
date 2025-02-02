@@ -10,7 +10,7 @@ const playlistIdRegex = /(?:p="([^"]+)"|v="([^"]+)")/g;
 const totalVideosRegex = /"total-videos">([^<]*)<\/span>/;
 function readExcludedIds() {
   try {
-    const data = fs.readFileSync('exclude.txt', 'utf8');
+    const data = fs.readFileSync(path.join(__dirname, '..', 'yt', 'exclude.txt'), 'utf8');
     return data.split(',').map(id => id.trim()).filter(id => id !== '');
   } catch (err) {
     console.error('Error reading exclude.txt:', err);
@@ -125,7 +125,7 @@ const writeOutput = async () => {
   const updatedHtmlContent = htmlContent
     .replace(searchDivRegex, `id="shuffle">${finalSearchDiv}</div>`)
     .replace(totalVideosRegex, `"total-videos">${formattedTotalVideoCount}</span>`);
-  fs.writeFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+    fs.writeFileSync(path.join(__dirname, '..', 'index.html'), updatedHtmlContent, 'utf8');
   console.log(`Total videos: ${formattedTotalVideoCount}`);
   console.log(`Number of errors: ${errorCount}`);
 };
