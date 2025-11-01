@@ -46,9 +46,9 @@ function displayRandomBibleVerse() {
 }
 const headerVerse = document.getElementById('header-verse');
 document.addEventListener("DOMContentLoaded", function() {
-  if (isMobile) {
-    headerVerse.style.display = 'none';
-  }
+  // if (isMobile) {
+  //   headerVerse.style.display = 'none';
+  // }
   if (isInitialLoad) {
     displayRandomBibleVerse();
   }

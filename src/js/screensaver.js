@@ -4,7 +4,7 @@
         const bufferCtx = bufferCanvas.getContext('2d');
         let width, height;
         const shapes = [];
-        const SHAPE_COUNT = 15;
+        const SHAPE_COUNT = 12;
         const BASE_SIZE = 0.0075;
         const BASE_SIZE_MULTIPLIER = 16;
         const BLUR_AMOUNT = 3;
@@ -99,7 +99,7 @@
         }
 
         function createAndChangeShapes(deltaTime) {
-            const time = Date.now() * 0.00012;
+            const time = Date.now() * 0.000005;
             shapes.forEach(shape => {
                 let freq1 = 0.0015, freq2 = 0.007;
                 let noiseValueX = noise.noise(shape.x * freq1, time) * 0.15 + noise.noise(shape.x * freq2, time * 3) * 0.05;
