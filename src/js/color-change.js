@@ -1,4 +1,4 @@
-if (!isMobile || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+// if (!isMobile || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 const hoverShift = document.querySelectorAll('button, a, .article-nav-bottom, footer');
 const alwaysShift = document.querySelectorAll('header, #site-title, #toolbar, nav .col a, .article-header, .article-title, .section-nav, footer');
 function getRandomDegree() {return Math.random() < 0.5 ? Math.floor(Math.random() * -270) - 45 : Math.floor(Math.random() * 270) + 46;}
@@ -98,4 +98,4 @@ hoverShift.forEach(element => {
     handleDisengage(element, stopAnimationFunction);
   }, 30));
 });
-}
+// }

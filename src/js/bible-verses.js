@@ -51,8 +51,6 @@ document.addEventListener("DOMContentLoaded", function() {
   }
   if (isInitialLoad) {
     displayRandomBibleVerse();
-    welcomeOverlay.style.opacity = welcomeInitialOpacity;
-    requestAnimationFrame((timestamp) => animateOverlay(timestamp));
   }
 });
 const bibleVerses = [[
