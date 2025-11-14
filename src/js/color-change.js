@@ -1,3 +1,5 @@
+if (!isMobile) {
+
 const hoverShift = document.querySelectorAll('button, a, .article-nav-bottom, footer');
 const alwaysShift = document.querySelectorAll('header, #site-title, #toolbar, nav .col a, .article-header, .article-title, .section-nav, footer');
 
@@ -113,3 +115,5 @@ hoverShift.forEach(element => {
   });
   element.addEventListener('mouseout', debounce(() => handleDisengage(element, stopAnimationFunction), 30));
 });
+
+}

@@ -4,17 +4,21 @@ const frameDuration = 100;
 const totalFrames = Math.ceil(welcomeDuration / frameDuration);
 let currentFrame = 0;
 
-function easeInExpo(t) {
-  return t === 0 ? 0 : Math.pow(2, 10 * t - 10);
+// Precompute easing curve values
+const easingCurve = new Float32Array(totalFrames);
+for (let i = 0; i < totalFrames; i++) {
+  const t = i / totalFrames;
+  const progress = t === 0 ? 0 : Math.pow(2, 10 * t - 10);
+  easingCurve[i] = 1 - progress;
 }
 
 const intervalId = setInterval(() => {
   currentFrame++;
-  const progress = Math.min(currentFrame / totalFrames, 1);
-  const opacity = 1 - easeInExpo(progress);
-  welcomeOverlay.style.opacity = opacity.toFixed(3);
+  if (currentFrame <= totalFrames) {
+    welcomeOverlay.style.opacity = easingCurve[currentFrame - 1].toFixed(3);
+  }
 
-  if (progress >= 1) {
+  if (currentFrame >= totalFrames) {
     clearInterval(intervalId);
     welcomeOverlay.style.display = 'none';
     welcomeOverlay.style.pointerEvents = 'none';

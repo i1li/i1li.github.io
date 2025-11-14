@@ -17,6 +17,8 @@ canvas {
     display: block;
     background-blend-mode: difference;
     mix-blend-mode: difference;
+    will-change: contents;
+    image-rendering: -webkit-optimize-contrast;
 }
 #header-verse:hover {
     opacity: 1;
