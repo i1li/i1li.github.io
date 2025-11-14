@@ -24,6 +24,7 @@ canvas {
     opacity: 1;
 }
 #header-verse {
+    display: none;
     position: absolute;
     left: 6%;
     top: -.75em;

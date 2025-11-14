@@ -1,5 +1,4 @@
 if (!isMobile) {
-
 function constructVerseURL(verse) {
 const [book, chapter_verse] = verse.split(' ');
 const [chapter, verse_range] = chapter_verse.split(':');
@@ -7,6 +6,8 @@ const formatted_book = book.toLowerCase().substring(0, 3);
 return `https://www.blb.org/csb/${formatted_book}/${chapter}/${verse_range}`;
 }
 function displayRandomBibleVerse() {
+  const headerVerse = document.getElementById('header-verse');
+  headerVerse.style.display = 'block';
   shuffle(bibleVerses);
   let currentIndex = 0;
   let remainingTime = 0;
@@ -32,6 +33,7 @@ function displayRandomBibleVerse() {
     }
     function tick() {
       if (isWindowActive && !document.querySelector('header').classList.contains('scrolled-down')) {
+        headerVerse.style.display = 'block';
         remainingTime -= tickInterval;
         if (remainingTime <= 0) {
           displayVerse();
@@ -39,6 +41,7 @@ function displayRandomBibleVerse() {
           timerPause = setTimeout(tick, tickInterval);
         }
       } else {
+        headerVerse.style.display = 'none';
         timerPause = setTimeout(tick, tickInterval);
       }
     }
@@ -46,9 +49,7 @@ function displayRandomBibleVerse() {
   }
   displayVerse();
 }
-const headerVerse = document.getElementById('header-verse');
 document.addEventListener("DOMContentLoaded", function() {
-
   if (isInitialLoad) {
     displayRandomBibleVerse();
   }

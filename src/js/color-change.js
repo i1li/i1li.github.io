@@ -1,10 +1,7 @@
-if (!isMobile) {
-
 const hoverShift = document.querySelectorAll('button, a, .article-nav-bottom, footer');
 const alwaysShift = document.querySelectorAll('header, #site-title, #toolbar, nav .col a, .article-header, .article-title, .section-nav, footer');
 
 function getRandomDegree() {
-  // More uniform distribution and efficient rounding
   return Math.random() < 0.5
     ? -45 - Math.floor(Math.random() * 270)
     : 46 + Math.floor(Math.random() * 224);
@@ -48,13 +45,12 @@ function startShift(element, interval, isHover = false) {
     element.style.filter = filterValue;
   }
 
-  function animate(time) {
+  function animateColors(time) {
     if (!isRunning) return;
     if (isWindowActive && isElementInViewport(element)) {
       const deltaTime = time - lastTime;
       lastTime = time;
       progress += deltaTime / interval;
-
       if (progress >= 1) {
         targetDegree = getRandomDegree();
         targetSaturation = Math.random() * 35 + 90; // 90-125
@@ -62,58 +58,86 @@ function startShift(element, interval, isHover = false) {
         targetBrightness = Math.random() * (isHover ? 50 : 20) + (isHover ? 85 : 90);
         progress = 0;
       }
-
       const t = () => metaRecursiveEaseNoise(progress);
-
       currentDegree += Math.round((targetDegree - currentDegree) * t() * Math.random() * 0.07);
       currentSaturation += Math.round((targetSaturation - currentSaturation) * t() * Math.random());
       currentContrast += Math.round((targetContrast - currentContrast) * t() * Math.random());
       currentBrightness += Math.round((targetBrightness - currentBrightness) * t() * Math.random());
-
       updateFilter();
     }
-
-    if (isRunning) requestAnimationFrame(animate);
+    if (isRunning) requestAnimationFrame(animateColors);
   }
 
-  requestAnimationFrame(animate);
-
+  // Initial filter apply (starts from random state)
+  updateFilter();
+  requestAnimationFrame(animateColors);
   return () => {
     isRunning = false;
     element.style.filter = 'none';
   };
 }
 
-function handleDisengage(element, stopAnimationFunction) {
-  if (stopAnimationFunction) {
-    stopAnimationFunction();
+function handleDisengage(element, stopAnim) {
+  if (stopAnim) {
+    stopAnim();
   }
   element.style.filter = 'none';
 }
 
-// Initialize alwaysShift elements with throttled animations
-alwaysShift.forEach(element => {
-  element.animateFunction = throttle(() => startShift(element, getRandomInterval()), 30)();
-});
+// Viewport-lazy with light staggering: Observe in batches for gradual init
+const observerOptions = {
+  threshold: 0,
+  rootMargin: '200px',
+};
 
-// Initialize hoverShift elements with event handlers and throttle/debounce control
-hoverShift.forEach(element => {
-  let stopAnimationFunction = null;
-  let disengageTimeout = null;
-
-  const startAnim = throttle(() => {
-    if (stopAnimationFunction) stopAnimationFunction();
-    stopAnimationFunction = startShift(element, getRandomInterval(), true);
-  }, 30);
-
-  element.addEventListener('mouseover', startAnim);
-  element.addEventListener('click', startAnim);
-  element.addEventListener('touchstart', () => {
-    if (stopAnimationFunction) stopAnimationFunction();
-    stopAnimationFunction = startShift(element, getRandomInterval(), true);
-    disengageTimeout = setTimeout(() => handleDisengage(element, stopAnimationFunction), 888);
+const animationObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    const element = entry.target;
+    if (entry.isIntersecting && !element._isAnimating) {
+      element._stopper = startShift(element, getRandomInterval());
+      element._isAnimating = true;
+    }
   });
-  element.addEventListener('mouseout', debounce(() => handleDisengage(element, stopAnimationFunction), 30));
+}, observerOptions);
+
+// Stagger .observe() calls lightly (~20ms batches) for perf ramp-up
+let observeDelay = 0;
+const observeBatchSize = 10;
+alwaysShift.forEach((element, index) => {
+  setTimeout(() => {
+    animationObserver.observe(element);
+  }, observeDelay);
+  if (index % observeBatchSize === observeBatchSize - 1) {
+    observeDelay += 20;  // Tune: 10-50ms for balance
+  }
 });
 
+// Cleanup on unload
+window.addEventListener('beforeunload', () => {
+  alwaysShift.forEach(element => {
+    if (element._stopper) {
+      element._stopper();
+      element._stopper = null;
+    }
+  });
+  animationObserver.disconnect();
+});
+
+if (!isMobile) {
+  hoverShift.forEach(element => {
+    let stopAnim = null;
+    let disengageTimeout = null;
+    const startAnim = throttle(() => {
+      if (stopAnim) stopAnim();
+      stopAnim = startShift(element, getRandomInterval(), true);
+    }, 30);
+    element.addEventListener('mouseover', startAnim);
+    element.addEventListener('click', startAnim);
+    element.addEventListener('touchstart', () => {
+      if (stopAnim) stopAnim();
+      stopAnim = startShift(element, getRandomInterval(), true);
+      disengageTimeout = setTimeout(() => handleDisengage(element, stopAnim), 888);
+    });
+    element.addEventListener('mouseout', debounce(() => handleDisengage(element, stopAnim), 30));
+  });
 }
