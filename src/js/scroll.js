@@ -52,4 +52,4 @@ function updateURLOnScroll() {
 ['scroll', 'touchmove', 'resize'].forEach(event => window.addEventListener(event, throttle(() => {
   updateURLOnScroll();
   handleScroll();
-}, 500)));
+}, 100)));

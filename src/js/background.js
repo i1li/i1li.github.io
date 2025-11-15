@@ -99,6 +99,10 @@ function createBgLayerState(element) {
   };
 }
 
+// Cache the last gradient string to avoid unnecessary DOM writes
+let lastGradient1 = '';
+let lastGradient2 = '';
+
 function setGradient(element, state) {
   const { currentLayer } = getShiftLayerInfo(element);
   const width = element.offsetWidth || element.clientWidth;
@@ -120,7 +124,16 @@ function setGradient(element, state) {
     );
   }
 
-  element.style.backgroundImage = gradients.join(', ');
+  const gradientString = gradients.join(', ');
+
+  // Only update background if different to reduce style recalcs
+  if ((element.id === 'shift-layer1' && gradientString !== lastGradient1) ||
+      (element.id === 'shift-layer2' && gradientString !== lastGradient2)) {
+    element.style.backgroundImage = gradientString;
+    if (element.id === 'shift-layer1') lastGradient1 = gradientString;
+    else lastGradient2 = gradientString;
+  }
+
   element.style.filter = `
     opacity(${state.currentOpacity}%)
     contrast(${state.currentContrast}%)
@@ -135,6 +148,7 @@ function updateLayerState(state, element, deltaTime) {
   state.transitionProgress = Math.min(1, state.transitionProgress + deltaTime / state.transitionDuration);
 
   const t = () => metaRecursiveEaseNoise(state.transitionProgress);
+
   const { currentLayer } = getShiftLayerInfo(element);
 
   const randomFactor = (max) => Math.random() * max;

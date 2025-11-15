@@ -1,10 +1,10 @@
 const hoverShift = document.querySelectorAll('button, a, .article-nav-bottom, footer');
 const alwaysShift = document.querySelectorAll('header, #site-title, #toolbar, nav .col a, .article-header, .article-title, .section-nav, footer');
 
-function getRandomDegree() {
+function getRandomHueRotation() {
   return Math.random() < 0.5
     ? -45 - Math.floor(Math.random() * 270)
-    : 46 + Math.floor(Math.random() * 224);
+    : 45 + Math.floor(Math.random() * 270);
 }
 
 function getRandomInterval() {
@@ -25,8 +25,8 @@ function isElementInViewport(el) {
 }
 
 function startShift(element, interval, isHover = false) {
-  let currentDegree = getRandomDegree();
-  let targetDegree = currentDegree;
+  let currentHueRotation = getRandomHueRotation();
+  let targetHueRotation = currentHueRotation;
   let currentSaturation = 100, targetSaturation = 100;
   let currentContrast = 100, targetContrast = 100;
   let currentBrightness = 100, targetBrightness = 100;
@@ -36,7 +36,7 @@ function startShift(element, interval, isHover = false) {
 
   function updateFilter() {
     const filterValue = `
-      hue-rotate(${currentDegree}deg)
+      hue-rotate(${currentHueRotation}deg)
       saturate(${currentSaturation}%)
       contrast(${currentContrast}%)
       brightness(${currentBrightness}%)
@@ -52,14 +52,14 @@ function startShift(element, interval, isHover = false) {
       lastTime = time;
       progress += deltaTime / interval;
       if (progress >= 1) {
-        targetDegree = getRandomDegree();
+        targetHueRotation = getRandomHueRotation();
         targetSaturation = Math.random() * 35 + 90; // 90-125
         targetContrast = Math.random() * (isHover ? 90 : 40) + 80;
         targetBrightness = Math.random() * (isHover ? 50 : 20) + (isHover ? 85 : 90);
         progress = 0;
       }
       const t = () => metaRecursiveEaseNoise(progress);
-      currentDegree += Math.round((targetDegree - currentDegree) * t() * Math.random() * 0.07);
+      currentHueRotation += Math.round((targetHueRotation - currentHueRotation) * t() * Math.random() * 0.07);
       currentSaturation += Math.round((targetSaturation - currentSaturation) * t() * Math.random());
       currentContrast += Math.round((targetContrast - currentContrast) * t() * Math.random());
       currentBrightness += Math.round((targetBrightness - currentBrightness) * t() * Math.random());
