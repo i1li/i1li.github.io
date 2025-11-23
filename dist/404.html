@@ -10,6 +10,7 @@
 // url username.github.io instead of username.github.io/repo-name )
 
 // Single Page Apps for GitHub Pages https://github.com/rafgraph/spa-github-pages
+// (this version is updated from original linked above)
 // This script takes the current url and converts the path and query
 // string into just a query string, and then redirects the browser
 // to the new url with only a query string and hash fragment,
@@ -26,17 +27,13 @@
 (() => {
   const pathSegmentsToKeep = 0;
   let l = new URL(window.location);
-
-  // Check if the URL is already in redirect format to prevent looping
   if (!l.search.startsWith('?/')) {
     const basePath = '/' + l.pathname.split('/').slice(1, 1 + pathSegmentsToKeep).join('/');
     const restPath = l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/');
     const newPath = basePath + (basePath.endsWith('/') ? '' : '/') + '?/' + restPath.replace(/&/g, '~and~');
     const newSearch = l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '';
-
     l.pathname = newPath;
     l.search = newSearch;
-
     window.SPA404Redirect = l;
     window.location.replace(l.href);
   }

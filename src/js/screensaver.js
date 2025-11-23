@@ -65,7 +65,7 @@ function getNoiseValue(generator, x, y, time) {
 let lastNoiseTime = 0;
 const NOISE_UPDATE_INTERVAL = isMobile ? 32 : 16;
 
-function createAndChangeShapes(deltaTime, currentTime) {
+function createAndChangeShapes(SSDeltaTime, currentTime) {
   if (typeof isWindowActive !== 'undefined' && !isWindowActive) return;
   const time = currentTime * 0.000005;
   const shouldUpdateNoise = (currentTime - lastNoiseTime) >= NOISE_UPDATE_INTERVAL;
@@ -86,15 +86,15 @@ function createAndChangeShapes(deltaTime, currentTime) {
         noise.noise(y * freq2, time3) * 0.05
       ) * shape.noiseInfluenceY;
 
-      const smoothing = deltaTime * 0.7;
+      const smoothing = SSDeltaTime * 0.7;
       shape.vx += (noiseValueX - shape.vx) * smoothing;
       shape.vy += (noiseValueY - shape.vy) * smoothing;
     }
 
-    const velocityFactor = deltaTime * 40 * shape.speedMultiplier;
+    const velocityFactor = SSDeltaTime * 40 * shape.speedMultiplier;
     shape.x += shape.vx * velocityFactor;
     shape.y += shape.vy * velocityFactor;
-    shape.rotation += shape.rotationSpeed * deltaTime * 0.6;
+    shape.rotation += shape.rotationSpeed * SSDeltaTime * 0.6;
 
     const margin = 10;
     if (shape.x - margin < 0) {
@@ -239,9 +239,9 @@ function drawShapes(ctx) {
 let accumulator = 0;
 
 function animateShapes(currentTime) {
-  const deltaTime = (currentTime - lastFrameTime) / 1000 || 0.016;
+  const SSDeltaTime = (currentTime - lastFrameTime) / 1000 || 0.016;
   lastFrameTime = currentTime;
-  accumulator += deltaTime;
+  accumulator += SSDeltaTime;
   while (accumulator >= ACCUMULATOR_THRESHOLD) {
     createAndChangeShapes(ACCUMULATOR_THRESHOLD, currentTime);
     accumulator -= ACCUMULATOR_THRESHOLD;

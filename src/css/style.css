@@ -47,7 +47,7 @@ header {position: fixed;
     margin-left:2%;
     z-index: 1;
     padding: 1em 0 0 0;
-    transition: all .3s;
+    transition: all .1s ease-out;
     overflow: hidden;
     background: linear-gradient(to top, rgba(255, 0, 0, .25) 0%, rgba(0, 22, 0, .3) 2%, rgba(128, 0, 128, 0.2) 98%,  rgba(0, 0, 255, .5) 100%);
     backdrop-filter: brightness(115%) contrast(90%) saturate(270%);
@@ -156,7 +156,7 @@ p {line-height: 1.2;
 .no-indent {text-indent: 0;} .no-indent p {text-indent: 0;} .width95 {width: 95%; margin:auto;} .width95 p {width: 95%; margin:auto;} .width90 {width: 90%; margin:auto;} .width90 p {width: 90%; margin:auto;}
 .center {text-align: center;} .justify-content-center {justify-content:center;} .center p {text-align: center;} .justify-content-center p {justify-content: center;}
 .italic90 {font-style: italic; font-size: 90%;}
-body {transition: all .3s ease-in-out;
+body {
     font-size: 1em;
     line-height: 1.5;
     color: black;
