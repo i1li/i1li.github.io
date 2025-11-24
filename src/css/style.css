@@ -258,19 +258,18 @@ article {min-height:80vh; border: dotted 1px rgba(255,255,0,.1);}
     backdrop-filter: brightness(90%) contrast(250%) grayscale(50%) blur(.1em) saturate(120%);}
 .article-content:hover {background: radial-gradient(rgba(128, 128, 128, 0.1), rgba(0, 0, 0, 0.1));
     backdrop-filter: brightness(95%) contrast(200%) grayscale(50%) blur(.1em) saturate(120%);}
-#toTop {transition: all .45s;
+#toTop {transition: all .1s ease-in-out;
     z-index: 5;
-    pointer-events: none;
     position: fixed;
     bottom: 0;
     right: 2.5%;
     padding: 5px;
     background: rgba(128,128,128,.1);
-    opacity: 0;}
-#toTop:hover {background: rgba(128,128,128,.33);
-    cursor: pointer;
-    opacity: 0.9 !important;}
-.to-top {width: 2.7em;} .to-top:hover {filter: invert(100%) !important; transition: all .3s ease-in-out;}
+    opacity: 0.4;}
+#toTop:hover {cursor: pointer; 
+    background: rgba(128,128,128,.3);
+    opacity: 0.9;}
+.to-top {width: 2.7em;} .to-top:hover {filter: invert(100%);}
 #toTopFooter {opacity: 0.5;} #toTopFooter:hover {cursor: pointer; opacity: 0.9;}
 footer {background: linear-gradient(to top, rgba(0, 0, 0, .3), rgba(128, 128, 128, 0.2));
     transition: all 1.2s ease-in-out;

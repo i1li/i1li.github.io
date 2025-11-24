@@ -15,6 +15,7 @@
   border: 0;
 }
 #expand-icon {
+  opacity: .6;
   width: 2.5rem;
   position: fixed;
   bottom: 5rem;
@@ -31,7 +32,6 @@
   position: fixed;
   bottom: 7rem;
   right: 0;
-  transition: all .45s;
 }
 #now-playing-text:hover {
   opacity: .75;
@@ -39,7 +39,7 @@
 #remote-control {
   opacity: .7;
   position: fixed;
-  bottom: 5rem;
+  bottom: 5.5rem;
   right: .2rem;
   display: flex;
   flex-direction: column;
@@ -51,7 +51,9 @@
   opacity: .9;
 }
 #remote-control button {
-  margin-right: .2rem;
+  position: fixed;
+  right: .3rem;
+  bottom: 8rem;
 }
 #remote-control a {
   margin-right: 0;

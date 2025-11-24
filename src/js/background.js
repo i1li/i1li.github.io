@@ -184,4 +184,4 @@ setTimeout(() => {
   bgState = createBgLayerState(bg);
   lastBGUpdateTime = performance.now();
   requestAnimationFrame(updateColors);
-}, 3000);
+}, 4100);

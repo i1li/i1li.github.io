@@ -92,13 +92,13 @@ setTimeout(() => {
   }, observerOptions);
   // Stagger .observe() calls lightly (~20ms batches) for perf ramp-up
   let observeDelay = 0;
-  const observeBatchSize = 10;
+  const observeBatchSize = 15;
   alwaysShift.forEach((element, index) => {
     setTimeout(() => {
       animationObserver.observe(element);
     }, observeDelay);
     if (index % observeBatchSize === observeBatchSize - 1) {
-      observeDelay += 20;  // Tune: 10-50ms for balance
+      observeDelay += 10;
     }
   });
   // Cleanup on unload
@@ -129,4 +129,4 @@ setTimeout(() => {
       element.addEventListener('mouseout', debounce(() => handleDisengage(element, stopAnim), 30));
     });
   }
-}, 3000);
+}, 4000);

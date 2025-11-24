@@ -13,35 +13,35 @@ class YTEmbed extends HTMLElement {
     switch (true) {
       default:
         if (this.classList.contains('no-link-embed')) {
-          linkUrl = `https://www.youtube.com/watch?v=${this.id}${this.params ? '&' + this.params + '&': '&'}autoplay=1`;
-          embedUrl = `https://www.youtube-nocookie.com/embed/${this.id}${this.params ? '?' + this.params + '&' : '?'}autoplay=1`;
+         linkUrl = `https://www.youtube.com/watch?v=${this.id}${this.params ? '&' + this.params + '&': '&'}autoplay=1`;
+         embedUrl = `https://www.youtube-nocookie.com/embed/${this.id}${this.params ? '?' + this.params + '&' : '?'}autoplay=1`;
         } else if (this.classList.contains('no-embed')) {
-          linkUrl = `https://www.youtube.com/watch?v=${this.id}${this.params ? '&' + this.params + '&' : '&'}autoplay=1`;
+         linkUrl = `https://www.youtube.com/watch?v=${this.id}${this.params ? '&' + this.params + '&' : '&'}autoplay=1`;
         } else {
-          linkUrl = `https://www.youtube-nocookie.com/embed/${this.id}${this.params ? '?' + this.params + '&' : '?'}autoplay=1`;
-          embedUrl = linkUrl;
+         linkUrl = `https://www.youtube-nocookie.com/embed/${this.id}${this.params ? '?' + this.params + '&' : '?'}autoplay=1`;
+         embedUrl = linkUrl;
         }
         break;
       case this.videoIds.length > 1:
         if (this.classList.contains('no-link-embed')) {
-          linkUrl = `https://www.youtube.com/watch_videos?video_ids=${this.videoIds.join(',')}&autoplay=1`;
-          embedUrl = `https://www.youtube-nocookie.com/embed/?playlist=${this.videoIds.join(',')}&autoplay=1`;
+         linkUrl = `https://www.youtube.com/watch_videos?video_ids=${this.videoIds.join(',')}&autoplay=1`;
+         embedUrl = `https://www.youtube-nocookie.com/embed/?playlist=${this.videoIds.join(',')}&autoplay=1`;
         } else if (this.classList.contains('no-embed')) {
-          linkUrl = `https://www.youtube.com/watch_videos?video_ids=${this.videoIds.join(',')}&autoplay=1`;
+         linkUrl = `https://www.youtube.com/watch_videos?video_ids=${this.videoIds.join(',')}&autoplay=1`;
         } else {
-          linkUrl = `https://www.youtube-nocookie.com/embed/?playlist=${this.videoIds.join(',')}&autoplay=1`;
-          embedUrl = linkUrl;
+         linkUrl = `https://www.youtube-nocookie.com/embed/?playlist=${this.videoIds.join(',')}&autoplay=1`;
+         embedUrl = linkUrl;
         }
         break;
       case this.id.length > 11 && (this.id.startsWith('PL') || this.id.startsWith('TL') || this.id.startsWith('OL') || this.id.startsWith('FL') || this.id.startsWith('UU')):
         if (this.classList.contains('no-link-embed')) {
-          linkUrl = `https://www.youtube.com/playlist?list=${this.id}&autoplay=1`;
-          embedUrl = `https://www.youtube-nocookie.com/embed/videoseries?list=${this.id}&autoplay=1`;
+         linkUrl = `https://www.youtube.com/playlist?list=${this.id}&autoplay=1`;
+         embedUrl = `https://www.youtube-nocookie.com/embed/videoseries?list=${this.id}&autoplay=1`;
         } else if (this.classList.contains('no-embed')) {
-          linkUrl = `https://www.youtube.com/playlist?list=${this.id}&autoplay=1`;
+         linkUrl = `https://www.youtube.com/playlist?list=${this.id}&autoplay=1`;
         } else {
-          linkUrl = `https://www.youtube-nocookie.com/embed/videoseries?list=${this.id}&autoplay=1`;
-          embedUrl = linkUrl;
+         linkUrl = `https://www.youtube-nocookie.com/embed/videoseries?list=${this.id}&autoplay=1`;
+         embedUrl = linkUrl;
         }
         break;
     }
@@ -130,47 +130,41 @@ class YTEmbed extends HTMLElement {
     if (!remoteControl) {
       remoteControl = document.createElement('div');
       remoteControl.id = 'remote-control';
-      remoteControl.style.opacity = '0';
-      remoteControl.style.pointerEvents = 'none';
+      remoteControl.style.display = 'none';
       document.body.appendChild(remoteControl);
       const nowPlayingText = document.createElement('div');
       nowPlayingText.id = 'now-playing-text';
       nowPlayingText.innerHTML = '🔊Now<br>Playing:';
-      nowPlayingText.style.opacity = '0';
-      nowPlayingText.style.pointerEvents = 'none';
+      nowPlayingText.style.display = 'none';
       document.body.appendChild(nowPlayingText);
       const expandIcon = document.createElement('div');
       expandIcon.id = 'expand-icon';
       expandIcon.setAttribute('aria-label', 'Expand Remote Control');
+      expandIcon.style.display = 'block';
       document.body.appendChild(expandIcon);      
       const showRemoteControl = () => {
-        remoteControl.style.opacity = '0.7';
-        remoteControl.style.pointerEvents = 'auto';
-        expandIcon.style.opacity = '0';
-        expandIcon.style.pointerEvents = 'none';
-        nowPlayingText.style.opacity = '0';
-        nowPlayingText.style.pointerEvents = 'none';
+        remoteControl.style.display = 'block';
+        expandIcon.style.display = 'none';
+        nowPlayingText.style.display = 'none';
       };
       expandIcon.onclick = showRemoteControl;
       expandIcon.onmouseenter = showRemoteControl;
       remoteControl.onmouseleave = () => {
         if (this.isOutOfViewport()) {
-          remoteControl.style.opacity = '0';
-          remoteControl.style.pointerEvents = 'none';
-          expandIcon.style.opacity = '0.2';
-          expandIcon.style.pointerEvents = 'auto';
-          nowPlayingText.style.opacity = '0.55';
-          nowPlayingText.style.pointerEvents = 'auto';
+          remoteControl.style.display = 'none';
+          expandIcon.style.display = 'block';
+          nowPlayingText.style.display = 'block';
         }
       };
     }
     remoteControl.innerHTML = '';
     const stopButton = this.button.cloneNode(true);
     stopButton.style = '';
+    stopButton.style.display = 'block';
     stopButton.onclick = () => this.toggleVideo();
     const linkToVideo = document.createElement('a');
     linkToVideo.textContent = 'Go to video';
-    linkToVideo.style.marginTop = '10px';
+    linkToVideo.style.display = 'block';
     linkToVideo.onclick = (e) => {
       e.preventDefault();
       this.navigateToNowPlaying();
@@ -186,29 +180,23 @@ class YTEmbed extends HTMLElement {
     const nowPlayingText = document.getElementById('now-playing-text');
     if (this.isOutOfViewport()) {
       if (remoteControl) {
-        remoteControl.style.opacity = '0';
-        remoteControl.style.pointerEvents = 'none';
+        remoteControl.style.display = 'none';
       }
       if (expandIcon) {
-        expandIcon.style.opacity = '0.2';
-        expandIcon.style.pointerEvents = 'auto';
+        expandIcon.style.display = 'block';
       }
       if (nowPlayingText) {
-        nowPlayingText.style.opacity = '0.55';
-        nowPlayingText.style.pointerEvents = 'auto';
+        nowPlayingText.style.display = 'block';
       }
     } else {
       if (remoteControl) {
-        remoteControl.style.opacity = '0';
-        remoteControl.style.pointerEvents = 'none';
+        remoteControl.style.display = 'none';
       }
       if (expandIcon) {
-        expandIcon.style.opacity = '0';
-        expandIcon.style.pointerEvents = 'none';
+        expandIcon.style.display = 'none';
       }
       if (nowPlayingText) {
-        nowPlayingText.style.opacity = '0';
-        nowPlayingText.style.pointerEvents = 'none';
+        nowPlayingText.style.display = 'none';
       }
     }
   }

@@ -1,27 +1,27 @@
-const welcomeOverlay = document.getElementById('welcome-overlay');
-const welcomeDuration = 5000;
-const frameDuration = 100;
+document.body.style.overflow = 'hidden';
+const welcomeDuration = 4500;
+const frameDuration = 50;
 const totalFrames = Math.ceil(welcomeDuration / frameDuration);
-let currentFrame = 0;
-
-// Precompute easing curve values
+const scrollbarIntroFrame = Math.floor(totalFrames * 0.65);
 const easingCurve = new Float32Array(totalFrames);
 for (let i = 0; i < totalFrames; i++) {
   const t = i / totalFrames;
   const progress = t === 0 ? 0 : Math.pow(2, 10 * t - 10);
   easingCurve[i] = 1 - progress;
 }
-
+const welcomeOverlay = document.getElementById('welcome-overlay');
+let currentFrame = 0;
 const intervalId = setInterval(() => {
   currentFrame++;
   if (currentFrame <= totalFrames) {
     welcomeOverlay.style.opacity = easingCurve[currentFrame - 1].toFixed(3);
   }
-
+  if (currentFrame >= scrollbarIntroFrame) {
+    document.body.style.overflow = 'auto';
+  }
   if (currentFrame >= totalFrames) {
     clearInterval(intervalId);
     welcomeOverlay.style.display = 'none';
-    welcomeOverlay.style.pointerEvents = 'none';
     isInitialLoad = false;
   }
 }, frameDuration);

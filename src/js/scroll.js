@@ -13,11 +13,9 @@ function handleScroll() {
     header.classList.remove('scrolled-down');
   }
   if (document.body.scrollTop > window.innerHeight || document.documentElement.scrollTop > window.innerHeight) {
-      toTop.style.opacity = "0.4";
-      toTop.style.pointerEvents = "auto";
+      toTop.style.display = "inline-block";
     } else {
-      toTop.style.opacity = "0";
-      toTop.style.pointerEvents = "none";
+      toTop.style.display = "none";
     }
   }
 function updateURLOnScroll() {
@@ -50,6 +48,6 @@ function updateURLOnScroll() {
   }
 }
 ['scroll', 'touchmove', 'resize'].forEach(event => window.addEventListener(event, throttle(() => {
-  updateURLOnScroll();
   handleScroll();
-}, 100)));
+  updateURLOnScroll();
+}, 150)));
