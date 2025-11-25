@@ -1,8 +1,11 @@
+let isInitialLoad = true;//used in spa.js to prevent scrollIntoView conflict
 document.body.style.overflow = 'hidden';
 const welcomeDuration = 4500;
+const delayOtherResources = welcomeDuration - 200;
+const delayOtherResources2 = welcomeDuration - 100;
 const frameDuration = 50;
 const totalFrames = Math.ceil(welcomeDuration / frameDuration);
-const scrollbarIntroFrame = Math.floor(totalFrames * 0.65);
+const scrollbarIntroFrame = Math.floor(totalFrames * 0.7);
 const easingCurve = new Float32Array(totalFrames);
 for (let i = 0; i < totalFrames; i++) {
   const t = i / totalFrames;

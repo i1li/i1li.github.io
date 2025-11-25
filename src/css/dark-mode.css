@@ -1,43 +1,43 @@
 body.dark-mode {color: white;
-    text-shadow: 1px 1px 1px rgba(0,0,0,.3), 0 0 .3em rgba(22,22,22,.5), 0 0 1em rgba(255,0,0,.4);}
+    text-shadow: 1px 1px 1px rgba(0,0,0,.3), 0 0 .3rem rgba(22,22,22,.5), 0 0 1rem rgba(255,0,0,.4);}
 a:link.dark-mode, a:visited.dark-mode {color: #00eeff;
-    text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
-    filter: drop-shadow(0 0 .1em rgba(255, 100, 100, .3));
+    text-shadow: 1px 1px 2px red, 0 0 1rem blue, 0 0 0.2rem blue;
+    filter: drop-shadow(0 0 .1rem rgba(255, 100, 100, .3));
     text-decoration: underline dashed;
     text-decoration-thickness: 1px;
-    padding: .1em;
-    margin: .1em;
+    padding: .1rem;
+    margin: .1rem;
     padding-top:0;
     padding-bottom:0;
-    border: .1em rgba(22,22,22,.15) groove;
+    border: .1rem rgba(22,22,22,.15) groove;
     background: linear-gradient(to top, rgba(22,222,222, .1), rgba(222, 222, 222, 0.1));
-    border-radius: 1em;}
+    border-radius: 1rem;}
 a:hover.dark-mode {text-decoration: dotted underline;
     text-decoration-thickness: 2px;
-    border: .1em rgba(22,22,22,.1) ridge;
+    border: .1rem rgba(22,22,22,.1) ridge;
     background: linear-gradient(to top, rgba(22,22,222, .5), rgba(222, 222, 222, .1));}
 a, a.dark-mode, button {font-weight:600; opacity: .8;}
 #draw.dark-mode a {color: #00eeff;
-    text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
-    filter: drop-shadow(0 0 .1em rgba(255, 100, 100, .3));
+    text-shadow: 1px 1px 2px red, 0 0 1rem blue, 0 0 0.2rem blue;
+    filter: drop-shadow(0 0 .1rem rgba(255, 100, 100, .3));
     text-decoration: underline dashed;
     text-decoration-thickness: 1px;
-    padding: .1em;
-    margin: .1em;
+    padding: .1rem;
+    margin: .1rem;
     padding-top:0;
     padding-bottom:0;
-    border: .1em rgba(22,22,22,.15) groove;
+    border: .1rem rgba(22,22,22,.15) groove;
     background: linear-gradient(to top, rgba(22,222,222, .1), rgba(222, 222, 222, 0.1));
-    border-radius: 1em;}
+    border-radius: 1rem;}
 #draw.dark-mode a:hover {text-decoration: dotted underline;
     text-decoration-thickness: 2px;
-    border: .1em rgba(22,22,22,.1) ridge;
+    border: .1rem rgba(22,22,22,.1) ridge;
     background: linear-gradient(to top, rgba(22,22,222, .5), rgba(222, 222, 222, .1));}
 .article-header.dark-mode {background-image: url("../img/bginvert.png"); filter: opacity(85%) brightness(50%) contrast(250%) saturate(250%)}
 .article-content-wrapper.dark-mode {background-image: url("../img/bginvert.png");
     background-attachment: fixed;
-    border: inset .15em rgba(100,100,100,.2);
-    border-bottom:solid .1em rgba(255,0,0,.4);
+    border: inset .15rem rgba(100,100,100,.2);
+    border-bottom:solid .1rem rgba(255,0,0,.4);
     border-top:0;}
 .article-content:hover.dark-mode {background: radial-gradient(rgba(0, 0, 0, .2), rgba(128, 128, 128, 0.2));}
 .article-content.dark-mode {border: solid 1px rgba(255,0,0,.2);
@@ -45,6 +45,6 @@ a, a.dark-mode, button {font-weight:600; opacity: .8;}
     background-attachment: scroll;
     background-size: 22000px;
     background-position-x: -200px;
-    padding: 0 0 1em .2em;
+    padding: 0 0 1rem .2rem;
     margin:0;
-    backdrop-filter: brightness(70%) contrast(200%) grayscale(50%) blur(.1em) saturate(150%);}
+    backdrop-filter: brightness(70%) contrast(200%) grayscale(50%) blur(.1rem) saturate(150%);}

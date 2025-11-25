@@ -1,15 +1,37 @@
 class YTEmbed extends HTMLElement {
+  static get observedAttributes() {
+    return ['v'];
+  }
+
   constructor() {
     super();
+    this.throttledCheckViewport = this.checkViewport.bind(this);
+    this.throttledCheckViewport = throttle(this.throttledCheckViewport, 500);
+    this.link = document.createElement('a');
+    this.link.title = 'View video in new tab';
+    this.link.target = '_blank';
+    this.link.rel = 'noreferrer';
+    this.button = document.createElement('button');
+    this.button.title = 'Play Video';
+    this.button.className = 'showHideButton';
+    this.initFromV(); // Initial call (handles null v)
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === 'v' && oldValue !== newValue) {
+      this.initFromV();
+    }
+  }
+
+  initFromV() {
     const v = this.getAttribute('v');
+    if (!v) return; // Skip if null/no v
     const [id, params] = v.split('?');
     this.id = id;
     this.params = params;
     const videoIds = this.id.split(',');
     this.videoIds = videoIds;
     let linkUrl , embedUrl;
-    this.throttledCheckViewport = this.checkViewport.bind(this);
-    this.throttledCheckViewport = throttle(this.throttledCheckViewport, 500);
     switch (true) {
       default:
         if (this.classList.contains('no-link-embed')) {
@@ -47,14 +69,9 @@ class YTEmbed extends HTMLElement {
     }
     this.linkUrl = linkUrl;
     this.embedUrl = embedUrl;
-    this.link = document.createElement('a');
-    this.link.textContent = this.getAttribute('t') || 'View Video';
-    this.link.title = 'View video in new tab';
     this.link.href = this.linkUrl;
-    this.button = document.createElement('button');
+    this.link.textContent = this.getAttribute('t') || 'View Video';
     this.button.textContent = '▶️ Play';
-    this.button.title = 'Play Video';
-    this.button.className = 'showHideButton';
     if (this.classList.contains('no-embed')) {
       this.button.onclick = () => window.open(this.linkUrl);
       this.appendChild(this.button);
@@ -67,7 +84,7 @@ class YTEmbed extends HTMLElement {
       this.appendChild(this.link);
       this.appendChild(this.wrapper);
     }
-  }  
+  }
   toggleVideo() {
     const iframeExists = this.wrapper.querySelector('iframe');
     if (!iframeExists) {
@@ -224,7 +241,7 @@ class YTEmbed extends HTMLElement {
     if (nowPlaying) {
       const path = nowPlaying.getAttribute('data-video-path');
       if (path) {
-        navigate(path.substring(1));
+        navigateSPA(path.substring(1));
         setTimeout(() => {
           const y = nowPlaying.getBoundingClientRect().top + window.pageYOffset - window.innerHeight * 0.1;
           window.scrollTo({ top: y, behavior: 'smooth' });

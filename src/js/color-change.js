@@ -129,4 +129,4 @@ setTimeout(() => {
       element.addEventListener('mouseout', debounce(() => handleDisengage(element, stopAnim), 30));
     });
   }
-}, 4000);
+}, delayOtherResources2);
