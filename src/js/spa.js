@@ -4,15 +4,16 @@ const headerHeight = 3 * parseFloat(getComputedStyle(document.documentElement).f
 const toTop = document.getElementById("toTop");
 function goToTop() {window.scrollTo(0, 0);}
 let lastUpdatedPath = '';
-function scrollSPA(arg, isInitial = false) {
+let isInitial = true;
+function scrollSPA(arg, instantScrollNoHeaderOffset = false) {
   if (arg && arg.nodeType && !(arg instanceof Event)) {
-    const behavior = isInitial ? 'instant' : 'smooth';
+    const behavior = instantScrollNoHeaderOffset ? 'instant' : 'smooth';
     arg.closest('article').scrollIntoView({ behavior });
-    const offsetTop = arg.getBoundingClientRect().top + window.scrollY - headerHeight;
+    const offset = instantScrollNoHeaderOffset ? 0 : headerHeight;
+    const offsetTop = arg.getBoundingClientRect().top + window.scrollY - offset;
     window.scrollTo({ top: offsetTop, behavior });
     return;
   }
-  const event = arg;
   if (window.scrollY > headerHeight * 0.6) {
     header.classList.add('scrolled-down');
   } else {
@@ -96,18 +97,19 @@ function showAllArticles() {
   goToTop();
 }
 function showArticle(articleId, sectionId, isInitial = false) {
-  articles.forEach((container) => {
-    const isTarget = container.id === articleId;
-    container.style.display = isTarget ? 'block' : 'none';
-    if (isTarget) {
-      welcome.style.display = 'none';
-      const content = container.querySelector('.article-content');
-      if (content) content.style.display = 'block';
-      showBottomNav(container);
-      scrollSPA(isTarget ? (sectionId ? container.querySelector(`.section-title#${sectionId}`) : container) : null, isInitial);
-      const newPath = `/${articleId}${sectionId ? `/${sectionId}` : ''}`;
-      history.replaceState({ articleId, sectionId }, '', newPath);
+  articles.forEach(container => {
+    if (container.id !== articleId) {
+      container.style.display = 'none';
+      return;
     }
+    container.style.display = 'block';
+    welcome.style.display = 'none';
+    const contentEl = container.querySelector('.article-content');
+    if (contentEl) contentEl.style.display = 'block';
+    showBottomNav(container);
+    scrollSPA(sectionId ? container.querySelector(`.section-title#${sectionId}`) : container, isInitial && !!sectionId);
+    const newPath = `/${articleId}${sectionId ? `/${sectionId}` : ''}`;
+    history.replaceState({ articleId, sectionId }, '', newPath);
   });
 }
 const initialPath = window.location.pathname.substring(1);

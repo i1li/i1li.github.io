@@ -50,9 +50,7 @@ function displayRandomBibleVerse() {
   displayVerse();
 }
 document.addEventListener("DOMContentLoaded", function() {
-  if (isInitialLoad) {
-    displayRandomBibleVerse();
-  }
+  displayRandomBibleVerse();
 });
 const bibleVerses = [[
 "Philippians 4:7",

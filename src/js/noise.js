@@ -66,20 +66,6 @@ class SimplexNoise {
 const permutation = [...Array(256)].map(() => Math.floor(Math.random() * 256));
 const p = [...permutation, ...permutation];
 
-function fade(t) { 
-  return t * t * t * (t * (t * 6 - 15) + 10); 
-}
-
-function lerp(t, a, b) { 
-  return a + t * (b - a); 
-}
-
-function grad(hash, x) {
-  const h = hash & 15;
-  const grad = 1 + (h & 7);
-  return (h & 8 ? -grad : grad) * x;
-}
-
 function perlinNoise(x) {
   const X = Math.floor(x) & 255;
   x -= Math.floor(x);

@@ -42,7 +42,7 @@ canvas {
 header:hover {background:linear-gradient(to bottom, rgba(255, 0, 0, .4) 0%, rgba(0, 222, 0, .15) 6%, rgba(128, 22, 128, 0.3) 94%, rgba(255, 0, 0, .4) 100%);}
 header {position:fixed;
     top:0;
-    height:5em;
+    height:5rem;
     width:95%;
     margin-left:2%;
     z-index:1;
@@ -56,13 +56,13 @@ header {position:fixed;
     border-right:solid .2rem rgba(111,0,111,.4);
     border-radius:0 0 2rem 2rem;}
 .scrolled-down:hover {background:linear-gradient(to top, rgba(0, 0, 0, .6), rgba(128, 128, 128, 0.6));opacity:1;}
-.scrolled-down {height:3em;
+.scrolled-down {height:3rem;
     opacity:.8;
     padding-top:0;
     width:97%;
     margin-left:1%;
     overflow-x:hidden;
-    backdrop-filter:blur(.07em) brightness(90%) contrast(115%) saturate(115%);
+    backdrop-filter:blur(.07rem) brightness(90%) contrast(115%) saturate(115%);
     background:linear-gradient(to bottom, rgba(0, 0, 0, .5) 0%, rgba(128, 128, 128, 0.1) 99%, rgba(128, 128, 128, .75) 100%);
     border-bottom:none;
     border-left:solid .2rem rgba(255,0,0,.15);
@@ -71,34 +71,34 @@ header {position:fixed;
 #header-filler {position:sticky;
     top:0;
     left:0;
-    height:6em;}
+    height:6rem;}
 .scrolled-down h1 {font-size:140%;position:absolute;left:0;filter:drop-shadow(0 0 1rem white);}
 .scrolled-down .img-header {height:2.9rem;filter:drop-shadow(0 0 1rem rgba(127, 127, 127, 0.45))}
-.scrolled-down #site-title-text {margin-left:-.2em;opacity:.33;}
+.scrolled-down #site-title-text {margin-left:-.2rem;opacity:.33;}
 .scrolled-down #toolbar {opacity:.7;
     position:absolute;
-    top:.2em;
-    right:.4em;
+    top:.2rem;
+    right:.4rem;
     font-size:110%;}
 #toolbar:hover {opacity:.9;}
 #toolbar {opacity:.8;
     position:absolute;
     text-align:right;
-    top:3em;
+    top:3rem;
     right:2%;
     font-size:120%;
     transition:all .2s ease-in-out;
     z-index:2;}
-#site-title {margin-left:-.1em;margin-top:.3em;display:flex;align-items:center;} .scrolled-down #site-title {margin-top:-.25em;}
+#site-title {margin-left:-.1rem;margin-top:.3rem;display:flex;align-items:center;} .scrolled-down #site-title {margin-top:-.25rem;}
 #site-title-text:hover {opacity:.77;}
-#site-title-text {opacity:.55;margin:.3em 0 0 -.3em;}
+#site-title-text {opacity:.55;margin:.3em 0 0 -.3rem;}
 .img-header {height:4rem;transition:all 1s ease;
 filter:drop-shadow(0 0 1rem rgba(127, 127, 127, 0.75));}
 .img-header:hover {filter:invert(100%) !important;transition:all .5s ease-in-out;scale:1.07;}
 .no-bg {background:none !important;border:none !important;}
 #site-intro {text-align:center;
-    padding:.1em 0 .2em;
-    backdrop-filter:brightness(90%)contrast(111%)saturate(555%)blur(.04em);
+    padding:.1rem 0 .2rem;
+    backdrop-filter:brightness(90%)contrast(111%)saturate(555%)blur(.04rem);
     border:solid rgba(255, 0, 0, 0.4);
     border-width:0px 1px 1px 1px;
     border-radius:.5rem;}
@@ -358,7 +358,7 @@ details > summary {cursor:pointer;}
 details > summary:hover {cursor:pointer;text-decoration:underline;}
 .container{margin-right:auto;margin-left:auto}
 @media (min-width:376px){.container{max-width:376px}}@media (min-width:476px){.container{max-width:476px}}@media (min-width:576px){.container,.container-sm{max-width:540px}}@media (min-width:768px){.container{max-width:720px}}@media (min-width:992px){.container {max-width:960px}}@media (min-width:1200px){.container{max-width:1140px}}@media (min-width:1400px){.container{max-width:1320px}}
-@media only screen and (max-width:767px) and (orientation:portrait) {html body, table{font-size:92%;} p {text-align:initial;} .to-top {max-width:2.5em;margin-bottom:.2em;margin-right:-.5em;padding-left:.6em;padding-top:.5em;} .row-cols-auto>*{flex:0 0 100%;min-width:100%;} .col-md-9{width:80%;} .width95 {width:97.5%;margin:auto;} .width95 p {width:97.5%;margin:auto;} .width90 {width:95%;margin:auto;} .width90 p {width:95%;margin:auto;} blockquote {width:96%;} h1 {font-size:130%;} h2 {font-size:120%;} h3 {font-size:110%;} header {width:98%;}}
+@media only screen and (max-width:767px) and (orientation:portrait) {html body, table{font-size:92%;} p {text-align:initial;} .to-top {max-width:2.5em;margin-bottom:.2rem;margin-right:-.5rem;padding-left:.6em;padding-top:.5rem;} .row-cols-auto>*{flex:0 0 100%;min-width:100%;} .col-md-9{width:80%;} .width95 {width:97.5%;margin:auto;} .width95 p {width:97.5%;margin:auto;} .width90 {width:95%;margin:auto;} .width90 p {width:95%;margin:auto;} blockquote {width:96%;} h1 {font-size:130%;} h2 {font-size:120%;} h3 {font-size:110%;} header {width:98%;}}
 .row>*{width:100%;max-width:100%;}.row{display:flex;flex-wrap:wrap;}
 .col{flex:1 0 auto;margin-left:.7rem;margin-right:.7rem;margin-bottom:.2rem}
 .row-cols-auto>*{flex:0 0 auto;width:auto}

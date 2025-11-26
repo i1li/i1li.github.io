@@ -1,8 +1,5 @@
 class YTEmbed extends HTMLElement {
-  static get observedAttributes() {
-    return ['v'];
-  }
-
+  static get observedAttributes() {return ['v'];}
   constructor() {
     super();
     this.throttledCheckViewport = this.checkViewport.bind(this);
@@ -14,58 +11,70 @@ class YTEmbed extends HTMLElement {
     this.button = document.createElement('button');
     this.button.title = 'Play Video';
     this.button.className = 'showHideButton';
-    this.initFromV(); // Initial call (handles null v)
+    this.initFromV();
   }
-
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'v' && oldValue !== newValue) {
       this.initFromV();
     }
   }
-
+  isPlaylistID(id) {
+    return id.length > 11 && (id.startsWith('PL') || id.startsWith('TL') || id.startsWith('OL') || id.startsWith('FL') || id.startsWith('UU'));
+  }
   initFromV() {
     const v = this.getAttribute('v');
-    if (!v) return; // Skip if null/no v
+    if (!v) return;
     const [id, params] = v.split('?');
     this.id = id;
     this.params = params;
     const videoIds = this.id.split(',');
     this.videoIds = videoIds;
     let linkUrl , embedUrl;
-    switch (true) {
-      default:
-        if (this.classList.contains('no-link-embed')) {
-         linkUrl = `https://www.youtube.com/watch?v=${this.id}${this.params ? '&' + this.params + '&': '&'}autoplay=1`;
-         embedUrl = `https://www.youtube-nocookie.com/embed/${this.id}${this.params ? '?' + this.params + '&' : '?'}autoplay=1`;
-        } else if (this.classList.contains('no-embed')) {
-         linkUrl = `https://www.youtube.com/watch?v=${this.id}${this.params ? '&' + this.params + '&' : '&'}autoplay=1`;
-        } else {
-         linkUrl = `https://www.youtube-nocookie.com/embed/${this.id}${this.params ? '?' + this.params + '&' : '?'}autoplay=1`;
-         embedUrl = linkUrl;
-        }
-        break;
-      case this.videoIds.length > 1:
-        if (this.classList.contains('no-link-embed')) {
-         linkUrl = `https://www.youtube.com/watch_videos?video_ids=${this.videoIds.join(',')}&autoplay=1`;
-         embedUrl = `https://www.youtube-nocookie.com/embed/?playlist=${this.videoIds.join(',')}&autoplay=1`;
-        } else if (this.classList.contains('no-embed')) {
-         linkUrl = `https://www.youtube.com/watch_videos?video_ids=${this.videoIds.join(',')}&autoplay=1`;
-        } else {
-         linkUrl = `https://www.youtube-nocookie.com/embed/?playlist=${this.videoIds.join(',')}&autoplay=1`;
-         embedUrl = linkUrl;
-        }
-        break;
-      case this.id.length > 11 && (this.id.startsWith('PL') || this.id.startsWith('TL') || this.id.startsWith('OL') || this.id.startsWith('FL') || this.id.startsWith('UU')):
-        if (this.classList.contains('no-link-embed')) {
-         linkUrl = `https://www.youtube.com/playlist?list=${this.id}&autoplay=1`;
-         embedUrl = `https://www.youtube-nocookie.com/embed/videoseries?list=${this.id}&autoplay=1`;
-        } else if (this.classList.contains('no-embed')) {
-         linkUrl = `https://www.youtube.com/playlist?list=${this.id}&autoplay=1`;
-        } else {
-         linkUrl = `https://www.youtube-nocookie.com/embed/videoseries?list=${this.id}&autoplay=1`;
-         embedUrl = linkUrl;
-        }
-        break;
+    if (this.classList.contains('no-link-embed')) {
+      switch (true) {
+        default:
+          linkUrl = `https://www.youtube.com/watch?v=${this.id}${this.params ? '&' + this.params + '&': '&'}autoplay=1`;
+          embedUrl = `https://www.youtube-nocookie.com/embed/${this.id}${this.params ? '?' + this.params + '&' : '?'}autoplay=1`;
+          break;
+        case this.videoIds.length > 1:
+          linkUrl = `https://www.youtube.com/watch_videos?video_ids=${this.videoIds.join(',')}&autoplay=1`;
+          embedUrl = `https://www.youtube-nocookie.com/embed/?playlist=${this.videoIds.join(',')}&autoplay=1`;
+          break;
+        case this.isPlaylistID(this.id):
+          linkUrl = `https://www.youtube.com/playlist?list=${this.id}&autoplay=1`;
+          embedUrl = `https://www.youtube-nocookie.com/embed/videoseries?list=${this.id}&autoplay=1`;
+          break;
+      }
+    } else if (this.classList.contains('no-embed')) {
+      switch (true) {
+        default:
+          linkUrl = `https://www.youtube.com/watch?v=${this.id}${this.params ? '&' + this.params + '&' : '&'}autoplay=1`;
+          embedUrl = null;
+          break;
+        case this.videoIds.length > 1:
+          linkUrl = `https://www.youtube.com/watch_videos?video_ids=${this.videoIds.join(',')}&autoplay=1`;
+          embedUrl = null;
+          break;
+        case this.isPlaylistID(this.id):
+          linkUrl = `https://www.youtube.com/playlist?list=${this.id}&autoplay=1`;
+          embedUrl = null;
+          break;
+      }
+    } else {
+      switch (true) {
+        default:
+          linkUrl = `https://www.youtube-nocookie.com/embed/${this.id}${this.params ? '?' + this.params + '&' : '?'}autoplay=1`;
+          embedUrl = linkUrl;
+          break;
+        case this.videoIds.length > 1:
+          linkUrl = `https://www.youtube-nocookie.com/embed/?playlist=${this.videoIds.join(',')}&autoplay=1`;
+          embedUrl = linkUrl;
+          break;
+        case this.isPlaylistID(this.id):
+          linkUrl = `https://www.youtube-nocookie.com/embed/videoseries?list=${this.id}&autoplay=1`;
+          embedUrl = linkUrl;
+          break;
+      }
     }
     this.linkUrl = linkUrl;
     this.embedUrl = embedUrl;
@@ -269,3 +278,45 @@ class YTEmbed extends HTMLElement {
   }
 }
 customElements.define('y-t', YTEmbed);
+const shuffleDiv = document.getElementById('shuffle');
+const elements = [...shuffleDiv.querySelectorAll('y-t')];
+let combinedElements = [];
+let elementIdsMap = new Map();
+function processAndCombine(element, index) {
+  if (processedElements.has(index)) {return;}
+  const elementIdsString = element.getAttribute('v');
+  let elementIds = elementIdsMap.get(index) || elementIdsString.split(',');
+  if (!elementIdsMap.has(index)) elementIdsMap.set(index, elementIds);
+  const limitedIds = shuffle(elementIds, 3);
+  limitedIds.forEach(id => combinedElements.push(id.split('?')[0]));
+  const shuffledArray = shuffle(elementIds, 150);
+  element.setAttribute('v', shuffledArray.join(','));
+  processedElements.add(index);
+  if (index < elements.length - 1) {
+    processAndCombine(elements[index + 1], index + 1);
+  }
+  else {
+    const combo = document.getElementById('combined-list');
+    const comboElement = combo.querySelector('y-t') ?? combo.appendChild(document.createElement('y-t'));
+    comboElement.setAttribute('v', shuffle([...new Set(combinedElements)], 150).join(','));
+  }
+}
+let processedElements = new Set();
+processAndCombine(elements[0], 0);
+function shuffleAndDraw() {
+  shuffle(elements);
+  let currentIndex = 0;
+  let draw = document.getElementById('draw');
+  const clonedElement = elements[currentIndex].cloneNode(false);
+  processAndCombine(clonedElement, currentIndex);
+  draw.appendChild(clonedElement);
+  let next = document.querySelector("#next");
+  next.addEventListener('click', function() {
+    currentIndex = (currentIndex + 1) % elements.length;
+    draw.innerHTML = '';
+    const clonedElement = elements[currentIndex].cloneNode(false);
+    processAndCombine(clonedElement, currentIndex);
+    draw.appendChild(clonedElement);
+  });
+}
+shuffleAndDraw();

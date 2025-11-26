@@ -1,6 +1,5 @@
-let isInitialLoad = true;//used in spa.js to prevent scrollIntoView conflict
 document.body.style.overflow = 'hidden';
-const welcomeDuration = 4500;
+const welcomeDuration = 3700;
 const delayOtherResources = welcomeDuration - 200;
 const delayOtherResources2 = welcomeDuration - 100;
 const frameDuration = 50;
@@ -25,6 +24,5 @@ const intervalId = setInterval(() => {
   if (currentFrame >= totalFrames) {
     clearInterval(intervalId);
     welcomeOverlay.style.display = 'none';
-    isInitialLoad = false;
   }
 }, frameDuration);
