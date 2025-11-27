@@ -2,7 +2,7 @@ const esbuild = require('esbuild');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const cheerio = require('cheerio'); // npm install cheerio
+const cheerio = require('cheerio');
 
 let html = fs.readFileSync('src/index.html', 'utf8');
 const itemsToCopy = ['favicon.ico', 'img'];
@@ -54,6 +54,16 @@ $('a').each((i, el) => {
     $(el).attr('onclick', `navigateSPA(event, '${escapedPath}')`); // Pass event explicitly
   }
 });
+
+// Add onclick to overlay-eligible images
+$('img:not(.img-footer,.img-header,.to-top,.no-overlay)').each((i, el) => {
+  const src = $(el).attr('src');
+  if (src) {  // Skip images without src
+    const escapedSrc = src.replace(/'/g, "\\'");
+    $(el).attr('onclick', `openImageOverlay('${escapedSrc}');return false;`);
+  }
+});
+
 html = $.html(); // Update html with modifications
 
 async function bundleJS() {

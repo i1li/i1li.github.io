@@ -20,7 +20,7 @@
 <div class="search-results-wrapper"><div id="searchResults">
 </div></div></div></div>
 
-<div id="fullScreenOverlay" onclick="closeOverlay()"><span class="close-button" onclick="closeOverlay()">&times;</span><img id="overlayImage"></div>
+<div id="fullScreenOverlay" onclick="closeImageOverlay()"><span class="close-button">&times;</span><img id="overlayImage"></div>
 
 <div id="bg-wrapper"><div id="bg-img"><div id="bg-wrapper2"><div id="bg-wrapper3"></div></div></div></div>
 <div id="bg"><div id="shift-layer1"><div id="shift-layer2"></div></div></div><div id="bg-frame-top"></div><div id="bg-frame-right"></div><div id="bg-frame-bottom"></div><div id="bg-frame-left"></div>
@@ -31,8 +31,8 @@
 <table><tr><td style="width:50%;">
 <h1><span id="site-title"><a href="/" class="no-bg" title="Home"><img alt="Home" class="img-header img-opaq" decoding="async" src="/img/yinyang.png"></a>
 <a href="/" id="site-title-text" class="no-bg" title="Home">i&i</a></span></h1></td><td style="width:50%;">
-<span id="toolbar"><span id="search" title="Search"><span id="search-text">Search</span>🔍</span><button id="zoom-out" title="Zoom Out">−</button><button id="zoom-in" title="Zoom In">+</button>
-<span class="dark-light"><button id="dark-light" title="Dark / Light">🌙 / ☀️</button></span></span>
+<span id="toolbar"><span id="search" title="Search"><span id="search-text" onclick="openSearchOverlay()">Search</span>🔍</span><button id="zoom-out" title="Zoom Out" onclick="pageZoom(false)">−</button><button id="zoom-in" title="Zoom In" onclick="pageZoom(true)">+</button>
+<span class="dark-light"><button id="dark-light" title="Dark / Light" onclick="toggleDarkMode()">🌙 / ☀️</button></span></span>
 </td></tr></table></header><div id="header-filler"></div>
 
 <div class="row justify-content-center"><div class="col-md-9">
@@ -1505,7 +1505,6 @@ class="no-embed"
 <td style="text-align:center; width:60%; vertical-align:middle; padding-top:1em; font-size:1em; opacity:.7;"><a href="https://connect4more.netlify.app" class="no-bg" title="Connect for more.">Connect</a></td>
 <td style="text-align:right; width:20%; padding-right:2.5%; padding-top:.6em;"><a class="no-bg" title="Home" href="/"><img class="img-footer img-opaq" decoding="async" alt="Home" src="/img/yinyang.png"></a></td></tr></table></footer>
 
-<script src="/js/github-pages.js"></script>
 <script src="/js/welcome-overlay.js"></script>
 <script src="/js/utils.js"></script>
 <script src="/js/noise.js"></script>
@@ -1518,7 +1517,6 @@ class="no-embed"
 <script src="/js/background.js"></script>
 <script src="/js/color-change.js"></script>
 <script src="/js/display-toggle.js"></script>
-<script src="/js/image-overlay.js"></script>
 <script src="/js/search.js"></script>
 
 </div></div></body></html>

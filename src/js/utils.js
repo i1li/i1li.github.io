@@ -128,3 +128,18 @@ function metaRecursiveNoise(x, depth = 0, maxDepth = random(33,111), noiseFunc) 
   const u = metaRecursiveEaseNoise(fade(x), depth + 1, maxDepth);
   return lerp(u, grad(p[X], x), grad(p[X+1], x-1));
 }
+
+// Full Screen Image Overlay
+let imgOverlay = document.getElementById("fullScreenOverlay");
+function openImageOverlay(imageSource) {
+  let overlayImage = document.getElementById("overlayImage");
+  imgOverlay.style.display = "block";
+  overlayImage.src = imageSource;
+  document.body.style.overflow = 'hidden';
+  document.addEventListener('keydown', closeImageOverlay);
+}
+function closeImageOverlay() {
+  imgOverlay.style.display = "none";
+  document.body.style.overflow = 'auto';
+  document.removeEventListener('keydown', closeImageOverlay);
+}

@@ -4,12 +4,12 @@ function applyDarkMode(isDarkMode) {
     element.classList.toggle('dark-mode', isDarkMode);
   });
 }
+let darkMode;
 function toggleDarkMode() {
   darkMode = !darkMode;
   applyDarkMode(darkMode);
   localStorage.setItem('darkMode', darkMode);
 }
-let darkMode;
 const savedMode = localStorage.getItem('darkMode');
 if (savedMode !== null) {
   darkMode = savedMode === 'true';
@@ -21,5 +21,3 @@ if (savedMode !== null) {
   darkMode = true;
 }
 applyDarkMode(darkMode);
-const modeToggle = document.getElementById('dark-light');
-modeToggle.addEventListener('click', toggleDarkMode);
