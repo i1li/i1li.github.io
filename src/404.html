@@ -28,12 +28,11 @@
   const pathSegmentsToKeep = 0;
   const l = new URL(window.location);
   const decodedPath = decodeURIComponent(l.pathname);
-  if (!decodedPath.includes('?/') && !l.search.startsWith('?/')) {
+  if (!decodedPath.includes('//')) {
     const basePath = '/' + l.pathname.split('/').slice(1, 1 + pathSegmentsToKeep).join('/');
     const restPath = l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/');
-    const newPath = basePath + (basePath.endsWith('/') ? '' : '/') + '?/' + restPath.replace(/&/g, '~and~');
-    const newSearch = l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '';
-    window.location.replace(l.origin + newPath + newSearch + l.hash);
+    const newPath = basePath + (basePath.endsWith('/') ? '/' : '//') + restPath;
+    window.location.replace(l.origin + newPath + l.search + l.hash);
   }
 })();
 </script></head><body></body></html>
