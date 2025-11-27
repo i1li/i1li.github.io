@@ -11,10 +11,8 @@
 // the single page app to route accordingly.
 
 // Updated to modern syntax in 2024 for https://github.com/i1li/i
-(function (l) {
-  if (l.search.startsWith('?/')) {
-    const decoded = l.search.slice(1).split('&').map(s => s.replace(/~and~/g, '&')).join('?');
-    const newUrl = l.origin + l.pathname.slice(0, -1) + decoded + l.hash;
-    window.history.replaceState(null, null, newUrl);
-  }
-})(window.location);
+if (window.location.search.startsWith('?/')) {
+  const decoded = window.location.search.slice(1).split('&').map(s => s.replace(/~and~/g, '&')).join('?');
+  window.history.replaceState(null, null, window.location.origin + '/' + decoded + window.location.hash);
+}
+
