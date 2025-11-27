@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const cheerio = require('cheerio'); // npm install cheerio
 
 let html = fs.readFileSync('src/index.html', 'utf8');
-const itemsToCopy = ['favicon.ico', '404.html', 'img'];
+const itemsToCopy = ['favicon.ico', 'img'];
 const cacheBuster = () => crypto.randomBytes(3).toString('hex').slice(0, 5);
 const uniqueHash = cacheBuster();
 const addComment = (content, fileType) => {
@@ -94,6 +94,7 @@ Promise.all([bundleJS(), bundleCSS()])
         html = html.replace(/\s+/g, ' ');
         html = addComment(html, 'html');
         fs.writeFileSync('dist/index.html', html);
+        fs.writeFileSync('dist/404.html', html);
         console.log('Build complete');
     })
     .catch((error) => {
