@@ -11,7 +11,7 @@
 // the single page app to route accordingly.
 
 // Updated to modern syntax in 2024 for https://github.com/i1li/i
-if (window.location.search.startsWith('//')) {
-  const decoded = window.location.search.slice(2);
-  window.history.replaceState(null, null, window.location.origin + '/' + decoded + window.location.hash);
+if (window.location.search.startsWith('?/')) {
+  const decoded = window.location.search.slice(1).split('&').map(s => s.replace(/~and~/g, '&')).join('?');
+  window.history.replaceState(null, null, window.location.origin + decoded + window.location.hash);
 }
