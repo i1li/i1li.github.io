@@ -14,9 +14,7 @@ class YTEmbed extends HTMLElement {
     this.initFromV();
   }
   attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'v' && oldValue !== newValue) {
-      this.initFromV();
-    }
+    if (name === 'v' && oldValue !== newValue) {this.initFromV();}
   }
   isPlaylistID(id) {
     return id.length > 11 && (id.startsWith('PL') || id.startsWith('TL') || id.startsWith('OL') || id.startsWith('FL') || id.startsWith('UU'));
@@ -110,12 +108,8 @@ class YTEmbed extends HTMLElement {
       const article = this.closest('article');
       const section = this.closest('section');
       let path = '/';
-      if (article) {
-        path += article.id;
-        if (section) {
-          path += `/${section.id}`;
-        }
-      }
+      if (article) { path += article.id;
+        if (section) { path += `/${section.id}`; }}
       this.setAttribute('data-video-path', path);
       this.createRemoteControl();
       this.setupViewportCheck();
@@ -130,25 +124,8 @@ class YTEmbed extends HTMLElement {
     }
   }
   closeOtherVideos() {
-    const playingVideos = document.querySelectorAll('y-t[data-now-playing]');
-    playingVideos.forEach(video => {
-      if (video !== this) {
-        const button = video.querySelector('button.showHideButton');
-        if (button && button.textContent === '⏹️ Stop') {
-          video.removeAttribute('data-now-playing');
-          video.removeAttribute('data-video-path');
-          const wrapper = video.querySelector('.yt-wrapper');
-          if (wrapper) {
-            const iframe = wrapper.querySelector('iframe');
-            if (iframe) {
-              wrapper.removeChild(iframe);
-            }
-            wrapper.style.display = 'none';
-          }
-          button.textContent = '▶️ Play';
-          button.title = 'Play Video';
-        }
-      }
+    document.querySelectorAll('y-t[data-now-playing]').forEach(video => {
+      if (video !== this) video.button.click();
     });
   }
   createRemoteControl() {
@@ -191,10 +168,7 @@ class YTEmbed extends HTMLElement {
     const linkToVideo = document.createElement('a');
     linkToVideo.textContent = 'Go to video';
     linkToVideo.style.display = 'block';
-    linkToVideo.onclick = (e) => {
-      e.preventDefault();
-      this.navigateToNowPlaying();
-    };
+    linkToVideo.onclick=(e)=>{e.preventDefault();this.navigateToNowPlaying();};
     this.updateNowPlayingLink(linkToVideo);
     remoteControl.appendChild(stopButton);
     remoteControl.appendChild(linkToVideo);
@@ -205,25 +179,13 @@ class YTEmbed extends HTMLElement {
     const expandIcon = document.getElementById('expand-icon');
     const nowPlayingText = document.getElementById('now-playing-text');
     if (this.isOutOfViewport()) {
-      if (remoteControl) {
-        remoteControl.style.display = 'none';
-      }
-      if (expandIcon) {
-        expandIcon.style.display = 'block';
-      }
-      if (nowPlayingText) {
-        nowPlayingText.style.display = 'block';
-      }
+      if (remoteControl) {remoteControl.style.display = 'none';}
+      if (expandIcon) {expandIcon.style.display = 'block';}
+      if (nowPlayingText) {nowPlayingText.style.display = 'block';}
     } else {
-      if (remoteControl) {
-        remoteControl.style.display = 'none';
-      }
-      if (expandIcon) {
-        expandIcon.style.display = 'none';
-      }
-      if (nowPlayingText) {
-        nowPlayingText.style.display = 'none';
-      }
+      if (remoteControl) {remoteControl.style.display = 'none';}
+      if (expandIcon) {expandIcon.style.display = 'none';}
+      if (nowPlayingText) {nowPlayingText.style.display = 'none';}
     }
   }
   setupViewportCheck() {
@@ -232,18 +194,11 @@ class YTEmbed extends HTMLElement {
   }
   isOutOfViewport() {
     const rect = this.getBoundingClientRect();
-    return (
-      rect.bottom <= 0 ||
-      rect.right <= 0 ||
-      rect.left >= window.innerWidth ||
-      rect.top >= window.innerHeight
-    );
+    return (rect.bottom <= 0 || rect.right <= 0 || rect.left >= window.innerWidth || rect.top >= window.innerHeight);
   }
   updateNowPlayingLink(linkElement) {
     const path = this.getAttribute('data-video-path');
-    if (path) {
-      linkElement.href = `${path}#now-playing`;
-    }
+    if (path) {linkElement.href = `${path}#now-playing`;}
   }
   navigateToNowPlaying() {
     const nowPlaying = document.querySelector('y-t[data-now-playing]');
@@ -263,23 +218,18 @@ class YTEmbed extends HTMLElement {
   }
   removeRemoteControl() {
     const remoteControl = document.getElementById('remote-control');
-    if (remoteControl) {
-      document.body.removeChild(remoteControl);
-    }
+    if (remoteControl) {document.body.removeChild(remoteControl);}
     const expandIcon = document.getElementById('expand-icon');
-    if (expandIcon) {
-      document.body.removeChild(expandIcon);
-    }
+    if (expandIcon) {document.body.removeChild(expandIcon);}
     const nowPlayingText = document.getElementById('now-playing-text');
-    if (nowPlayingText) {
-      document.body.removeChild(nowPlayingText);
-    }
+    if (nowPlayingText) {document.body.removeChild(nowPlayingText);}
     this.removeEventListeners()
   }
 }
 customElements.define('y-t', YTEmbed);
+
 const shuffleDiv = document.getElementById('shuffle');
-const elements = [...shuffleDiv.querySelectorAll('y-t')];
+const shuffleDivElements = [...shuffleDiv.querySelectorAll('y-t')];
 let combinedElements = [];
 let elementIdsMap = new Map();
 function processAndCombine(element, index) {
@@ -292,8 +242,8 @@ function processAndCombine(element, index) {
   const shuffledArray = shuffle(elementIds, 150);
   element.setAttribute('v', shuffledArray.join(','));
   processedElements.add(index);
-  if (index < elements.length - 1) {
-    processAndCombine(elements[index + 1], index + 1);
+  if (index < shuffleDivElements.length - 1) {
+    processAndCombine(shuffleDivElements[index + 1], index + 1);
   }
   else {
     const combo = document.getElementById('combined-list');
@@ -302,21 +252,21 @@ function processAndCombine(element, index) {
   }
 }
 let processedElements = new Set();
-processAndCombine(elements[0], 0);
+processAndCombine(shuffleDivElements[0], 0);
 function shuffleAndDraw() {
-  shuffle(elements);
+  shuffle(shuffleDivElements);
   let currentIndex = 0;
-  let draw = document.getElementById('draw');
-  const clonedElement = elements[currentIndex].cloneNode(false);
+  let deck = document.getElementById('deck');
+  const clonedElement = shuffleDivElements[currentIndex].cloneNode(false);
   processAndCombine(clonedElement, currentIndex);
-  draw.appendChild(clonedElement);
+  deck.appendChild(clonedElement);
   let next = document.querySelector("#next");
   next.addEventListener('click', function() {
-    currentIndex = (currentIndex + 1) % elements.length;
-    draw.innerHTML = '';
-    const clonedElement = elements[currentIndex].cloneNode(false);
+    currentIndex = (currentIndex + 1) % shuffleDivElements.length;
+    deck.innerHTML = '';
+    const clonedElement = shuffleDivElements[currentIndex].cloneNode(false);
     processAndCombine(clonedElement, currentIndex);
-    draw.appendChild(clonedElement);
+    deck.appendChild(clonedElement);
   });
 }
 shuffleAndDraw();

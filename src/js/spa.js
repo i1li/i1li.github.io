@@ -5,6 +5,9 @@ const toTop = document.getElementById("toTop");
 function goToTop() {window.scrollTo(0, 0);}
 let lastUpdatedPath = '';
 let isInitial = true;
+let historyStack = new Map();
+let currentHistoryIndex = -1;
+history.scrollRestoration = 'manual';
 function scrollSPA(arg, instantScrollNoHeaderOffset = false) {
   if (arg && arg.nodeType && !(arg instanceof Event)) {
     const behavior = instantScrollNoHeaderOffset ? 'instant' : 'smooth';
@@ -14,6 +17,7 @@ function scrollSPA(arg, instantScrollNoHeaderOffset = false) {
     window.scrollTo({ top: offsetTop, behavior });
     return;
   }
+  if (currentHistoryIndex >= 0) historyStack.get(currentHistoryIndex).scrollY = window.scrollY;
   if (window.scrollY > headerHeight * 0.6) {
     header.classList.add('scrolled-down');
   } else {
@@ -50,7 +54,10 @@ function scrollSPA(arg, instantScrollNoHeaderOffset = false) {
       path += `/${currentSection?.id}`;
     }
     if (path !== lastUpdatedPath) {
-      history.replaceState(null, '', `/${path}`);
+      const newSectionId = currentSection ? currentSection.id : undefined;
+      historyStack.get(currentHistoryIndex).sectionId = newSectionId;
+      historyStack.get(currentHistoryIndex).path = path;
+      history.replaceState({historyIndex: currentHistoryIndex}, '', `/${path}`);
       lastUpdatedPath = path;
     }
   }
@@ -83,7 +90,7 @@ function showBottomNav(container) {
   }
 }
 const welcome = document.getElementById('welcome');
-function showAllArticles() {
+function showAllArticles(fromHistory = false) {
   articles.forEach((article, index) => {
     article.style.display = 'block';
     if (index !== 0) {
@@ -94,9 +101,9 @@ function showAllArticles() {
     if (navBottom) navBottom.remove();
   });
   welcome.style.display = 'block';
-  goToTop();
+  if (!fromHistory) goToTop();
 }
-function showArticle(articleId, sectionId, isInitial = false) {
+function showArticle(articleId, sectionId, isInitial = false, fromHistory = false) {
   articles.forEach(container => {
     if (container.id !== articleId) {
       container.style.display = 'none';
@@ -107,17 +114,25 @@ function showArticle(articleId, sectionId, isInitial = false) {
     const contentEl = container.querySelector('.article-content');
     if (contentEl) contentEl.style.display = 'block';
     showBottomNav(container);
-    scrollSPA(sectionId ? container.querySelector(`.section-title#${sectionId}`) : container, isInitial && !!sectionId);
-    const newPath = `/${articleId}${sectionId ? `/${sectionId}` : ''}`;
-    history.replaceState({ articleId, sectionId }, '', newPath);
+    if (fromHistory) {
+      const sectionEl = sectionId ? container.querySelector(`.section-title#${sectionId}`) : container;
+      const scrollTop = sectionEl.getBoundingClientRect().top + window.scrollY - headerHeight;
+      window.scrollTo({top: scrollTop, behavior: 'instant'});
+    } else {
+      scrollSPA(sectionId ? container.querySelector(`.section-title#${sectionId}`) : container, isInitial && !!sectionId);
+    }
   });
 }
 const initialPath = window.location.pathname.substring(1);
 const initialHash = window.location.hash.substring(1);
+let initialArticleId = null;
+let initialSectionId = null;
 if (initialPath) {
   const [articleId, sectionId] = initialPath.split('/');
   if (articleId && document.getElementById(articleId)) {
     showArticle(articleId, sectionId, true);
+    initialArticleId = articleId;
+    initialSectionId = sectionId;
   } else {
     showAllArticles();
   }
@@ -126,21 +141,31 @@ if (initialPath) {
 } else {
   showAllArticles();
 }
+currentHistoryIndex = 0;
+historyStack.set(0, {path: initialPath, articleId: initialArticleId, sectionId: initialSectionId, scrollY: 0});
+history.replaceState({historyIndex: 0}, '', window.location.pathname);
+document.body.setAttribute(`data-history-${currentHistoryIndex}`, 'true');
 scrollSPA();
 window.onpopstate = (event) => {
-  if (event.state?.articleId) {
-    showArticle(event.state.articleId, event.state.sectionId, false);
+  if (event.state && event.state.historyIndex !== undefined) {
+    currentHistoryIndex = event.state.historyIndex;
+    document.body.setAttribute(`data-history-${currentHistoryIndex}`, 'true');
+    const entry = historyStack.get(currentHistoryIndex);
+    if (entry.articleId) {
+      showArticle(entry.articleId, entry.sectionId, false, true);
+    } else {
+      showAllArticles(true);
+      window.scrollTo({top: entry.scrollY, behavior: 'instant'});
+    }
   } else {
     showAllArticles();
   }
 };
 function handleHash(hash) {
-  if (hash === 'now-playing' || !document.getElementById(hash)) {
-    showAllArticles();
-    history.replaceState({}, '', window.location.origin);
+  if (hash === 'now-playing' || !document.getElementById(hash.split('/')[0])) {
+    navigateSPA('/');
   } else {
-    const [articleId, sectionId] = hash.split('/');
-    showArticle(articleId, sectionId, false);
+    navigateSPA(hash);
   }
 }
 window.addEventListener('hashchange', () => handleHash(window.location.hash.substring(1)));
@@ -152,11 +177,18 @@ function navigateSPA(pathOrEvent, path) {
     handleHash(actualPath.substring(1));
     return;
   }
-  const [articleId, sectionId] = actualPath.split('/');
-  if (articleId) {
-    showArticle(articleId, sectionId, false);
+  const [newArticleId, newSectionId] = actualPath.split('/');
+  const newPath = actualPath;
+  if (newPath === historyStack.get(currentHistoryIndex)?.path) return;
+  if (currentHistoryIndex >= 0) historyStack.get(currentHistoryIndex).scrollY = window.scrollY;
+  currentHistoryIndex++;
+  for (let key of Array.from(historyStack.keys()).sort((a,b)=>a-b)) {if (key > currentHistoryIndex) historyStack.delete(key);}
+  historyStack.set(currentHistoryIndex, {path: newPath, articleId: newArticleId, sectionId: newSectionId, scrollY: 0});
+  history.pushState({historyIndex: currentHistoryIndex}, '', newPath ? `/${newPath}` : '/');
+  document.body.setAttribute(`data-history-${currentHistoryIndex}`, 'true');
+  if (newArticleId) {
+    showArticle(newArticleId, newSectionId, false, false);
   } else {
     showAllArticles();
-    history.replaceState({}, '', window.location.origin);
   }
 }

@@ -17,7 +17,7 @@ a:hover.dark-mode {text-decoration: dotted underline;
     border: .1rem rgba(22,22,22,.1) ridge;
     background: linear-gradient(to top, rgba(22,22,222, .5), rgba(222, 222, 222, .1));}
 a, a.dark-mode, button {font-weight:600; opacity: .8;}
-#draw.dark-mode a {color: #00eeff;
+#deck.dark-mode a {color: #00eeff;
     text-shadow: 1px 1px 2px red, 0 0 1rem blue, 0 0 0.2rem blue;
     filter: drop-shadow(0 0 .1rem rgba(255, 100, 100, .3));
     text-decoration: underline dashed;
@@ -29,7 +29,7 @@ a, a.dark-mode, button {font-weight:600; opacity: .8;}
     border: .1rem rgba(22,22,22,.15) groove;
     background: linear-gradient(to top, rgba(22,222,222, .1), rgba(222, 222, 222, 0.1));
     border-radius: 1rem;}
-#draw.dark-mode a:hover {text-decoration: dotted underline;
+#deck.dark-mode a:hover {text-decoration: dotted underline;
     text-decoration-thickness: 2px;
     border: .1rem rgba(22,22,22,.1) ridge;
     background: linear-gradient(to top, rgba(22,22,222, .5), rgba(222, 222, 222, .1));}

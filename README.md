@@ -71,7 +71,7 @@ node yt-ids.js
 <h3 id="shuffle.js"><a href="/yt/shuffle.js">shuffle.js</a></h3>
 
 - proccessAndCombine combines all video IDs, (limiting how many come from each playlist), from the music section into one `<y-t>` element, at the top of [/edu/vibes](https://y0.netlify.app/edu/vibes).
-- shuffleAndDraw shuffles an array of playlists & videos extracted from the music section, with its own 'next' button. It then "draws" from the shuffled array, cloning the drawn `<y-t>` element into the 'draw' `<div>`. [Demo at top of main page](https://y0.netlify.app/)
+- shuffleAndDraw shuffles an array of playlists & videos extracted from the music section, with its own 'next' button. It then "draws" from the shuffled array, cloning the drawn `<y-t>` element into the 'deck' `<div>`. [Demo at top of main page](https://y0.netlify.app/)
 - The order of the elements is shuffled at each page load, as well as the video IDs within each element.
 - Limited to the `<div>` with id "music" so only music is included and playlist order is preserved in other sections of the site.
 - Since shuffled playlists are constructed with each video ID in the URL, there is a limit of 150 per playlist, although each shuffle picks from the entire list of video IDs (in this case about 20,000 for the combined playlist)
