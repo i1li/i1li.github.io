@@ -34,7 +34,6 @@
     const newSearch = l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '';
     l.pathname = newPath;
     l.search = newSearch;
-    window.SPA404Redirect = l;
     window.location.replace(l.href);
   }
 })();
