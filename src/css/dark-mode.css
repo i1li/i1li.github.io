@@ -1,4 +1,5 @@
-body.dark-mode {color: white;
+body.dark-mode {background-color: rgb(21, 21, 21);
+    color: white;
     text-shadow: 1px 1px 1px rgba(0,0,0,.3), 0 0 .3rem rgba(22,22,22,.5), 0 0 1rem rgba(255,0,0,.4);}
 a:link.dark-mode, a:visited.dark-mode {color: #00eeff;
     text-shadow: 1px 1px 2px red, 0 0 1rem blue, 0 0 0.2rem blue;

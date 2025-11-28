@@ -64,71 +64,6 @@ function shuffle(array, limit = Infinity) {
   }
 }
 
-const random = (min, max) => Math.random() * (max - min) + min;
-const easeInOut = t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-
-const easingFunctions = [
-  (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2, // easeInOutCubic
-  (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t, // easeInOutQuad
-  (t) => t < 0.5 ? (1 - Math.sqrt(1 - 4 * t * t)) / 2 : (Math.sqrt(1 - Math.pow(-2 * t + 2, 2)) + 1) / 2, // easeInOutCirc
-  (t) => -(Math.cos(Math.PI * t) - 1) / 2, // easeInOutSine
-  // easeInOutExpo
-  (t) => t === 0 ? 0 : t === 1 ? 1 : 
-    t < 0.5 ? Math.pow(2, 20 * t - 10) / 2 : 
-    (2 - Math.pow(2, -20 * t + 10)) / 2,
-  // easeInOutElastic
-  (t) => {
-    const c5 = (2 * Math.PI) / 4.5;
-    return t === 0 ? 0 : t === 1 ? 1 :
-      t < 0.5 ? 
-        -(Math.pow(2, 20 * t - 10) * Math.sin((t * 2 - 1.075) * c5)) / 2 :
-        (Math.pow(2, -20 * t + 10) * Math.sin((t * 2 - 0.075) * c5)) / 2 + 1;
-  },
-];
-
-const noiseFunctions = [
-  (x) => perlinNoise(x),
-  (x) => Math.sin(x * 10) * 0.5 + 0.5, // Sine wave noise
-  (x) => Math.exp(-Math.pow(x - 0.5, 2) / 0.05), // Gaussian curve
-  (x) => Math.pow(Math.sin(x * Math.PI), 3), // Cubic sine wave
-];
-
-function metaRecursiveEaseNoise(t, depth = 0, maxDepth = Math.ceil(Math.random() * 300) + 33) {
-  if (depth >= maxDepth) {
-    const randomEase = easingFunctions[Math.floor(Math.random() * easingFunctions.length)];
-    return randomEase(t);
-  }
-  const randomEase = easingFunctions[Math.floor(Math.random() * easingFunctions.length)];
-  const randomNoise = noiseFunctions[Math.floor(Math.random() * noiseFunctions.length)];
-  const noiseScale = Math.random();
-  const noiseAmplitude = noiseScale / random(1.5,2.5);
-  const easedT = randomEase(t);
-  const noiseValue = metaRecursiveNoise(t * noiseScale, depth + 1, maxDepth, randomNoise) * noiseAmplitude;
-  return Math.max(0, Math.min(1, easedT + noiseValue));
-}
-
-function fade(t) { 
-  return t * t * t * (t * (t * 6 - 15) + 10); 
-}
-function lerp(t, a, b) { 
-  return a + t * (b - a); 
-}
-function grad(hash, x) {
-  const h = hash & 15;
-  const grad = 1 + (h & 7);
-  return (h & 8 ? -grad : grad) * x;
-}
-
-function metaRecursiveNoise(x, depth = 0, maxDepth = random(33,111), noiseFunc) {
-  if (depth >= maxDepth) {
-    return noiseFunc(x);
-  }
-  const X = Math.floor(x) & 255;
-  x -= Math.floor(x);
-  const u = metaRecursiveEaseNoise(fade(x), depth + 1, maxDepth);
-  return lerp(u, grad(p[X], x), grad(p[X+1], x-1));
-}
-
 // Full Screen Image Overlay
 let imgOverlay = document.getElementById("fullScreenOverlay");
 function openImageOverlay(imageSource) {
@@ -143,3 +78,130 @@ function closeImageOverlay() {
   document.body.style.overflow = 'auto';
   document.removeEventListener('keydown', closeImageOverlay);
 }
+
+//zoom
+document.addEventListener("DOMContentLoaded", function() {
+const savedFontSize = localStorage.getItem('baseFontSize');
+if (savedFontSize) {
+  document.documentElement.style.fontSize = savedFontSize + 'px';
+}
+});
+function pageZoom(isZoomIn) {
+  const zoomFactor = isZoomIn ? 1.05 : 0.95;
+  const zoom = document.querySelectorAll("html");
+  zoom.forEach(function(element) {
+    let currentFontSize = parseFloat(window.getComputedStyle(element).fontSize);
+    currentFontSize = currentFontSize * zoomFactor;
+    element.style.fontSize = currentFontSize + "px";
+  });
+  const baseFontSize = parseFloat(window.getComputedStyle(document.documentElement).fontSize);
+  localStorage.setItem('baseFontSize', baseFontSize);
+}
+
+//light/dark mode
+function applyDarkMode(isDarkMode) {
+  document.body.classList.toggle("dark-mode", isDarkMode);
+  document.querySelectorAll('*').forEach((element) => {
+    element.classList.toggle('dark-mode', isDarkMode);
+  });
+}
+let darkMode;
+function toggleDarkMode() {
+  darkMode = !darkMode;
+  applyDarkMode(darkMode);
+  localStorage.setItem('darkMode', darkMode);
+}
+document.addEventListener("DOMContentLoaded", function() {
+const savedMode = localStorage.getItem('darkMode');
+if (savedMode !== null) {
+  darkMode = savedMode === 'true';
+} else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  darkMode = true;
+} else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+  darkMode = false;
+} else {
+  darkMode = true;
+}
+applyDarkMode(darkMode);
+});
+
+// Simple Embedded Content Toggle
+class SimpleToggle extends HTMLElement {
+    constructor() {
+      super();
+      this.button = document.createElement('button');
+      this.button.textContent = '▶️ Play';
+      this.button.title = 'Play Content';
+      this.button.className = 'showHideButton';
+      this.button.onclick = () => this.toggleContent();
+      this.content = document.createElement('div');
+      this.content.style.display = 'none';
+      this.template = document.createElement('template');
+      this.template.innerHTML = this.getAttribute('c');
+      this.append(this.button, this.content);
+    }
+    toggleContent() {
+      if (this.content.style.display === 'none') {
+        this.content.appendChild(this.template.content.cloneNode(true));
+        this.content.style.display = 'block';
+        this.button.textContent = '⏹️ Stop';
+        this.button.title = 'Stop Content';
+      } else {
+        this.content.innerHTML = '';
+        this.content.style.display = 'none';
+        this.button.textContent = '▶️ Play';
+        this.button.title = 'Play Content';
+      }
+    }
+  }
+customElements.define('s-t', SimpleToggle);
+
+//basic search
+function searchSPA() {
+  const query = document.getElementById('searchInput').value.toLowerCase().trim();
+  const results = document.getElementById('searchResults');
+  results.innerHTML = '';
+  if (!query) {results.innerHTML='<p>Enter a search term</p>';results.style.display='block';return;}
+  if (query.length < 3) {results.style.display='none';return;}
+  results.style.display = 'block';
+  let hasResults = false;
+  document.querySelectorAll('article').forEach(article => {
+    const clone = article.cloneNode(true);
+    clone.querySelectorAll('button').forEach(b => b.remove());
+    clone.querySelectorAll('nav').forEach(b => b.remove());
+    const text = clone.textContent.toLowerCase();
+    if (!text.includes(query)) return;
+    hasResults = true;
+    const title = article.querySelector('h1,h2,h3')?.textContent || 'Untitled Article';
+    const id = article.id || '';
+    const i = text.indexOf(query);
+    const excerpt = text.slice(Math.max(0,i-50), i+query.length+50);
+    const highlighted = excerpt.replace(new RegExp(query,'gi'), m=>`<strong>${m}</strong>`);
+    results.insertAdjacentHTML('beforeend', `
+      <div class="search-result">
+        <h3>${id ? `<a href="/${id}" class="search-result-link">` : ''}${title}${id ? '</a>' : ''}</h3>
+        <p>...${highlighted}...</p>
+      </div>
+    `);
+  });
+  results.querySelectorAll('.search-result-link').forEach(link =>
+    link.addEventListener('click', closeSearchOverlay)
+  );
+  if (!hasResults) results.innerHTML = '<p>No results found.</p>';
+}
+function handleKeyPress(e) {if (e.key === "Escape") closeSearchOverlay();}
+function openSearchOverlay() {
+  document.getElementById("searchOverlay").style.display = "block";
+  document.getElementById("searchInput").focus();
+  document.body.style.overflow = 'hidden';
+  document.addEventListener('keydown', handleKeyPress);
+  searchSPA();
+}
+function closeSearchOverlay() {
+  document.getElementById("searchOverlay").style.display = "none";
+  document.body.style.overflow = 'auto';
+  document.removeEventListener('keydown', handleKeyPress);
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').innerHTML = '';
+}
+document.getElementById('searchInput').addEventListener('input', throttle(() => search(), 500));

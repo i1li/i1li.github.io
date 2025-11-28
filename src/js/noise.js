@@ -1,3 +1,68 @@
+const random = (min, max) => Math.random() * (max - min) + min;
+const easeInOut = t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+
+const easingFunctions = [
+  (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2, // easeInOutCubic
+  (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t, // easeInOutQuad
+  (t) => t < 0.5 ? (1 - Math.sqrt(1 - 4 * t * t)) / 2 : (Math.sqrt(1 - Math.pow(-2 * t + 2, 2)) + 1) / 2, // easeInOutCirc
+  (t) => -(Math.cos(Math.PI * t) - 1) / 2, // easeInOutSine
+  // easeInOutExpo
+  (t) => t === 0 ? 0 : t === 1 ? 1 : 
+    t < 0.5 ? Math.pow(2, 20 * t - 10) / 2 : 
+    (2 - Math.pow(2, -20 * t + 10)) / 2,
+  // easeInOutElastic
+  (t) => {
+    const c5 = (2 * Math.PI) / 4.5;
+    return t === 0 ? 0 : t === 1 ? 1 :
+      t < 0.5 ? 
+        -(Math.pow(2, 20 * t - 10) * Math.sin((t * 2 - 1.075) * c5)) / 2 :
+        (Math.pow(2, -20 * t + 10) * Math.sin((t * 2 - 0.075) * c5)) / 2 + 1;
+  },
+];
+
+const noiseFunctions = [
+  (x) => perlinNoise(x),
+  (x) => Math.sin(x * 10) * 0.5 + 0.5, // Sine wave noise
+  (x) => Math.exp(-Math.pow(x - 0.5, 2) / 0.05), // Gaussian curve
+  (x) => Math.pow(Math.sin(x * Math.PI), 3), // Cubic sine wave
+];
+
+function metaRecursiveEaseNoise(t, depth = 0, maxDepth = Math.ceil(Math.random() * 300) + 33) {
+  if (depth >= maxDepth) {
+    const randomEase = easingFunctions[Math.floor(Math.random() * easingFunctions.length)];
+    return randomEase(t);
+  }
+  const randomEase = easingFunctions[Math.floor(Math.random() * easingFunctions.length)];
+  const randomNoise = noiseFunctions[Math.floor(Math.random() * noiseFunctions.length)];
+  const noiseScale = Math.random();
+  const noiseAmplitude = noiseScale / random(1.5,2.5);
+  const easedT = randomEase(t);
+  const noiseValue = metaRecursiveNoise(t * noiseScale, depth + 1, maxDepth, randomNoise) * noiseAmplitude;
+  return Math.max(0, Math.min(1, easedT + noiseValue));
+}
+
+function fade(t) { 
+  return t * t * t * (t * (t * 6 - 15) + 10); 
+}
+function lerp(t, a, b) { 
+  return a + t * (b - a); 
+}
+function grad(hash, x) {
+  const h = hash & 15;
+  const grad = 1 + (h & 7);
+  return (h & 8 ? -grad : grad) * x;
+}
+
+function metaRecursiveNoise(x, depth = 0, maxDepth = random(33,111), noiseFunc) {
+  if (depth >= maxDepth) {
+    return noiseFunc(x);
+  }
+  const X = Math.floor(x) & 255;
+  x -= Math.floor(x);
+  const u = metaRecursiveEaseNoise(fade(x), depth + 1, maxDepth);
+  return lerp(u, grad(p[X], x), grad(p[X+1], x-1));
+}
+
 // Simplex noise constants
 const F2 = 0.5 * (Math.sqrt(3) - 1);
 const G2 = (3 - Math.sqrt(3)) / 6;
@@ -6,7 +71,6 @@ const grad3 = [
   [1, 0, 1], [-1, 0, 1], [1, 0, -1], [-1, 0, -1],
   [0, 1, 1], [0, -1, 1], [0, 1, -1], [0, -1, -1]
 ];
-
 class SimplexNoise {
   constructor(seed = Math.random()) {
     this.p = new Uint8Array(256);
@@ -65,7 +129,6 @@ class SimplexNoise {
 // Perlin noise implementation
 const permutation = [...Array(256)].map(() => Math.floor(Math.random() * 256));
 const p = [...permutation, ...permutation];
-
 function perlinNoise(x) {
   const X = Math.floor(x) & 255;
   x -= Math.floor(x);
@@ -79,14 +142,12 @@ function fbm(simplexInstance, x, y, octaves = 4, persistence = 0.5, lacunarity =
   let amplitude = 1;
   let frequency = 1;
   let maxValue = 0;
-  
   for (let i = 0; i < octaves; i++) {
     value += amplitude * simplexInstance.noise(x * frequency, y * frequency);
     maxValue += amplitude;
     amplitude *= persistence;
     frequency *= lacunarity;
   }
-  
   return value / maxValue;
 }
 
@@ -96,14 +157,12 @@ function turbulence(simplexInstance, x, y, octaves = 4) {
   let amplitude = 1;
   let freqX = x;
   let freqY = y;
-  
   for (let i = 0; i < octaves; i++) {
     value += amplitude * Math.abs(simplexInstance.noise(freqX, freqY));
     freqX *= 2;
     freqY *= 2;
     amplitude *= 0.5;
   }
-  
   return value;
 }
 
@@ -113,25 +172,19 @@ function worley(x, y, cellCount = 4) {
   const cellY = Math.floor(y * cellCount);
   const fracX = x * cellCount - cellX;
   const fracY = y * cellCount - cellY;
-  
   let minDist = Infinity;
-  
   for (let dx = -1; dx <= 1; dx++) {
     for (let dy = -1; dy <= 1; dy++) {
       const nx = cellX + dx;
       const ny = cellY + dy;
-      
       // Pseudo-random point in cell using hash function
       const hashX = Math.sin(nx * 73.156 + ny * 94.673) * 43758.5453;
       const hashY = Math.sin(nx * 45.164 + ny * 94.673) * 43758.5453;
-      
       const px = (hashX - Math.floor(hashX)) + dx - fracX;
       const py = (hashY - Math.floor(hashY)) + dy - fracY;
-      
       const dist = Math.sqrt(px * px + py * py);
       if (dist < minDist) minDist = dist;
     }
   }
-  
   return Math.min(1, minDist);
 }
