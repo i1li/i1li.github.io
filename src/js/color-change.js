@@ -115,18 +115,20 @@ setTimeout(() => {
     hoverShift.forEach(element => {
       let stopAnim = null;
       let disengageTimeout = null;
-      const startAnim = throttle(() => {
+      const sharedHoverHandler = throttle((event) => {
         if (stopAnim) stopAnim();
         stopAnim = startShift(element, getRandomInterval(), true);
       }, 30);
-      element.addEventListener('mouseover', startAnim);
-      element.addEventListener('click', startAnim);
+      const sharedDisengage = debounce(() => handleDisengage(element, stopAnim), 30);
+      element.addEventListener('mouseover', sharedHoverHandler);
+      element.addEventListener('click', sharedHoverHandler);
       element.addEventListener('touchstart', () => {
         if (stopAnim) stopAnim();
         stopAnim = startShift(element, getRandomInterval(), true);
+        if (disengageTimeout) clearTimeout(disengageTimeout);
         disengageTimeout = setTimeout(() => handleDisengage(element, stopAnim), 888);
       });
-      element.addEventListener('mouseout', debounce(() => handleDisengage(element, stopAnim), 30));
+      element.addEventListener('mouseout', sharedDisengage);
     });
   }
 }, delayOtherResources2);

@@ -157,13 +157,15 @@ class SimpleToggle extends HTMLElement {
 customElements.define('s-t', SimpleToggle);
 
 //basic search
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+const searchOverlay = document.getElementById('searchOverlay');
 function searchSPA() {
-  const query = document.getElementById('searchInput').value.toLowerCase().trim();
-  const results = document.getElementById('searchResults');
-  results.innerHTML = '';
-  if (!query) {results.innerHTML='<p>Enter a search term</p>';results.style.display='block';return;}
-  if (query.length < 3) {results.style.display='none';return;}
-  results.style.display = 'block';
+  const query = searchInput.value.toLowerCase().trim();
+  searchResults.innerHTML = '';
+  if (!query) {searchResults.innerHTML='<p>Enter a search term</p>';searchResults.style.display='block';return;}
+  if (query.length < 3) {searchResults.style.display='none';return;}
+  searchResults.style.display = 'block';
   let hasResults = false;
   document.querySelectorAll('article').forEach(article => {
     const clone = article.cloneNode(true);
@@ -177,31 +179,40 @@ function searchSPA() {
     const i = text.indexOf(query);
     const excerpt = text.slice(Math.max(0,i-50), i+query.length+50);
     const highlighted = excerpt.replace(new RegExp(query,'gi'), m=>`<strong>${m}</strong>`);
-    results.insertAdjacentHTML('beforeend', `
+    searchResults.insertAdjacentHTML('beforeend', `
       <div class="search-result">
         <h3>${id ? `<a href="/${id}" class="search-result-link">` : ''}${title}${id ? '</a>' : ''}</h3>
         <p>...${highlighted}...</p>
       </div>
     `);
   });
-  results.querySelectorAll('.search-result-link').forEach(link =>
+  searchResults.querySelectorAll('.search-result-link').forEach(link =>
     link.addEventListener('click', closeSearchOverlay)
   );
-  if (!hasResults) results.innerHTML = '<p>No results found.</p>';
+  if (!hasResults) searchResults.innerHTML = '<p>No results found.</p>';
 }
-function handleKeyPress(e) {if (e.key === "Escape") closeSearchOverlay();}
+let sharedSearchHandler;
 function openSearchOverlay() {
-  document.getElementById("searchOverlay").style.display = "block";
-  document.getElementById("searchInput").focus();
+  searchOverlay.style.display = "block";
   document.body.style.overflow = 'hidden';
-  document.addEventListener('keydown', handleKeyPress);
-  searchSPA();
+  searchInput.focus();
+  searchResults.innerHTML='<p>Enter a search term</p>';searchResults.style.display='block';
+  sharedSearchHandler = throttle((event) => {
+    if (event.type === 'keydown' && event.key === 'Escape') {
+      closeSearchOverlay();
+    } else if (event.type === 'input') {
+      searchSPA();
+    }
+  }, 500);
+  document.addEventListener('keydown', sharedSearchHandler);
+  searchInput.addEventListener('input', sharedSearchHandler);
 }
 function closeSearchOverlay() {
-  document.getElementById("searchOverlay").style.display = "none";
+  searchOverlay.style.display = "none";
   document.body.style.overflow = 'auto';
-  document.removeEventListener('keydown', handleKeyPress);
-  document.getElementById('searchInput').value = '';
-  document.getElementById('searchResults').innerHTML = '';
+  searchInput.value = '';
+  searchResults.innerHTML = '';
+  document.removeEventListener('keydown', sharedSearchHandler);
+  searchInput.removeEventListener('input', sharedSearchHandler);
+  sharedSearchHandler = null;
 }
-document.getElementById('searchInput').addEventListener('input', throttle(() => search(), 500));
