@@ -28,22 +28,8 @@ class YTEmbed extends HTMLElement {
     const videoIds = this.id.split(',');
     this.videoIds = videoIds;
     let linkUrl , embedUrl;
-    if (this.classList.contains('no-link-embed')) {
-      switch (true) {
-        default:
-          linkUrl = `https://www.youtube.com/watch?v=${this.id}${this.params ? '&' + this.params + '&': '&'}autoplay=1`;
-          embedUrl = `https://www.youtube-nocookie.com/embed/${this.id}${this.params ? '?' + this.params + '&' : '?'}autoplay=1`;
-          break;
-        case this.videoIds.length > 1:
-          linkUrl = `https://www.youtube.com/watch_videos?video_ids=${this.videoIds.join(',')}&autoplay=1`;
-          embedUrl = `https://www.youtube-nocookie.com/embed/?playlist=${this.videoIds.join(',')}&autoplay=1`;
-          break;
-        case this.isPlaylistID(this.id):
-          linkUrl = `https://www.youtube.com/playlist?list=${this.id}&autoplay=1`;
-          embedUrl = `https://www.youtube-nocookie.com/embed/videoseries?list=${this.id}&autoplay=1`;
-          break;
-      }
-    } else if (this.classList.contains('no-embed')) {
+    const embedProxyUrl = 'https://embed-proxy.github.io/';
+    if (this.classList.contains('no-embed')) {
       switch (true) {
         default:
           linkUrl = `https://www.youtube.com/watch?v=${this.id}${this.params ? '&' + this.params + '&' : '&'}autoplay=1`;
@@ -61,16 +47,16 @@ class YTEmbed extends HTMLElement {
     } else {
       switch (true) {
         default:
-          linkUrl = `https://www.youtube-nocookie.com/embed/${this.id}${this.params ? '?' + this.params + '&' : '?'}autoplay=1`;
-          embedUrl = linkUrl;
+          embedUrl = `https://www.youtube-nocookie.com/embed/${this.id}${this.params ? '?' + this.params + '&' : '?'}autoplay=1`;
+          linkUrl = embedProxyUrl + embedUrl;
           break;
         case this.videoIds.length > 1:
-          linkUrl = `https://www.youtube-nocookie.com/embed/?playlist=${this.videoIds.join(',')}&autoplay=1`;
-          embedUrl = linkUrl;
+          embedUrl = `https://www.youtube-nocookie.com/embed/?playlist=${this.videoIds.join(',')}&autoplay=1`;
+          linkUrl = embedProxyUrl + embedUrl;
           break;
         case this.isPlaylistID(this.id):
-          linkUrl = `https://www.youtube-nocookie.com/embed/videoseries?list=${this.id}&autoplay=1`;
-          embedUrl = linkUrl;
+          embedUrl = `https://www.youtube-nocookie.com/embed/videoseries?list=${this.id}&autoplay=1`;
+          linkUrl = embedProxyUrl + embedUrl;
           break;
       }
     }
@@ -229,7 +215,17 @@ class YTEmbed extends HTMLElement {
 customElements.define('y-t', YTEmbed);
 
 const shuffleDiv = document.getElementById('shuffle');
-const shuffleDivElements = [...shuffleDiv.querySelectorAll('y-t')];
+const embeddableYT = [...shuffleDiv.querySelectorAll('y-t:not(#no-embed y-t)')];
+const noEmbedSpan = document.getElementById('no-embed');
+const noEmbedYT = noEmbedSpan.querySelector('y-t');
+let allNonEmbedIds = [];
+embeddableYT.forEach(el => {
+  const u = el.getAttribute('u');
+  if (u) {
+    allNonEmbedIds.push(...u.split(',').map(id => id.trim()));
+  }
+});
+noEmbedYT.setAttribute('v', shuffle([...new Set(allNonEmbedIds)], 150).join(','));
 let combinedElements = [];
 let elementIdsMap = new Map();
 function processAndCombine(element, index) {
@@ -242,8 +238,8 @@ function processAndCombine(element, index) {
   const shuffledArray = shuffle(elementIds, 150);
   element.setAttribute('v', shuffledArray.join(','));
   processedElements.add(index);
-  if (index < shuffleDivElements.length - 1) {
-    processAndCombine(shuffleDivElements[index + 1], index + 1);
+  if (index < embeddableYT.length - 1) {
+    processAndCombine(embeddableYT[index + 1], index + 1);
   }
   else {
     const combo = document.getElementById('combined-list');
@@ -252,19 +248,19 @@ function processAndCombine(element, index) {
   }
 }
 let processedElements = new Set();
-processAndCombine(shuffleDivElements[0], 0);
+processAndCombine(embeddableYT[0], 0);
 function shuffleAndDraw() {
-  shuffle(shuffleDivElements);
+  shuffle(embeddableYT);
   let currentIndex = 0;
   let deck = document.getElementById('deck');
-  const clonedElement = shuffleDivElements[currentIndex].cloneNode(false);
+  const clonedElement = embeddableYT[currentIndex].cloneNode(false);
   processAndCombine(clonedElement, currentIndex);
   deck.appendChild(clonedElement);
   let next = document.querySelector("#next");
   next.addEventListener('click', function() {
-    currentIndex = (currentIndex + 1) % shuffleDivElements.length;
+    currentIndex = (currentIndex + 1) % embeddableYT.length;
     deck.innerHTML = '';
-    const clonedElement = shuffleDivElements[currentIndex].cloneNode(false);
+    const clonedElement = embeddableYT[currentIndex].cloneNode(false);
     processAndCombine(clonedElement, currentIndex);
     deck.appendChild(clonedElement);
   });

@@ -69,8 +69,8 @@ const getPlaylistItems = async (playlistIDs) => {
             reject(err);
           });
         });
-        const availableVideos = result.items.filter((item) => 
-          item.status.privacyStatus === 'public' && 
+        const availableVideos = result.items.filter((item) =>
+          item.status.privacyStatus === 'public' &&
           !excludedIds.includes(item.snippet.resourceId.videoId)
         );
         videoIds = [...videoIds, ...availableVideos.map((item) => item.snippet.resourceId.videoId)];
@@ -90,8 +90,58 @@ const getPlaylistItems = async (playlistIDs) => {
   }
   return { availableVideoIds, errorCount };
 };
+async function getEmbeddableStatus(videoIds) {
+  if (videoIds.length === 0) return {};
+  const cleanToFull = {};
+  videoIds.forEach(fullId => {
+    const cleanId = fullId.split('?')[0];
+    if (!cleanToFull[cleanId]) cleanToFull[cleanId] = [];
+    cleanToFull[cleanId].push(fullId);
+  });
+  const uniqueCleanIds = Object.keys(cleanToFull);
+  const map = {}; // cleanId -> embeddable
+  for (let i = 0; i < uniqueCleanIds.length; i += 50) {
+    const batch = uniqueCleanIds.slice(i, i + 50);
+    const params = {
+      part: 'status',
+      id: batch.join(','),
+      key: KEY
+    };
+    const url = new URL('https://www.googleapis.com/youtube/v3/videos');
+    url.search = new URLSearchParams(params).toString();
+    try {
+      const result = await new Promise((resolve, reject) => {
+        https.get(url.toString(), (res) => {
+          let data = '';
+          res.on('data', (chunk) => { data += chunk; });
+          res.on('end', () => {
+            try {
+              resolve(JSON.parse(data));
+            } catch (parseErr) {
+              reject(parseErr);
+            }
+          });
+        }).on('error', (err) => {
+          reject(err);
+        });
+      });
+      if (result.error) {
+        console.error(`Error fetching video status: ${result.error.message}`);
+        continue;
+      }
+      result.items.forEach(item => {
+        map[item.id] = item.status.embeddable;
+      });
+    } catch (error) {
+      console.error(`Error in batch fetch: ${error.message}`);
+    }
+  }
+  return map;
+}
 const writeOutput = async () => {
   const { availableVideoIds, errorCount } = await getPlaylistItems(playlistIds);
+  const allVideoIds = [...new Set([...videoIds, ...Object.values(availableVideoIds).flat()])].filter(id => !excludedIds.includes(id.split('?')[0]));
+  const embeddableMap = await getEmbeddableStatus(allVideoIds);
   let totalVideoCount = 0;
   const ytRegex = /<y-t([^>]*)>/g;
   const updatedSearchDiv = searchDiv.replace(ytRegex, (match, attributes) => {
@@ -103,7 +153,15 @@ const writeOutput = async () => {
     playlistIdsInTag = [...new Set([...playlistIdsInTag, ...playlistIdsInV])];
     videoIdsInTag = videoIdsInTag.filter(id => !id.match(/^(PL|FL|OL|TL|UU)/));
     const newVideoIds = playlistIdsInTag.flatMap(playlistId => availableVideoIds[playlistId] || []);
-    const combinedVideoIds = [...new Set([...videoIdsInTag, ...newVideoIds])].filter(id => !excludedIds.includes(id));
+    const combinedVideoIds = [...new Set([...videoIdsInTag, ...newVideoIds])].filter(id => !excludedIds.includes(id.split('?')[0]));
+    const embeddableIds = combinedVideoIds.filter(fullId => {
+      const cleanId = fullId.split('?')[0];
+      return embeddableMap[cleanId] === true;
+    });
+    const nonEmbeddableIds = combinedVideoIds.filter(fullId => {
+      const cleanId = fullId.split('?')[0];
+      return embeddableMap[cleanId] !== true;
+    });
     totalVideoCount += combinedVideoIds.length;
     let newAttributes = attributes;
     if (playlistIdsInTag.length > 0) {
@@ -113,9 +171,12 @@ const writeOutput = async () => {
       }
     }
     if (vMatch) {
-      newAttributes = newAttributes.replace(/v="[^"]*"/, `v="${combinedVideoIds.join(',')}"`);
+      newAttributes = newAttributes.replace(/v="[^"]*"/, `v="${embeddableIds.join(',')}"`);
     } else {
-      newAttributes += ` v="${combinedVideoIds.join(',')}"`;
+      newAttributes += ` v="${embeddableIds.join(',')}"`;
+    }
+    if (nonEmbeddableIds.length > 0) {
+      newAttributes += ` u="${nonEmbeddableIds.join(',')}"`;
     }
     newAttributes = newAttributes.replace(/\s+/g, ' ').trim();
     return `<y-t ${newAttributes}>`;

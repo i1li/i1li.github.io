@@ -33,16 +33,16 @@ function throttle(func, limit) {
 
 let isWindowActive = !document.hidden;
 let lastUpdateTime = performance.now();
-const updateWindowStatus = throttle(() => {
+const sharedWindowStatusHandler = throttle(() => {
   const wasActive = isWindowActive;
   isWindowActive = !document.hidden || document.hasFocus();
   if (isWindowActive && !wasActive) {
     lastUpdateTime = performance.now();
   }
 }, 500);
-window.addEventListener('focus', updateWindowStatus);
-window.addEventListener('blur', updateWindowStatus);
-document.addEventListener('visibilitychange', updateWindowStatus);
+window.addEventListener('focus', sharedWindowStatusHandler);
+window.addEventListener('blur', sharedWindowStatusHandler);
+document.addEventListener('visibilitychange', sharedWindowStatusHandler);
 
 function shuffle(array, limit = Infinity) {
   if (array.length === 1) { return array; } else

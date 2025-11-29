@@ -1,13 +1,10 @@
 const esbuild = require('esbuild');
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
-const cheerio = require('cheerio');
 
-let html = fs.readFileSync('src/index.html', 'utf8');
+let htmlContent = fs.readFileSync('src/index.html', 'utf8');
 const itemsToCopy = ['favicon.ico', 'img'];
-const cacheBuster = () => crypto.randomBytes(3).toString('hex').slice(0, 5);
-const uniqueHash = cacheBuster();
+const cacheBuster = Math.random().toString(36).slice(2, 8);
 const addComment = (content, fileType) => {
     const comment = "Hello and God bless! Christ is King! https://github.com/i1li/i";
     switch(fileType) {
@@ -29,82 +26,87 @@ const resolvePath = (filePath) => {
     }
     return path.join(__dirname, 'src', filePath);
 };
-const jsFiles = [...html.matchAll(scriptRegex)].map(match => resolvePath(match[1]));
-const cssFiles = [...html.matchAll(linkRegex)].map(match => resolvePath(match[1]));
-
+const jsFiles = [...htmlContent.matchAll(scriptRegex)].map(match => resolvePath(match[1]));
+const cssFiles = [...htmlContent.matchAll(linkRegex)].map(match => resolvePath(match[1]));
 if (fs.existsSync('dist')) {
     fs.rmSync('dist', { recursive: true, force: true });
 }
 fs.mkdirSync('dist');
 
-// NEW: Process links in HTML at build time
-const $ = cheerio.load(html);
-$('a').each((i, el) => {
-  const href = $(el).attr('href');
-  if (!href) return; // Skip anchors without href
+// Helper function to process <a> tags with regex
+function processLinks(html) {
+    return html.replace(/<a\s+([^>]*?)>/gi, (match, attrs) => {
+        const hrefMatch = attrs.match(/href\s*=\s*["']([^"']+)["']/i);
+        if (!hrefMatch) return match; // Skip if no href
+        const href = hrefMatch[1];
+        let newAttrs = attrs;
+        if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) {
+            // External: Add target and rel if not present
+            if (!/target\s*=\s*["']_blank["']/i.test(newAttrs)) {
+                newAttrs += ` target="_blank"`;
+            }
+            if (!/rel\s*=\s*["']noreferrer["']/i.test(newAttrs)) {
+                newAttrs += ` rel="noreferrer"`;
+            }
+        } else {
+            // Local: Add onclick
+            const path = href.startsWith('/') ? href.substring(1) : href;
+            const escapedPath = path.replace(/'/g, "\\'");
+            if (!/onclick\s*=\s*["'][^"']*["']/i.test(newAttrs)) {
+                newAttrs += ` onclick="navigateSPA(event, '${escapedPath}')"`;
+            }
+        }
+        return `<a ${newAttrs.trim()}>`;
+    });
+}
+// Helper function to process <img> tags with regex
+function processImages(html) {
+    return html.replace(/<img\s+([^>]*?)>/gi, (match, attrs) => {
+        // Check for excluded classes
+        if (/\b(img-footer|img-header|to-top|no-overlay)\b/i.test(attrs)) {
+            return match; // Skip excluded images
+        }
+        const srcMatch = attrs.match(/src\s*=\s*["']([^"']+)["']/i);
+        if (!srcMatch) return match; // Skip if no src
+        const src = srcMatch[1];
+        const escapedSrc = src.replace(/'/g, "\\'");
+        let newAttrs = attrs;
+        if (!/onclick\s*=\s*["'][^"']*["']/i.test(newAttrs)) {
+            newAttrs += ` onclick="openImageOverlay('${escapedSrc}');return false;"`;
+        }
+        return `<img ${newAttrs.trim()}>`;
+    });
+}
+htmlContent = processLinks(htmlContent);
+htmlContent = processImages(htmlContent);
 
-  if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) {
-    // External: Add target/rel
-    $(el).attr('target', '_blank');
-    $(el).attr('rel', 'noreferrer');
-  } else {
-    // Local: Add onclick with navigate call (assumes href starts with /)
-    const path = href.startsWith('/') ? href.substring(1) : href;
-    const escapedPath = path.replace(/'/g, "\\'"); // Escape for JS string
-    $(el).attr('onclick', `navigateSPA(event, '${escapedPath}')`); // Pass event explicitly
-  }
-});
-
-// Add onclick to overlay-eligible images
-$('img:not(.img-footer,.img-header,.to-top,.no-overlay)').each((i, el) => {
-  const src = $(el).attr('src');
-  if (src) {  // Skip images without src
-    const escapedSrc = src.replace(/'/g, "\\'");
-    $(el).attr('onclick', `openImageOverlay('${escapedSrc}');return false;`);
-  }
-});
-
-html = $.html(); // Update html with modifications
-
-async function bundleJS() {
-    let concatenatedJS = '';
-    for (const file of jsFiles) {
+async function bundleFiles(type, files) {
+    let concatenated = '';
+    for (const file of files) {
         const result = await esbuild.build({
             entryPoints: [file],
             bundle: false,
             minify: true,
             write: false,
         });
-        concatenatedJS += result.outputFiles[0].text.trim();
+        concatenated += result.outputFiles[0].text.trim();
     }
-    concatenatedJS = concatenatedJS.replace(/\s+/g, ' ');
-    concatenatedJS = addComment(concatenatedJS, 'js');
-    fs.writeFileSync(`dist/bundle-${uniqueHash}.js`, concatenatedJS);
-}
-async function bundleCSS() {
-    let concatenatedCSS = '';
-    for (const file of cssFiles) {
-        const result = await esbuild.build({
-            entryPoints: [file],
-            bundle: false,
-            minify: true,
-            write: false,
-        });
-        concatenatedCSS += result.outputFiles[0].text.trim();
+    if (type === 'js') {
+        concatenated = concatenated.replace(/\s+/g, ' ');
     }
-    concatenatedCSS = addComment(concatenatedCSS, 'css');
-    fs.writeFileSync(`dist/bundle-${uniqueHash}.css`, concatenatedCSS);
+    concatenated = addComment(concatenated, type);
+    fs.writeFileSync(`dist/bundle-${cacheBuster}.${type}`, concatenated);
 }
-Promise.all([bundleJS(), bundleCSS()])
+Promise.all([bundleFiles('js', jsFiles), bundleFiles('css', cssFiles)])
     .then(() => {
-        html = html.replace(/<script.*?<\/script>/g, '');
-        html = html.replace('</body>', `<script src="/bundle-${uniqueHash}.js"></script></body>`);
-        html = html.replace(/<link.*?stylesheet.*?>/g, '');
-        html = html.replace('</head>', `<link rel="stylesheet" href="/bundle-${uniqueHash}.css"></head>`);
-        html = html.replace(/\s+/g, ' ');
-        html = addComment(html, 'html');
-        fs.writeFileSync('dist/index.html', html);
-        fs.writeFileSync('dist/404.html', html);
+        htmlContent = htmlContent.replace(/<script.*?<\/script>/g, '');
+        htmlContent = htmlContent.replace('</body>', `<script src="/bundle-${cacheBuster}.js"></script></body>`);
+        htmlContent = htmlContent.replace(/<link.*?stylesheet.*?>/g, '');
+        htmlContent = htmlContent.replace('</head>', `<link rel="stylesheet" href="/bundle-${cacheBuster}.css"></head>`);
+        htmlContent = htmlContent.replace(/\s+/g, ' ');
+        htmlContent = addComment(htmlContent, 'html');
+        fs.writeFileSync('dist/index.html', htmlContent);
+        fs.writeFileSync('dist/404.html', htmlContent);
         console.log('Build complete');
     })
     .catch((error) => {

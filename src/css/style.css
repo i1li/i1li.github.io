@@ -52,9 +52,9 @@ header {position:fixed;
     overflow:hidden;
     background:linear-gradient(to top, rgba(255, 0, 0, .25) 0%, rgba(0, 22, 0, .3) 2%, rgba(128, 0, 128, 0.2) 98%,  rgba(0, 0, 255, .5) 100%);
     backdrop-filter:brightness(115%) contrast(90%) saturate(270%);
-    border-bottom:solid .18rem rgba(0,0,255,.22);
-    border-left:solid .2rem rgba(255,0,0,.15);
-    border-right:solid .2rem rgba(111,0,111,.4);
+    border-bottom:dotted .17rem rgba(0,0,255,.2);
+    border-left:dotted .2rem rgba(255,0,0,.15);
+    border-right:dotted .22rem rgba(111,0,111,.18);
     border-radius:0 0 2rem 2rem;}
 .scrolled-down:hover {background:linear-gradient(to top, rgba(0, 0, 0, .6), rgba(128, 128, 128, 0.6));opacity:1;}
 .scrolled-down {height:3rem;
@@ -210,6 +210,7 @@ article {min-height:80vh;border:dotted 1px rgba(255,255,0,.1);}
     border-left:inset .7rem rgba(100,50,255,.3);
     border-right:inset .7rem rgba(11,100,100,.3);
     scale:1.02 1.011;}
+section {padding-bottom:2rem;}
 .section-title {all:unset !important;cursor:pointer !important;text-align:center !important;}
 .section-title h3:hover {text-decoration:underline;}
 .section-nav {background:linear-gradient(to right, rgb(22 222 28 / 25%) 0%, rgb(110 0 145 / 45%) 50%, rgb(222 114 22 / 25%) 100%);
@@ -256,14 +257,17 @@ article {min-height:80vh;border:dotted 1px rgba(255,255,0,.1);}
     border:inset .15rem rgba(100,100,100,.2);
     border-bottom:solid .2rem rgba(255,0,0,.2);
     border-top:0;
-    margin-bottom:.07rem;}
+    margin-bottom:.07rem;
+    padding:.3rem 0 .5rem 0;
+border-radius:.9rem;}
 .article-content {border:solid 1px rgba(255,0,0,.2);
     background-image:url("../img/bginvert.png");
     background-attachment:fixed;
     background-size:10000px;
     background-position-x:-200px;
-    padding:0 0 1rem .2rem;
+    padding:0 0 3rem .2rem;
     margin:0 0 .07rem 0;
+    border-radius:.75rem;
     backdrop-filter:brightness(90%) contrast(250%) grayscale(50%) blur(.1em) saturate(120%);}
 .article-content:hover {background:radial-gradient(rgba(128, 128, 128, 0.1), rgba(0, 0, 0, 0.1));
     backdrop-filter:brightness(95%) contrast(200%) grayscale(50%) blur(.1em) saturate(120%);}

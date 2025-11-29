@@ -26,7 +26,7 @@ node serv.js dev
 <h3 id="SPA Navigation & Content Loading">SPA Navigation & Content Loading</h3>
 
 - [spa.js](/src/js/spa.js) For SPA (Single Page App) routing across different hosting environments, the app uses [netlify.toml](/netlify.toml) on Netlify, or 
-- [404.html](/404.html) & [github-pages.js](/src/js/github-pages.js) on [GitHub Pages](https://i1li.github.io/), or
+- [404.html](/404.html) is cloned from index.html by build.js for SPA on [GitHub Pages](https://i1li.github.io/), or
 - [serv.js](/serv.js) elsewhere.
 - Enables seamless navigation within the application without full page reloads, improving user experience without complication of a framework.
 - Default "display all posts" view at root directory, with posts auto-expanding upon scroll, shows a welcome intro message & navigation links at top of page.
@@ -107,10 +107,10 @@ The hybrid shuffle function combines two different techniques to optimize perfor
 
 <h3 id="Custom Build Script">Custom Build Script</h3>
 
-- [build.js](build.js) minifies and bundles files from /src to /dist
+- [build.js](build.js) minifies and bundles files from /src to /dist, and adds event listeners to html.
 To use:
  ```javascript
-npm i esbuild
+npm i esbuild cheerio
 node build.js
 ```
 
