@@ -1,193 +1,132 @@
 require('dotenv').config();
-const KEY = process.env.KEY
-const path = require('path');
-const fs = require('fs');
+const KEY = process.env.KEY;
+const { readFileSync, writeFileSync } = require('fs');
+const { join } = require('path');
 const https = require('https');
-const htmlContent = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
-const searchDivRegex = /id="shuffle">([\s\S]*?)<\/div>/;
-const searchDiv = htmlContent.match(searchDivRegex)?.[1] || '';
-const playlistIdRegex = /(?:p="([^"]+)"|v="([^"]+)")/g;
-const totalVideosRegex = /"total-videos">([^<]*)<\/span>/;
-function readExcludedIds() {
-  try {
-    const data = fs.readFileSync(path.join(__dirname, '..', 'yt', 'exclude.txt'), 'utf8');
-    return data.split(',').map(id => id.trim()).filter(id => id !== '');
-  } catch (err) {
-    console.error('Error reading exclude.txt:', err);
-    return [];
-  }
-}
-const excludedIds = readExcludedIds();
-if (!KEY) {
-  throw new Error('API key is missing or empty. Please provide a valid API key. https://developers.google.com/youtube/v3/getting-started#before-you-start');
-}
-const extractIds = (regex, source) => {
-  const ids = [];
-  let match;
-  while ((match = regex.exec(source)) !== null) {
-    if (match[1]) {
-      ids.push(...match[1].split(',').map(id => id.trim()));
-    } else if (match[2]) {
-      ids.push(...match[2].split(',').map(id => id.trim()));
-    }
-  }
-  return ids;
+if (!KEY) throw new Error('API key missing');
+const excludedIds = new Set(
+  readFileSync(join(__dirname, '..', 'yt', 'exclude.txt'), 'utf8')
+    .split(',').map(id => id.trim()).filter(Boolean)
+);
+const htmlContent = readFileSync(join(__dirname, '..', 'index.html'), 'utf8');
+const searchDiv = htmlContent.match(/id="shuffle">([\s\S]*?)<\/div>/)?.[1] || '';
+const cleanId = id => id.split('?')[0];
+const isVideoId   = id => cleanId(id).length === 11;
+const isPlaylistId = id => cleanId(id).length > 11;
+const fetchUrl = url => new Promise((resolve, reject) => {
+  https.get(url.toString(), res => {
+    let data = '';
+    res.on('data', c => data += c);
+    res.on('end', () => resolve(JSON.parse(data)));
+  }).on('error', reject);
+});
+const buildUrl = (base, params) => {
+  const u = new URL(base);
+  u.search = new URLSearchParams(params);
+  return u;
 };
-const allIds = extractIds(playlistIdRegex, searchDiv);
-const playlistIds = allIds.filter(id => id.split('?')[0].length > 11);
-const videoIds = allIds.filter(id => id.split('?')[0].length === 11);
-const getPlaylistItems = async (playlistIDs) => {
-  let availableVideoIds = {};
-  let errorCount = 0;
-  for (const playlistID of playlistIDs) {
-    try {
-      console.log(`Fetching playlist items for playlist ID: ${playlistID}`);
-      let pageToken = null;
-      let totalItems = 0;
-      let videoIds = [];
-      do {
-        const params = {
-          part: 'id,snippet,status',
-          maxResults: 50,
-          playlistId: playlistID.trim(),
-          key: KEY,
-          pageToken: pageToken,
-        };
-        const url = new URL('https://www.googleapis.com/youtube/v3/playlistItems');
-        url.search = new URLSearchParams(params).toString();
-        url.href = url.href.replace(/&pageToken=null/, '');
-        const result = await new Promise((resolve, reject) => {
-          https.get(url.toString(), (res) => {
-            let data = '';
-            res.on('data', (chunk) => {
-              data += chunk;
-            });
-            res.on('end', () => {
-              resolve(JSON.parse(data));
-            });
-          }).on('error', (err) => {
-            reject(err);
-          });
-        });
-        const availableVideos = result.items.filter((item) =>
-          item.status.privacyStatus === 'public' &&
-          !excludedIds.includes(item.snippet.resourceId.videoId)
-        );
-        videoIds = [...videoIds, ...availableVideos.map((item) => item.snippet.resourceId.videoId)];
-        totalItems += result.items.length;
-        console.log(`Fetched ${totalItems} items for playlist ID: ${playlistID}`);
-        pageToken = result.nextPageToken;
-      } while (pageToken);
-      availableVideoIds[playlistID] = videoIds;
-    } catch (error) {
-      errorCount++;
-      if (error.response && error.response.status === 404) {
-        console.warn(`Skipping invalid playlist ID: ${playlistID}`);
-      } else {
-        console.error(`Error fetching playlist items for playlist ID ${playlistID}: ${error.message}`);
-      }
-    }
+const extractIds = (regex, src) => {
+  const out = [];
+  let m;
+  while ((m = regex.exec(src))) {
+    if (m[1]) out.push(...m[1].split(',').map(s => s.trim()));
+    if (m[2]) out.push(...m[2].split(',').map(s => s.trim()));
   }
-  return { availableVideoIds, errorCount };
+  return out;
 };
-async function getEmbeddableStatus(videoIds) {
-  if (videoIds.length === 0) return {};
-  const cleanToFull = {};
-  videoIds.forEach(fullId => {
-    const cleanId = fullId.split('?')[0];
-    if (!cleanToFull[cleanId]) cleanToFull[cleanId] = [];
-    cleanToFull[cleanId].push(fullId);
-  });
-  const uniqueCleanIds = Object.keys(cleanToFull);
-  const map = {}; // cleanId -> embeddable
-  for (let i = 0; i < uniqueCleanIds.length; i += 50) {
-    const batch = uniqueCleanIds.slice(i, i + 50);
-    const params = {
-      part: 'status',
-      id: batch.join(','),
-      key: KEY
-    };
-    const url = new URL('https://www.googleapis.com/youtube/v3/videos');
-    url.search = new URLSearchParams(params).toString();
-    try {
-      const result = await new Promise((resolve, reject) => {
-        https.get(url.toString(), (res) => {
-          let data = '';
-          res.on('data', (chunk) => { data += chunk; });
-          res.on('end', () => {
-            try {
-              resolve(JSON.parse(data));
-            } catch (parseErr) {
-              reject(parseErr);
-            }
-          });
-        }).on('error', (err) => {
-          reject(err);
-        });
-      });
-      if (result.error) {
-        console.error(`Error fetching video status: ${result.error.message}`);
-        continue;
-      }
-      result.items.forEach(item => {
-        map[item.id] = item.status.embeddable;
-      });
-    } catch (error) {
-      console.error(`Error in batch fetch: ${error.message}`);
-    }
-  }
-  return map;
-}
+const allIds = extractIds(/(?:p="([^"]+)"|v="([^"]+)")/g, searchDiv);
+const playlistIds = allIds.filter(isPlaylistId);
+const videoIds    = allIds.filter(isVideoId);
 const writeOutput = async () => {
-  const { availableVideoIds, errorCount } = await getPlaylistItems(playlistIds);
-  const allVideoIds = [...new Set([...videoIds, ...Object.values(availableVideoIds).flat()])].filter(id => !excludedIds.includes(id.split('?')[0]));
-  const embeddableMap = await getEmbeddableStatus(allVideoIds);
-  let totalVideoCount = 0;
-  const ytRegex = /<y-t([^>]*)>/g;
-  const updatedSearchDiv = searchDiv.replace(ytRegex, (match, attributes) => {
-    const pMatch = attributes.match(/p="([^"]+)"/);
-    const vMatch = attributes.match(/v="([^"]+)"/);
-    let playlistIdsInTag = pMatch ? pMatch[1].split(',').map(id => id.trim()) : [];
-    let videoIdsInTag = vMatch ? vMatch[1].split(',').map(id => id.trim()) : [];
-    const playlistIdsInV = videoIdsInTag.filter(id => id.match(/^(PL|FL|OL|TL|UU)/));
-    playlistIdsInTag = [...new Set([...playlistIdsInTag, ...playlistIdsInV])];
-    videoIdsInTag = videoIdsInTag.filter(id => !id.match(/^(PL|FL|OL|TL|UU)/));
-    const newVideoIds = playlistIdsInTag.flatMap(playlistId => availableVideoIds[playlistId] || []);
-    const combinedVideoIds = [...new Set([...videoIdsInTag, ...newVideoIds])].filter(id => !excludedIds.includes(id.split('?')[0]));
-    const embeddableIds = combinedVideoIds.filter(fullId => {
-      const cleanId = fullId.split('?')[0];
-      return embeddableMap[cleanId] === true;
-    });
-    const nonEmbeddableIds = combinedVideoIds.filter(fullId => {
-      const cleanId = fullId.split('?')[0];
-      return embeddableMap[cleanId] !== true;
-    });
-    totalVideoCount += combinedVideoIds.length;
-    let newAttributes = attributes;
-    if (playlistIdsInTag.length > 0) {
-      newAttributes = newAttributes.replace(/p="[^"]*"/, `p="${playlistIdsInTag.join(',')}"`);
-      if (!pMatch) {
-        newAttributes = `p="${playlistIdsInTag.join(',')}" ` + newAttributes;
+  const playlistVideos = {};
+  let playlistErrors = 0;
+  for (const raw of playlistIds) {
+    const pid = cleanId(raw);
+    let pageToken = null;
+    const ids = [];
+    do {
+      try {
+        const params = {
+          part: 'snippet,status',
+          playlistId: pid,
+          maxResults: 50,
+          key: KEY
+        };
+        if (pageToken) params.pageToken = pageToken;
+        const data = await fetchUrl(buildUrl('https://www.googleapis.com/youtube/v3/playlistItems', params));
+        if (data.error) throw new Error(data.error.message);
+        for (const item of data.items) {
+          if (
+            item.status?.privacyStatus !== 'private' &&
+            !excludedIds.has(item.snippet.resourceId.videoId)
+          ) {
+            ids.push(item.snippet.resourceId.videoId);
+          }
+        }
+        pageToken = data.nextPageToken || null;
+      } catch (e) {
+        playlistErrors++;
+        console.error(`Playlist ${pid}: ${e.message}`);
+        break;
       }
+    } while (pageToken);
+    playlistVideos[pid] = ids;
+  }
+  const allCleanIds = [...new Set([
+    ...videoIds.map(cleanId),
+    ...Object.values(playlistVideos).flat()
+  ])].filter(id => !excludedIds.has(id));
+  const embeddableMap = {};
+  let videoErrors = 0;
+  for (let i = 0; i < allCleanIds.length; i += 50) {
+    const batch = allCleanIds.slice(i, i + 50);
+    try {
+      const data = await fetchUrl(buildUrl('https://www.googleapis.com/youtube/v3/videos', {
+        part: 'status',
+        id: batch.join(','),
+        key: KEY
+      }));
+      if (data.error) throw new Error(data.error.message);
+      for (const item of data.items || []) {
+        if (item.status?.privacyStatus === 'private') continue;
+        embeddableMap[item.id] = item.status.embeddable ?? null;
+      }
+    } catch (e) {
+      videoErrors++;
+      console.error(`Videos batch error: ${e.message}`);
     }
-    if (vMatch) {
-      newAttributes = newAttributes.replace(/v="[^"]*"/, `v="${embeddableIds.join(',')}"`);
-    } else {
-      newAttributes += ` v="${embeddableIds.join(',')}"`;
-    }
-    if (nonEmbeddableIds.length > 0) {
-      newAttributes += ` u="${nonEmbeddableIds.join(',')}"`;
-    }
-    newAttributes = newAttributes.replace(/\s+/g, ' ').trim();
-    return `<y-t ${newAttributes}>`;
+  }
+  const originalMap = new Map(allIds.map(id => [cleanId(id), id]));
+  let total = 0;
+  const updated = searchDiv.replace(/<y-t([^>]*)>/g, (_, attrs) => {
+    const p = (attrs.match(/p="([^"]*)"/)?.[1] || '').split(',').map(s => s.trim()).filter(isPlaylistId);
+    const v = (attrs.match(/v="([^"]*)"/)?.[1] || '').split(',').map(s => s.trim());
+    const u = (attrs.match(/u="([^"]*)"/)?.[1] || '').split(',').map(s => s.trim()).filter(Boolean);
+    const fromPlaylists = p.flatMap(pid => playlistVideos[cleanId(pid)] || []);
+    const combinedClean = [...new Set([...fromPlaylists, ...v.map(cleanId)])]
+      .filter(id => !excludedIds.has(id));
+    const embeddableClean = combinedClean.filter(id => embeddableMap[id] === true);
+    const nonEmbeddableClean = combinedClean.filter(id => embeddableMap[id] === false || embeddableMap[id] === null);
+    total += embeddableClean.length + nonEmbeddableClean.length;
+    const embeddableFull = embeddableClean.map(id => originalMap.get(id) || id);
+    const nonEmbeddableFull = [...new Set([
+      ...nonEmbeddableClean.map(id => originalMap.get(id) || id),
+      ...u
+])].filter(Boolean);
+    let newAttrs = attrs
+      .replace(/p="[^"]*"/g, p.length ? `p="${p.join(',')}"` : 'p=""')
+      .replace(/v="[^"]*"/g, `v="${embeddableFull.join(',')}"`)
+      .replace(/u="[^"]*"/g, '');
+    if (nonEmbeddableFull.length>0) newAttrs += ` u="${nonEmbeddableFull.join(',')}"`;
+    return `<y-t ${newAttrs.trim().replace(/\s+/g, ' ')}>`;
   });
-  const formattedTotalVideoCount = totalVideoCount.toLocaleString();
-  const finalSearchDiv = updatedSearchDiv;
-  const updatedHtmlContent = htmlContent
-    .replace(searchDivRegex, `id="shuffle">${finalSearchDiv}</div>`)
-    .replace(totalVideosRegex, `"total-videos">${formattedTotalVideoCount}</span>`);
-    fs.writeFileSync(path.join(__dirname, '..', 'index.html'), updatedHtmlContent, 'utf8');
-  console.log(`Total videos: ${formattedTotalVideoCount}`);
-  console.log(`Number of errors: ${errorCount}`);
+  writeFileSync(join(__dirname, '..', 'index.html'),
+    htmlContent
+      .replace(/id="shuffle">[\s\S]*?<\/div>/, `id="shuffle">${updated}</div>`)
+      .replace(/"total-videos">[^<]*<\/span>/, `"total-videos">${total.toLocaleString()}</span>`),
+    'utf8'
+  );
+  console.log(`\nTotal videos processed: ${total.toLocaleString()}`);
+  console.log(`Errors — playlists: ${playlistErrors}, videos: ${videoErrors}`);
 };
 writeOutput().catch(console.error);
