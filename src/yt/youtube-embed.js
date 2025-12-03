@@ -16,17 +16,11 @@ class YTEmbed extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'v' && oldValue !== newValue) {this.initFromV();}
   }
-  isPlaylistID(id) {
-    return id.length > 11 && (id.startsWith('PL') || id.startsWith('TL') || id.startsWith('OL') || id.startsWith('FL') || id.startsWith('UU'));
-  }
   initFromV() {
-    const v = this.getAttribute('v');
-    if (!v) return;
-    const [id, params] = v.split('?');
-    this.id = id;
-    this.params = params;
-    const videoIds = this.id.split(',');
-    this.videoIds = videoIds;
+    const v = this.getAttribute('v'); if (!v) return;
+    const rawIds = v.split(','); this.rawIds = rawIds;
+    const {id,params,videoIds,playlistIds} = (()=>{const parts=this.rawIds.map(r=>r.split('?'));const list=parts.map(([a,b])=>({id:a,params:b}));const videoIds=list.filter(x=>x.id.length===11).map(x=>x.id);const playlistIds=list.filter(x=>x.id.length>11).map(x=>x.id);const pick=playlistIds[0]? list.find(x=>x.id===playlistIds[0]) : list.find(x=>x.id.length===11)|| list[0];return {id:pick.id,params:pick.params,videoIds,playlistIds};})();
+    Object.assign(this, { id, params, videoIds, playlistIds });
     let linkUrl , embedUrl;
     const embedProxyUrl = 'https://embed-proxy.github.io/';
     if (this.classList.contains('no-embed')) {
@@ -39,7 +33,7 @@ class YTEmbed extends HTMLElement {
           linkUrl = `https://www.youtube.com/watch_videos?video_ids=${this.videoIds.join(',')}&autoplay=1`;
           embedUrl = null;
           break;
-        case this.isPlaylistID(this.id):
+        case this.playlistIds.length > 0:
           linkUrl = `https://www.youtube.com/playlist?list=${this.id}&autoplay=1`;
           embedUrl = null;
           break;
@@ -54,7 +48,7 @@ class YTEmbed extends HTMLElement {
           embedUrl = `https://www.youtube-nocookie.com/embed/?playlist=${this.videoIds.join(',')}&autoplay=1`;
           linkUrl = embedProxyUrl + embedUrl;
           break;
-        case this.isPlaylistID(this.id):
+        case this.playlistIds.length > 0:
           embedUrl = `https://www.youtube-nocookie.com/embed/videoseries?list=${this.id}&autoplay=1`;
           linkUrl = embedProxyUrl + embedUrl;
           break;

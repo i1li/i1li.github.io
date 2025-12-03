@@ -1,9 +1,7 @@
 .yt-wrapper {
   display: none;
   position: relative;
-  margin: auto;
-  max-width: 720px;
-  padding-bottom: 56.25%;
+  padding: 56.25% 0 0 0;
 }
 .yt {
   position: absolute;
