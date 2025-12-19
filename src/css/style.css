@@ -161,7 +161,8 @@ p {line-height:1.2;
 .no-indent {text-indent:0;} .no-indent p {text-indent:0;} .width95 {width:95%;margin:auto;} .width95 p {width:95%;margin:auto;} .width90 {width:90%;margin:auto;} .width90 p {width:90%;margin:auto;}
 .center {text-align:center;} .justify-content-center {justify-content:center;} .center p {text-align:center;} .justify-content-center p {justify-content:center;}
 .italic90 {font-style:italic;font-size:90%;}
-body {background-color:rgb(234, 234, 234);
+body {overflow:none;
+    background-color:rgb(234, 234, 234);
     color:black;
     font-size:1rem;
     font-weight:500;
